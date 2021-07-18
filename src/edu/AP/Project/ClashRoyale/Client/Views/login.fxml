@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.AP.Project.ClashRoyale.Client.Controller.LoginController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="33.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="33.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="33.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" percentHeight="33.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <ImageView fitHeight="800.0" fitWidth="1200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.rowSpan="3" GridPane.valignment="TOP">
+         <image>
+            <Image url="@../Images/back.png" />
+         </image>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+      </ImageView>
+      <GridPane hgap="20.0" vgap="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TextField fx:id="usernameTxt" promptText="Username" GridPane.columnSpan="2" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Lilita One" size="16.0" />
+               </font></TextField>
+            <PasswordField fx:id="PasswordTxt" maxWidth="1.7976931348623157E308" promptText="Password" GridPane.columnSpan="2" GridPane.rowIndex="2">
+               <font>
+                  <Font name="Lilita One" size="16.0" />
+               </font></PasswordField>
+            <Label contentDisplay="CENTER" maxWidth="1.7976931348623157E308" style="-fx-alignment: center;" text="Login" textAlignment="CENTER" textFill="#fffefe" textOverrun="CENTER_ELLIPSIS" GridPane.columnSpan="2">
+               <font>
+                  <Font name="Lilita One" size="30.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="30.0" fitWidth="100.0" pickOnBounds="true" GridPane.rowIndex="3">
+               <image>
+                  <Image url="@../Images/Button/gray.png" />
+               </image>
+            </ImageView>
+            <Hyperlink fx:id="SignUpBtn" alignment="CENTER" onAction="#SignUpFunc" prefHeight="30.0" prefWidth="100.0" text="Sigin Up" textFill="#8367ff" GridPane.rowIndex="3">
+               <font>
+                  <Font name="Lilita One" size="14.0" />
+               </font></Hyperlink>
+            <ImageView fitHeight="50.0" fitWidth="150.0" pickOnBounds="true" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="TOP">
+               <image>
+                  <Image url="@../Images/Button/silver.png" />
+               </image>
+            </ImageView>
+            <JFXButton fx:id="LoginBTN" maxHeight="1.7976931348623157E308" onAction="#login" prefWidth="150.0" text="Log in" textFill="WHITE" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+               <font>
+                  <Font name="Lilita One" size="21.0" />
+               </font></JFXButton>
+            <Label fx:id="msgBox" maxWidth="1.7976931348623157E308" textFill="#ff6969" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <font>
+                  <Font name="Lilita One" size="12.0" />
+               </font>
+            </Label>
+         </children>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </GridPane>
+   </children>
+</GridPane>
