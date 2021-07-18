@@ -30,7 +30,7 @@ public class ServerCLUI extends ServerUI {
 
     @Override
     public void sendMessage(String message, String ending, String color) {
-        if(color.equals("DEFAULT")) {
+        if(color == null || color.equals("DEFAULT")) {
             color = ConsoleColors.PURPLE;
         }
         display.print(color + message + ending + ConsoleColors.RESET);
