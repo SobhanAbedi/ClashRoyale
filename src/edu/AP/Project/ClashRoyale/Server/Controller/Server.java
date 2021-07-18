@@ -28,7 +28,10 @@ public class Server implements Runnable{
         listener = new ConnectionListener(ui, this);
         listenerThread = new Thread(listener);
         listenerThread.start();
-        ServerInstruction instruction = new ServerInstruction(ServerInstructionKind.LOGIN, "SobhanAbedi", "TestPass", true, (Float)12.5f);
+        byte[] bArray = new byte[2];
+        bArray[0] = 12;
+        bArray[1] = 25;
+        ServerInstruction instruction = new ServerInstruction(ServerInstructionKind.LOGIN, "SobhanAbedi", "TestPass", true, (Float)12.5f, bArray);
         System.out.println(instruction.toString());
         DBConnector dbConnector = new DBConnector();
         if(dbConnector.connect() == 0)

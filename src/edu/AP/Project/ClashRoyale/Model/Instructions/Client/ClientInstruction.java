@@ -1,20 +1,22 @@
-package edu.AP.Project.ClashRoyale.Model.Instructions.Server;
+package edu.AP.Project.ClashRoyale.Model.Instructions.Client;
+
+import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstructionKind;
 
 import java.io.Serializable;
 import java.util.Arrays;
 
-public class ServerInstruction implements Serializable {
-    private static final long serialVersionUID = 536268L;
+public class ClientInstruction implements Serializable {
+    private static final long serialVersionUID = 737783L;
     private final char kind;
     private final Object[] args;
 
-    public ServerInstruction(ServerInstructionKind kind, Object... args) {
+    public ClientInstruction(ClientInstructionKind kind, Object... args) {
         this.kind = kind.code;
         this.args = args;
     }
 
-    public ServerInstructionKind getKind() {
-        return ServerInstructionKind.getInstructionKind(kind);
+    public ClientInstructionKind getKind() {
+        return ClientInstructionKind.getInstructionKind(kind);
     }
 
     public int getKindCode() {
@@ -33,7 +35,7 @@ public class ServerInstruction implements Serializable {
 
     @Override
     public String toString() {
-        ServerInstructionKind kind = ServerInstructionKind.getInstructionKind(this.kind);
+        ClientInstructionKind kind = ClientInstructionKind.getInstructionKind(this.kind);
         if(kind == null)
             return null;
         return kind.name + Arrays.toString(args);

@@ -133,7 +133,7 @@ public class DBConnector {
         //for(int i = 0; i < SALT_LEN; i++)
         //    System.out.print((char)salt[i]);
         //System.out.println();
-        //System.out.println(byteArrtoStr(salt));
+        //System.out.println(byteArrToStr(salt));
         //System.out.println(hashedPass + ", hashedPass size: " + hashedPass.length);
         String query = "INSERT INTO users (username, salt, password) VALUES ('" + username +"',  ?, ?)";
         //System.out.println(query);
@@ -144,7 +144,7 @@ public class DBConnector {
             preparedStatement.setBytes(2, hashedPass);
             int changes = preparedStatement.executeUpdate();
             if(changes == 0)
-                return -3; //something went wrong
+                return -5; //something went wrong
         } catch (SQLException e) {
             System.out.println(e.toString());
             return -1; //connection error
