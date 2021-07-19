@@ -63,6 +63,11 @@ public class BattleController {
     @FXML
     private ImageView imageBox;
 
+    @FXML
+    void initialize(){
+        Image arena = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/arenas/arena1.png")));
+        imageBox.setImage(arena);
+    }
 
 
     @FXML
