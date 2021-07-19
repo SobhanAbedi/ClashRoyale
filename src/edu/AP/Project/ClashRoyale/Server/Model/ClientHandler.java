@@ -1,8 +1,11 @@
 package edu.AP.Project.ClashRoyale.Server.Model;
 
+import edu.AP.Project.ClashRoyale.Model.Card;
+import edu.AP.Project.ClashRoyale.Model.GlobalVariables;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstruction;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstructionKind;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstruction;
+import edu.AP.Project.ClashRoyale.Model.PlayerInfo;
 import edu.AP.Project.ClashRoyale.Server.Controller.Server;
 import edu.AP.Project.ClashRoyale.Server.Network.ClientReceiver;
 import edu.AP.Project.ClashRoyale.Server.Network.ClientTransmitter;
@@ -11,11 +14,12 @@ import java.net.Socket;
 import java.util.HashMap;
 
 public class ClientHandler{
-    Socket socket;
-    Server server;
-    DBConnector dbConnector;
-    ClientReceiver clientReceiver;
-    Thread receiverThread;
+    private Socket socket;
+    private Server server;
+    private DBConnector dbConnector;
+    private ClientReceiver clientReceiver;
+    private Thread receiverThread;
+    private PlayerInfo clientInfo;
 
     public ClientHandler(Socket socket, Server server) {
         this.socket = socket;
@@ -25,6 +29,7 @@ public class ClientHandler{
         this.clientReceiver = new ClientReceiver(this.socket, this);
         receiverThread = new Thread(clientReceiver);
         receiverThread.start();
+        clientInfo = null;
     }
 
     public void close() {
@@ -37,6 +42,7 @@ public class ClientHandler{
     public void loginCheck(ServerInstruction instruction) {
         String username = (String) instruction.getArg(0);
         String password = (String) instruction.getArg(1);
+
         ClientTransmitter transmitter = new ClientTransmitter(socket, null);
         int res = dbConnector.login(username, password);
         switch (res) {
@@ -56,6 +62,7 @@ public class ClientHandler{
                 break;
             default:
                 //send login successful message with userid
+                clientInfo = dbConnector.getUserInfo(res);
                 transmitter.setInstruction(new ClientInstruction(ClientInstructionKind.SUCCESS, res));
                 break;
         }
@@ -65,6 +72,7 @@ public class ClientHandler{
     public void signupCheck(ServerInstruction instruction) {
         String username = (String) instruction.getArg(0);
         String password = (String) instruction.getArg(1);
+
         ClientTransmitter transmitter = new ClientTransmitter(socket, null);
         int res = dbConnector.login(username, password);
         switch (res) {
@@ -87,5 +95,58 @@ public class ClientHandler{
                 break;
         }
         new Thread(transmitter).start();
+    }
+
+    public void getPlayerInfo(ServerInstruction instruction) {
+        int id = (Integer) instruction.getArg(0);
+        boolean forceCheck = (Boolean) instruction.getArg(1);
+
+        ClientTransmitter transmitter = new ClientTransmitter(socket, null);
+        if(clientInfo == null || forceCheck) {
+            PlayerInfo res = dbConnector.getUserInfo(id);
+            if (res == null) {
+                transmitter.setInstruction(new ClientInstruction(ClientInstructionKind.FAIL, "Wrong userid or Something went wrong"));
+            } else {
+                transmitter.setInstruction(new ClientInstruction(ClientInstructionKind.USER_INFO, res));
+            }
+        } else {
+            transmitter.setInstruction(new ClientInstruction(ClientInstructionKind.USER_INFO, clientInfo));
+        }
+        new Thread(transmitter).start();
+    }
+
+    public void getAllCards(ServerInstruction instruction) {
+        //No arguments
+        if(clientInfo == null)
+            sendUserInfoInvalid();
+
+        Card[] cards = server.getCards(true);
+        String[] deck = dbConnector.getDeck(clientInfo.getUserID());
+        if(deck == null)
+            sendUserInfoInvalid();
+
+        HashMap<String, Integer> deckMap = new HashMap<>();
+        for(int i = 0; i < GlobalVariables.DECK_SIZE; i++) {
+            if(deck[i] != null)
+                deckMap.put(deck[i], i);
+        }
+        for(Card card : cards) {
+            Integer loc = deckMap.get(card.getName());
+            if(loc != null)
+                card.setDeckLocation(loc);
+        }
+        new Thread(new ClientTransmitter(socket, new ClientInstruction(ClientInstructionKind.ALL_CARDS, (Object) cards)));
+    }
+
+    public void getForceInfo(ServerInstruction instruction) {
+        String forceName = (String) instruction.getArg(0);
+
+        if(clientInfo == null)
+            sendUserInfoInvalid();
+
+    }
+
+    private void sendUserInfoInvalid() {
+        new Thread(new ClientTransmitter(socket, new ClientInstruction(ClientInstructionKind.FAIL, "UserInfo not available. Please Login again.")));
     }
 }

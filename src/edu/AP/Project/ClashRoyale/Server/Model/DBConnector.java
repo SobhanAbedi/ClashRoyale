@@ -1,5 +1,11 @@
 package edu.AP.Project.ClashRoyale.Server.Model;
 
+import com.mysql.cj.protocol.a.BinaryResultsetReader;
+import edu.AP.Project.ClashRoyale.Model.Card;
+import edu.AP.Project.ClashRoyale.Model.Forces.*;
+import edu.AP.Project.ClashRoyale.Model.GlobalVariables;
+import edu.AP.Project.ClashRoyale.Model.PlayerInfo;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
@@ -7,7 +13,9 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 public class DBConnector {
     private static final String URL = "jdbc:mysql://localhost:3306/clash_royale";
@@ -150,6 +158,134 @@ public class DBConnector {
             return -1; //connection error
         }
         return login(username, password);
+    }
+
+    public PlayerInfo getUserInfo(int userid) {
+        String query1 = "SELECT username, score, coins FROM users WHERE userid=" + userid;
+
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query1);
+            if(!resultSet.next())
+                return null;
+            String username = resultSet.getString("username");
+            int score = resultSet.getInt("score");
+            int coins = resultSet.getInt("coins");
+            String query2 = "SELECT * FROM level_score WHERE score>=" + score + " ORDER BY score ASC LIMIT 1";
+            closeStatement(statement);
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query2);
+            int level = 1;
+            if(!resultSet.next()) {
+                level = GlobalVariables.MAX_LEVEL;
+            } else {
+                level = resultSet.getInt("level");
+            }
+            closeStatement(statement);
+            return new PlayerInfo(username, userid, score, coins, level);
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return null;
+        }
+    }
+
+    public Card[] getAllCardsGeneral() {
+        String query1 = "SELECT * FROM cards";
+
+        try {
+            Statement statement1 = connection.createStatement();
+            ResultSet resultSet1 = statement1.executeQuery(query1);
+            ArrayList<Card> cards = new ArrayList<>();
+            while (resultSet1.next()) {
+                String name = resultSet1.getString("name");
+                int cost = resultSet1.getInt("cost");
+                ArrayList<String> forces = new ArrayList<>();
+                String query2 = "SELECT force_name, round FROM card_forces WHERE card_name='"+ name +"' ORDER BY round ASC";
+                Statement statement2 = connection.createStatement();
+                ResultSet resultSet2 = statement2.executeQuery(query2);
+                while (resultSet2.next()) {
+                    String forceName = resultSet2.getString("force_name");
+                    if(!forces.contains(forceName))
+                        forces.add(forceName);
+                }
+                Card card = new Card(name, cost);
+                if(forces.size() > 0)
+                    card.setForces(forces.toArray(new String[0]));
+                cards.add(card);
+                closeStatement(statement2);
+            }
+            closeStatement(statement1);
+            return cards.toArray(new Card[0]);
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return null;
+        }
+    }
+
+    public String[] getDeck(int userid) {
+        String query = "SELECT place, card_name FROM deck WHERE userid=" + userid + " ORDER BY place ASC";
+        String[] deck = new String[GlobalVariables.DECK_SIZE];
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            int index = 0;
+            while (resultSet.next()) {
+                deck[index] = resultSet.getString("card_name");
+                index++;
+            }
+            closeStatement(statement);
+            return deck;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return null;
+        }
+    }
+
+    public Force getForceInfo(int userid, String forceName) {
+        String query1 = "SELECT kind FROM force_kind WHERE name='" + forceName +"'";
+        int forceKind = 0;
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query1);
+            if(!resultSet.next())
+                return null;
+            forceKind = resultSet.getInt("kind");
+            closeStatement(statement);
+
+
+            String query2;
+            statement = connection.createStatement();
+            switch (forceKind) {
+                case 1:
+                    query2 = "SELECT ca.name, va.hp, va.damage, ca.hit_speed, ca.speed_tier, ca.target, ca.range, ca.area_splash, ca.flies, ca.projectile FROM soldiers_constant_attributes AS ca JOIN variable_attributes AS va WHERE ca.name='"+forceName+"' and va.name='"+forceName+"' and va.level="+userid;
+                    resultSet = statement.executeQuery(query2);
+                    closeStatement(statement);
+                    if(!resultSet.next())
+                        return null;
+                    return new Soldier(resultSet.getString("name"), resultSet.getInt("hp"), resultSet.getInt("damage"), resultSet.getFloat("hit_speed"), SpeedTier.getSpeedTier(resultSet.getInt("speed_tier")), TargetKind.getTargetKind(resultSet.getString("target")), resultSet.getFloat("range"), resultSet.getBoolean("area_splash"), resultSet.getBoolean("flies"), resultSet.getInt("projectile"));
+                case 2:
+                    query2 = "SELECT ca.name, va.hp, va.damage, ca.hit_speed, ca.target, ca.range, ca.lifetime, ca.projectile FROM building_constant_attributes AS ca JOIN variable_attributes AS va WHERE ca.name='"+forceName+"' and va.name='"+forceName+"' and va.level="+userid;
+                    resultSet = statement.executeQuery(query2);
+                    closeStatement(statement);
+                    if(!resultSet.next())
+                        return null;
+                    return new Building(resultSet.getString("name"), resultSet.getInt("hp"), resultSet.getInt("damage"), resultSet.getFloat("hit_speed"),  TargetKind.getTargetKind(resultSet.getString("target")), resultSet.getFloat("range"), resultSet.getInt("lifetime"), resultSet.getInt("projectile"));
+                case 3:
+                    //TODO: finish spell condition
+                    query2 = "";
+                    resultSet = statement.executeQuery(query2);
+                    closeStatement(statement);
+                    break;
+                default:
+                    return null;
+            }
+
+
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return null;
+        }
+        return null;
     }
 
     private int closeStatement(Statement statement) {

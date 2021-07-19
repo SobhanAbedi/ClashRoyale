@@ -1,8 +1,9 @@
 package edu.AP.Project.ClashRoyale.Model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
-public class Card implements Serializable {
+public class Card implements Serializable, Cloneable {
     private String name;
     private String[] forces;
     private int cost;
@@ -12,6 +13,13 @@ public class Card implements Serializable {
         this.name = name;
         this.cost = cost;
         this.deckLocation = deckLocation;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException{
+        Card card = new Card(name, cost, deckLocation);
+        card.setForces(Arrays.copyOf(forces, forces.length));
+        return card;
     }
 
     public Card(String name, int cost) {

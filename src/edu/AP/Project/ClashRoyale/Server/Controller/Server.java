@@ -1,5 +1,6 @@
 package edu.AP.Project.ClashRoyale.Server.Controller;
 
+import edu.AP.Project.ClashRoyale.Model.Card;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstruction;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstructionKind;
 import edu.AP.Project.ClashRoyale.Server.Model.ClientHandler;
@@ -11,6 +12,7 @@ import edu.AP.Project.ClashRoyale.Server.View.ServerUI;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Server implements Runnable{
 
@@ -19,10 +21,14 @@ public class Server implements Runnable{
     private ConnectionListener listener;
     private Thread listenerThread;
     private ArrayList<ClientHandler> handlerList;
+    private Card[] cards;
+    private DBConnector dbConnector;
 
     public Server() {
         stateLock = new Object();
         state = "Running";
+        cards = null;
+        dbConnector = new DBConnector();
     }
 
     @Override
@@ -37,7 +43,6 @@ public class Server implements Runnable{
         bArray[1] = 25;
         ServerInstruction instruction = new ServerInstruction(ServerInstructionKind.LOGIN, "SobhanAbedi", "TestPass", true, (Float)12.5f, bArray);
         System.out.println(instruction.toString());
-        DBConnector dbConnector = new DBConnector();
         if(dbConnector.connect() == 0)
             ui.sendVerification("DataBase Connected");
         ui.sendMessage(Integer.toString(dbConnector.signup("SobhanAbedi", "TestPass")), "\n", null);
@@ -47,6 +52,14 @@ public class Server implements Runnable{
             System.out.println(e.toString());
         }
         ui.sendMessage(Integer.toString(dbConnector.login("SobhanAbedi", "TestPass")), "\n", null);
+
+        Card[] cards = dbConnector.getAllCardsGeneral();
+        System.out.println("cards length: " + cards.length);
+        for(Card card : cards) {
+            System.out.println("Card: " + card.getName() + ", " + card.getCost() + ", " + Arrays.toString(card.getForces()));
+        }
+        System.out.println("Deck: " + Arrays.toString(dbConnector.getDeck(6)));
+
 
 
         if(dbConnector.disconnect() == 0)
@@ -79,4 +92,23 @@ public class Server implements Runnable{
             state = "Interrupted";
         }
     }
+
+    public Card[] getCards(boolean copy) {
+        if(cards == null)
+            cards = dbConnector.getAllCardsGeneral();
+        if(copy) {
+            Card[] newCards = new Card[cards.length];
+            for(int i = 0; i < cards.length; i++) {
+                try {
+                    newCards[i] = (Card)cards[i].clone();
+                } catch (CloneNotSupportedException e) {
+                    System.out.println(e.toString());
+                }
+            }
+            return newCards;
+        }
+        return cards;
+    }
+
+
 }

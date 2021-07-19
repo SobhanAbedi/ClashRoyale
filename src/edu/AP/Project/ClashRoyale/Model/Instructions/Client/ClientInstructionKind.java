@@ -5,7 +5,7 @@ import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstructionKin
 import java.util.HashMap;
 
 public enum ClientInstructionKind {
-    SUCCESS((char)0, "success"), FAIL((char)1, "fail");
+    SUCCESS((char)0, "success"), FAIL((char)1, "fail"), USER_INFO((char)2, "user info"), ALL_CARDS((char)3, "all cards");
 
     public final char code;
     public final String name;

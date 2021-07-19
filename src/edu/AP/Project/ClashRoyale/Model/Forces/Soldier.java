@@ -8,8 +8,10 @@ public class Soldier extends Force{
     private TargetKind target;
     private float range;
     private boolean areaSplash;
+    private boolean flies;
+    private int projectile;
 
-    public Soldier(String name, int HP, int damage, float hitSpeed, SpeedTier speed, TargetKind target, float range, boolean areaSplash) {
+    public Soldier(String name, int HP, int damage, float hitSpeed, SpeedTier speed, TargetKind target, float range, boolean areaSplash, boolean flies, int projectile) {
         super(name);
         this.HP = HP;
         this.damage = damage;
@@ -18,6 +20,12 @@ public class Soldier extends Force{
         this.target = target;
         this.range = range;
         this.areaSplash = areaSplash;
+        this.flies = flies;
+        this.projectile = projectile;
+    }
+
+    public Soldier(String name, int HP, int damage, float hitSpeed, SpeedTier speed, TargetKind target, float range, boolean areaSplash) {
+        this(name, HP, damage, hitSpeed, speed, target, range, areaSplash, false, 0);
     }
 
     public int getHP() {
