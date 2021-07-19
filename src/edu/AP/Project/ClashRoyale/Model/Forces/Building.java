@@ -1,0 +1,42 @@
+package edu.AP.Project.ClashRoyale.Model.Forces;
+
+public class Building extends Force{
+    private int HP;
+    private int damage;
+    private float hitSpeed;
+    private float range;
+    private int lifeTime;
+
+    public Building(String name, int HP, int damage, float hitSpeed, float range, int lifeTime) {
+        super(name);
+        this.HP = HP;
+        this.damage = damage;
+        this.hitSpeed = hitSpeed;
+        this.range = range;
+        this.lifeTime = lifeTime;
+    }
+
+    public int getHP() {
+        return HP;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public float getHitSpeed() {
+        return hitSpeed;
+    }
+
+    public float getRange() {
+        return range;
+    }
+
+    public int getLifeTime() {
+        return lifeTime;
+    }
+
+    public float getHealthGradiant() {
+        return -(((float)HP)/((float)lifeTime));
+    }
+}
