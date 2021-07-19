@@ -6,6 +6,7 @@ import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstruction;
 import edu.AP.Project.ClashRoyale.Server.Network.ClientTransmitter;
 
 import java.net.Socket;
+import java.util.HashMap;
 
 public class ClientHandler{
     DBConnector dbConnector;

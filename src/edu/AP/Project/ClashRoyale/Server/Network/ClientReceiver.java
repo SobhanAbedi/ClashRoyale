@@ -44,6 +44,7 @@ public class ClientReceiver implements Runnable {
             }
             if(instruction == null)
                 continue;
+
             switch (instruction.getKind()) {
                 case LOGIN:
                     handler.loginCheck(instruction);
