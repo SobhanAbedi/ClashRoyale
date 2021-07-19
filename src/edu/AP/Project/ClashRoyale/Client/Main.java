@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Main extends Application {
     private static Stage stage;
@@ -18,7 +19,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         stage = primaryStage;
-        Parent root = FXMLLoader.load(getClass().getResource("Views/login.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Views/login.fxml")));
         primaryStage.setTitle("ClashRoyal");
         primaryStage.setScene(new Scene(root, 1200, 800));
         primaryStage.setResizable(false);

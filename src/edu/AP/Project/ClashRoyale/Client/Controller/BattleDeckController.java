@@ -70,31 +70,43 @@ public class BattleDeckController {
 
     @FXML
     void initialize(){
-        // TODO
-        CardState cardState = new CardState();
+//         TODO
+//        CardState cardState = new CardState();
 
-        cardState.addCard(new Buildings("Inferno" , 5,2,
-                true,"../Images/Cards/buildings/inferno.png",
-                0.4f, Target.AIRANDGROUND,6,40,800,400));
-
-        cardState.addCard(new Buildings("Canon" , 6,1,
-                false,"../Images/Cards/buildings/cannon.png",
-                0.8f, Target.GROUND,5.5f,30,380,60));
-
-        cardState.addCard(new Troops("Barbarians",5,3,
-                false, "../Images/Cards/Troops/barbarians.png",
-                1.5f, Speed.Medium,Target.GROUND,1,false,
-                4,300,75));
-
-        cardState.addCard(new Spells("Rage",3,2,true,
-                "../Images/Cards/spells/rage.png","Description" ,
-                5,6));
-
+//        cardState.addCard(new Buildings("Inferno" , 5,2,
+//                true,"../Images/Cards/buildings/inferno.png",
+//                0.4f, Target.AIRANDGROUND,6,40,800,400));
+//
+//        cardState.addCard(new Buildings("Canon" , 6,1,
+//                false,"../Images/Cards/buildings/cannon.png",
+//                0.8f, Target.GROUND,5.5f,30,380,60));
+//
+//        cardState.addCard(new Troops("Barbarians",5,3,
+//                false, "../Images/Cards/Troops/barbarians.png",
+//                1.5f, Speed.Medium,Target.GROUND,1,false,
+//                4,300,75));
+//
+//        cardState.addCard(new Spells("Rage",3,2,true,
+//                "../Images/Cards/spells/rage.png","Description" ,
+//                5,6));
+        ArrayList<CardModel> cardModels = new ArrayList<>();
+        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/archers.png"));
+        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/baby_dragon.png"));
+        cardModels.add(new CardModel(false , 1, "../Images/Cards/Troops/barbarians.png"));
+        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/giant.png"));
+        cardModels.add(new CardModel(false , 2, "../Images/Cards/Troops/mini_pekka.png"));
+        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/valkyrie.png"));
+        cardModels.add(new CardModel(false , 1, "../Images/Cards/Troops/wizard.png"));
+        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/arrows.png"));
+        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/fireball.png"));
+        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/rage.png"));
+        cardModels.add(new CardModel(false , 1, "../Images/Cards/buildings/cannon.png"));
+        cardModels.add(new CardModel(true , 1, "../Images/Cards/buildings/inferno.png"));
 //        TODO Request server for battleDeck Cards and their specifications
 //
-        ArrayList<Card> cards = cardState.getCards();
+//        ArrayList<Card> cards = cardState.getCards();
 
-        for (Card card: cards){
+        for (CardModel card: cardModels){
             if (card.isInDeck()){
                 addCardToDeck(card);
             }else{
@@ -116,7 +128,7 @@ public class BattleDeckController {
 
     }
 
-    private void addCardToDeck(Card card){
+    private void addCardToDeck(CardModel card){
         VBox newObject = creatCardView(card);
         if(deckCounter < numberPerHBox){
             deckHBox1.getChildren().add(deckCounter,newObject);
@@ -128,7 +140,7 @@ public class BattleDeckController {
 
     }
 
-    private void addCardToCollection(Card card){
+    private void addCardToCollection(CardModel card){
         VBox newObject = creatCardView(card);
         if(collectionCounter < numberPerHBox){
             collectionHBox1.getChildren().add(collectionCounter,newObject);
@@ -139,14 +151,14 @@ public class BattleDeckController {
         }
     }
 
-    private VBox creatCardView(Card card){
+    private VBox creatCardView(CardModel card){
         VBox vBox = new VBox();
         vBox.alignmentProperty().set(Pos.CENTER);
 //        Image card1 = new Image (Objects.requireNonNull(getClass().getResourceAsStream(address)));
         ImageView card1View = new ImageView();
         card1View.setPreserveRatio(true);
         card1View.setFitWidth(100);
-        card1View.setImage(card.getCardImage());
+        card1View.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(card.getCardImageAddress()))));
         Label levelTxt = new Label();
         levelTxt.setText("Level " + card.getLevel());
         levelTxt.setFont(Font.font("Lilita One",20));
