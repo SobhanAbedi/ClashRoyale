@@ -30,6 +30,9 @@ public class LoginController {
     private Label msgBox;
 
     @FXML
+    private Label serverResponse;
+
+    @FXML
     void SignUpFunc(ActionEvent event) {
         changeScene("Views/SignUp.fxml");
     }

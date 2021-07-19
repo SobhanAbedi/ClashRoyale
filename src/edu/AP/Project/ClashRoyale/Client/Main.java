@@ -14,6 +14,7 @@ import java.util.Objects;
 
 public class Main extends Application {
     private static Stage stage;
+
 //    private static CardState cardState;
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -52,6 +53,7 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
 
 //    private static void initializeCards(){
 //        cardState = new CardState();
