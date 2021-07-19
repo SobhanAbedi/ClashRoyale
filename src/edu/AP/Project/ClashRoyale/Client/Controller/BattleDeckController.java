@@ -70,6 +70,7 @@ public class BattleDeckController {
 
     @FXML
     void initialize(){
+        // TODO
         CardState cardState = new CardState();
 
         cardState.addCard(new Buildings("Inferno" , 5,2,
@@ -114,6 +115,7 @@ public class BattleDeckController {
 //        addCardToCollection("../Images/Cards/buildings/inferno.png", 1);
 
     }
+
     private void addCardToDeck(Card card){
         VBox newObject = creatCardView(card);
         if(deckCounter < numberPerHBox){

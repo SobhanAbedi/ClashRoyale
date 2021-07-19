@@ -42,6 +42,25 @@ public class ProfileController {
     private HBox hbox;
 
     @FXML
+    private ImageView changeUsernameImage;
+
+    @FXML
+    private JFXButton changeUsernameBtn;
+
+    @FXML
+    private ImageView changePasswordImage;
+
+    @FXML
+    private JFXButton changePasswordBtn;
+
+    @FXML
+    private ImageView signOutImage;
+
+    @FXML
+    private JFXButton signOutBtn;
+
+
+    @FXML
     void battleClick(ActionEvent event) {
         changeScene("./Views/Battle.fxml");
     }
@@ -66,33 +85,50 @@ public class ProfileController {
     @FXML
     void mouseClicked(MouseEvent event) {
         Image silverButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/silver.png")));
-        Image grayButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/gray.png")));
+
         battleImage.setImage(silverButtonImage);
     }
 
     @FXML
     void mouseEntered(MouseEvent event) {
         Image silverButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/silver.png")));
+        Image goldButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/gold.png")));
         if (event.getSource().equals(battleBtn))
             battleImage.setImage(silverButtonImage);
         if (event.getSource().equals(battleDeckBtn))
             battleDeckImage.setImage(silverButtonImage);
         if (event.getSource().equals(battleHistory))
             battleHistoryImage.setImage(silverButtonImage);
+        if (event.getSource().equals(changeUsernameBtn))
+            changeUsernameImage.setImage(goldButtonImage);
+        if (event.getSource().equals(changePasswordBtn))
+            changePasswordImage.setImage(goldButtonImage);
+        if (event.getSource().equals(signOutBtn))
+            signOutImage.setImage(goldButtonImage);
     }
 
     @FXML
     void mouseExited(MouseEvent event) {
         Image grayButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/gray.png")));
+        Image silverButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/silver.png")));
         if (event.getSource().equals(battleBtn))
             battleImage.setImage(grayButtonImage);
         if (event.getSource().equals(battleDeckBtn))
             battleDeckImage.setImage(grayButtonImage);
         if (event.getSource().equals(battleHistory))
             battleHistoryImage.setImage(grayButtonImage);
-
+        if (event.getSource().equals(changeUsernameBtn))
+            changeUsernameImage.setImage(silverButtonImage);
+        if (event.getSource().equals(changePasswordBtn))
+            changePasswordImage.setImage(silverButtonImage);
+        if (event.getSource().equals(signOutBtn))
+            signOutImage.setImage(silverButtonImage);
     }
 
+    @FXML
+    void signOut(ActionEvent event) {
+        changeScene("Views/login.fxml");
+    }
 
 
 }
