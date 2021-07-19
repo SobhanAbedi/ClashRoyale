@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 
 
 import static edu.AP.Project.ClashRoyale.Client.Main.changeScene;
+import static edu.AP.Project.ClashRoyale.Client.Main.setUsername;
 
 
 public class LoginController {
@@ -39,7 +40,8 @@ public class LoginController {
 
     @FXML
     void login(ActionEvent event) {
-//        TODO Login 
+//        TODO Login
+        setUsername(usernameTxt.getText());
         msgBox.setText("Loged in Successfully");
         changeScene("Views/Battle.fxml");
 

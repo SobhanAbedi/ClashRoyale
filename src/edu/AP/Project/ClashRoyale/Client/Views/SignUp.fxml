@@ -79,6 +79,11 @@
                <font>
                   <Font name="Lilita One" size="23.0" />
                </font></JFXButton>
+            <Label fx:id="msgBox" maxWidth="1.7976931348623157E308" textFill="#ff6969" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <font>
+                  <Font name="Lilita One" size="14.0" />
+               </font>
+            </Label>
             </children>
             <GridPane.margin>
                 <Insets />

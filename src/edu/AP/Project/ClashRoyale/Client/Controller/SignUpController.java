@@ -9,6 +9,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import static edu.AP.Project.ClashRoyale.Client.Main.changeScene;
+import static edu.AP.Project.ClashRoyale.Client.Main.setUsername;
 
 public class SignUpController {
 
@@ -28,10 +29,10 @@ public class SignUpController {
     private JFXButton signUpBTN;
 
     @FXML
-    private Label msgBox;
+    private Label serverResponse;
 
     @FXML
-    private Label serverResponse;
+    private Label msgBox;
 
     @FXML
     void Login(ActionEvent event) {
@@ -42,7 +43,7 @@ public class SignUpController {
     void SignUp(ActionEvent event) {
         if (PasswordTxt.getText().equalsIgnoreCase(PasswordTxtRepeat.getText())){
 //            TODO Check and Sign up
-
+            setUsername(usernameTxt.getText());
             msgBox.setText("Successfully signed up");
             changeScene("Views/battle.fxml");
         }else{

@@ -14,6 +14,7 @@ import java.util.Objects;
 
 public class Main extends Application {
     private static Stage stage;
+    private static String username;
 
 //    private static CardState cardState;
     @Override
@@ -54,6 +55,13 @@ public class Main extends Application {
         stage.show();
     }
 
+    public static void setUsername(String username1){
+        username = username1;
+    }
+
+    public static String getUsername(){
+        return username;
+    }
 
 //    private static void initializeCards(){
 //        cardState = new CardState();
