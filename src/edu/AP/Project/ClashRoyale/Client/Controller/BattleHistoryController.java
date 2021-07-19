@@ -64,6 +64,21 @@ public class BattleHistoryController {
         games.add(new Game(false,"Abedi" , 2,3,70));
         games.add(new Game(true,"hamid" , 3,2,200));
         games.add(new Game(false,"Abooei" , 1,2,70));
+        games.add(new Game(true,"Hamidreza" , 2,1,200));
+        games.add(new Game(false,"Sobhan" , 0,3,70));
+        games.add(new Game(false,"Abedi" , 2,3,70));
+        games.add(new Game(true,"hamid" , 3,2,200));
+        games.add(new Game(false,"Abooei" , 1,2,70));
+        games.add(new Game(true,"Hamidreza" , 2,1,200));
+        games.add(new Game(false,"Sobhan" , 0,3,70));
+        games.add(new Game(false,"Abedi" , 2,3,70));
+        games.add(new Game(true,"hamid" , 3,2,200));
+        games.add(new Game(false,"Abooei" , 1,2,70));
+        games.add(new Game(true,"Hamidreza" , 2,1,200));
+        games.add(new Game(false,"Sobhan" , 0,3,70));
+        games.add(new Game(false,"Abedi" , 2,3,70));
+        games.add(new Game(true,"hamid" , 3,2,200));
+        games.add(new Game(false,"Abooei" , 1,2,70));
 
         listView.setItems(games);
         listView.setCellFactory(

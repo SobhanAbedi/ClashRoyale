@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -25,7 +26,7 @@
    <children>
       <ImageView fitHeight="800.0" fitWidth="1200.0" pickOnBounds="true" preserveRatio="true" GridPane.valignment="TOP">
          <image>
-            <Image url="@../Images/background.png" />
+            <Image url="@../Images/background3.png" />
          </image>
       </ImageView>
       <ImageView fx:id="battleImage" fitHeight="100.0" fitWidth="230.0" pickOnBounds="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
@@ -69,13 +70,16 @@
          </font>
       </JFXButton>
       <HBox fx:id="hbox" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowSpan="4">
+      <ListView fx:id="listView" cache="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowSpan="4">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
          <GridPane.margin>
             <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
          </GridPane.margin>
+         <effect>
+            <InnerShadow />
+         </effect>
       </ListView>
    </children>
 </GridPane>

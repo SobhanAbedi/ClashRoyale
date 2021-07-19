@@ -4,11 +4,21 @@ public class CardModel {
     private boolean inDeck;
     private int level;
     private String cardImageAddress;
+    private String name;
 
-    public CardModel(boolean inDeck, int level, String cardImageAddress) {
+    public CardModel(boolean inDeck, int level, String cardImageAddress, String name) {
         this.inDeck = inDeck;
         this.level = level;
         this.cardImageAddress = cardImageAddress;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public boolean isInDeck() {

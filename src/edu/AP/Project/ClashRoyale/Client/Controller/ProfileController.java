@@ -86,18 +86,18 @@ public class ProfileController {
         cup.setText("100");
 
         ArrayList<CardModel> cardModels = new ArrayList<>();
-        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/archers.png"));
-        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/baby_dragon.png"));
-        cardModels.add(new CardModel(false , 1, "../Images/Cards/Troops/barbarians.png"));
-        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/giant.png"));
-        cardModels.add(new CardModel(false , 2, "../Images/Cards/Troops/mini_pekka.png"));
-        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/valkyrie.png"));
-        cardModels.add(new CardModel(false , 1, "../Images/Cards/Troops/wizard.png"));
-        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/arrows.png"));
-        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/fireball.png"));
-        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/rage.png"));
-        cardModels.add(new CardModel(false , 1, "../Images/Cards/buildings/cannon.png"));
-        cardModels.add(new CardModel(true , 1, "../Images/Cards/buildings/inferno.png"));
+        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/archers.png" , "archer"));
+        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/baby_dragon.png","baby_dragon"));
+        cardModels.add(new CardModel(false , 1, "../Images/Cards/Troops/barbarians.png","barbarians"));
+        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/giant.png","giant"));
+        cardModels.add(new CardModel(false , 2, "../Images/Cards/Troops/mini_pekka.png" ,"mini_pekka"));
+        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/valkyrie.png","valkyrie"));
+        cardModels.add(new CardModel(false , 1, "../Images/Cards/Troops/wizard.png","wizard"));
+        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/arrows.png","arrows"));
+        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/fireball.png","fireball"));
+        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/rage.png","rage"));
+        cardModels.add(new CardModel(false , 1, "../Images/Cards/buildings/cannon.png","cannon"));
+        cardModels.add(new CardModel(true , 1, "../Images/Cards/buildings/inferno.png","inferno"));
 
         for (CardModel card: cardModels){
             if (card.isInDeck()){
