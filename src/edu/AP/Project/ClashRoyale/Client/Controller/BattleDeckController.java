@@ -1,6 +1,9 @@
 package edu.AP.Project.ClashRoyale.Client.Controller;
 
 import com.jfoenix.controls.JFXButton;
+import edu.AP.Project.ClashRoyale.Client.Main;
+import edu.AP.Project.ClashRoyale.Client.Models.*;
+import edu.AP.Project.ClashRoyale.Client.State.CardState;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -13,15 +16,17 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static edu.AP.Project.ClashRoyale.Client.Main.changeScene;
 
 public class BattleDeckController {
     private int deckCardNumber = 8;
-    private int numberPerHBox = 4;
+    private int numberPerHBox = 6;
     private int deckCounter = 0;
     private int collectionCounter = 0;
+
 
 
     @FXML
@@ -65,24 +70,52 @@ public class BattleDeckController {
 
     @FXML
     void initialize(){
-//        TODO Request server for battleDeck Cards and their Level
-//        VBo
-        addCardToDeck("../Images/Cards/Troops/archers.png" ,4);
-        addCardToDeck("../Images/Cards/Troops/baby_dragon.png" , 2);
-        addCardToCollection("../Images/Cards/Troops/barbarians.png", 1);
-        addCardToDeck("../Images/Cards/Troops/giant.png", 1);
-        addCardToDeck("../Images/Cards/Troops/mini_pekka.png", 1);
-        addCardToCollection("../Images/Cards/Troops/valkyrie.png", 3);
-        addCardToDeck("../Images/Cards/Troops/wizard.png", 1);
-        addCardToDeck("../Images/Cards/spells/arrows.png", 2);
-        addCardToCollection("../Images/Cards/spells/fireball.png", 2);
-        addCardToDeck("../Images/Cards/spells/rage.png", 1);
-        addCardToDeck("../Images/Cards/buildings/cannon.png", 2);
-        addCardToCollection("../Images/Cards/buildings/inferno.png", 1);
+        CardState cardState = new CardState();
+
+        cardState.addCard(new Buildings("Inferno" , 5,2,
+                true,"../Images/Cards/buildings/inferno.png",
+                0.4f, Target.AIRANDGROUND,6,40,800,400));
+
+        cardState.addCard(new Buildings("Canon" , 6,1,
+                false,"../Images/Cards/buildings/cannon.png",
+                0.8f, Target.GROUND,5.5f,30,380,60));
+
+        cardState.addCard(new Troops("Barbarians",5,3,
+                false, "../Images/Cards/Troops/barbarians.png",
+                1.5f, Speed.Medium,Target.GROUND,1,false,
+                4,300,75));
+
+        cardState.addCard(new Spells("Rage",3,2,true,
+                "../Images/Cards/spells/rage.png","Description" ,
+                5,6));
+
+//        TODO Request server for battleDeck Cards and their specifications
+//
+        ArrayList<Card> cards = cardState.getCards();
+
+        for (Card card: cards){
+            if (card.isInDeck()){
+                addCardToDeck(card);
+            }else{
+                addCardToCollection(card);
+            }
+        }
+//        addCardToDeck("../Images/Cards/Troops/archers.png" ,4);
+//        addCardToDeck("../Images/Cards/Troops/baby_dragon.png" , 2);
+//        addCardToCollection("../Images/Cards/Troops/barbarians.png", 1);
+//        addCardToDeck("../Images/Cards/Troops/giant.png", 1);
+//        addCardToDeck("../Images/Cards/Troops/mini_pekka.png", 1);
+//        addCardToCollection("../Images/Cards/Troops/valkyrie.png", 3);
+//        addCardToDeck("../Images/Cards/Troops/wizard.png", 1);
+//        addCardToDeck("../Images/Cards/spells/arrows.png", 2);
+//        addCardToCollection("../Images/Cards/spells/fireball.png", 2);
+//        addCardToDeck("../Images/Cards/spells/rage.png", 1);
+//        addCardToDeck("../Images/Cards/buildings/cannon.png", 2);
+//        addCardToCollection("../Images/Cards/buildings/inferno.png", 1);
 
     }
-    private void addCardToDeck(String address,int level){
-        VBox newObject = creatCardView(address , level);
+    private void addCardToDeck(Card card){
+        VBox newObject = creatCardView(card);
         if(deckCounter < numberPerHBox){
             deckHBox1.getChildren().add(deckCounter,newObject);
             deckCounter++;
@@ -93,8 +126,8 @@ public class BattleDeckController {
 
     }
 
-    private void addCardToCollection(String address , int level){
-        VBox newObject = creatCardView(address , level);
+    private void addCardToCollection(Card card){
+        VBox newObject = creatCardView(card);
         if(collectionCounter < numberPerHBox){
             collectionHBox1.getChildren().add(collectionCounter,newObject);
             collectionCounter++;
@@ -104,16 +137,16 @@ public class BattleDeckController {
         }
     }
 
-    private VBox creatCardView(String address, int level){
+    private VBox creatCardView(Card card){
         VBox vBox = new VBox();
         vBox.alignmentProperty().set(Pos.CENTER);
-        Image card1 = new Image (Objects.requireNonNull(getClass().getResourceAsStream(address)));
+//        Image card1 = new Image (Objects.requireNonNull(getClass().getResourceAsStream(address)));
         ImageView card1View = new ImageView();
         card1View.setPreserveRatio(true);
         card1View.setFitWidth(100);
-        card1View.setImage(card1);
+        card1View.setImage(card.getCardImage());
         Label levelTxt = new Label();
-        levelTxt.setText("Level " + level);
+        levelTxt.setText("Level " + card.getLevel());
         levelTxt.setFont(Font.font("Lilita One",20));
         levelTxt.textFillProperty().set(Paint.valueOf("#b5b2ff"));
         vBox.getChildren().addAll(card1View,levelTxt);
