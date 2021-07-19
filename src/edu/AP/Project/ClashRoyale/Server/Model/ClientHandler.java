@@ -3,19 +3,34 @@ package edu.AP.Project.ClashRoyale.Server.Model;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstruction;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstructionKind;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstruction;
+import edu.AP.Project.ClashRoyale.Server.Controller.Server;
+import edu.AP.Project.ClashRoyale.Server.Network.ClientReceiver;
 import edu.AP.Project.ClashRoyale.Server.Network.ClientTransmitter;
 
 import java.net.Socket;
 import java.util.HashMap;
 
 public class ClientHandler{
-    DBConnector dbConnector;
     Socket socket;
+    Server server;
+    DBConnector dbConnector;
+    ClientReceiver clientReceiver;
+    Thread receiverThread;
 
-    public ClientHandler(Socket socket) {
+    public ClientHandler(Socket socket, Server server) {
+        this.socket = socket;
+        this.server = server;
         dbConnector = new DBConnector();
         dbConnector.connect();
-        this.socket = socket;
+        this.clientReceiver = new ClientReceiver(this.socket, this);
+        receiverThread = new Thread(clientReceiver);
+        receiverThread.start();
+    }
+
+    public void close() {
+        receiverThread.interrupt();
+        dbConnector.disconnect();
+        server.closeClient(this);
     }
 
     //TODO: move encryption to client side.(you can send byte[] as Objects)

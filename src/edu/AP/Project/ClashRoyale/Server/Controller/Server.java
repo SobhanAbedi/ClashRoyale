@@ -2,12 +2,15 @@ package edu.AP.Project.ClashRoyale.Server.Controller;
 
 import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstruction;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstructionKind;
+import edu.AP.Project.ClashRoyale.Server.Model.ClientHandler;
 import edu.AP.Project.ClashRoyale.Server.Model.DBConnector;
 import edu.AP.Project.ClashRoyale.Server.Network.ConnectionListener;
 import edu.AP.Project.ClashRoyale.Server.View.ServerCLUI;
 import edu.AP.Project.ClashRoyale.Server.View.ServerUI;
 
+import java.net.Socket;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Server implements Runnable{
 
@@ -15,6 +18,7 @@ public class Server implements Runnable{
     private String  state;
     private ConnectionListener listener;
     private Thread listenerThread;
+    private ArrayList<ClientHandler> handlerList;
 
     public Server() {
         stateLock = new Object();
@@ -57,6 +61,15 @@ public class Server implements Runnable{
                 }
             }
         }
+    }
+
+    public void newClient(Socket socket) {
+        ClientHandler handler = new ClientHandler(socket, this);
+        handlerList.add(handler);
+    }
+
+    public void closeClient(ClientHandler handler) {
+        handlerList.remove(handler);
     }
 
     public void stop() {
