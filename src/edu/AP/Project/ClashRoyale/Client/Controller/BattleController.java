@@ -1,6 +1,7 @@
 package edu.AP.Project.ClashRoyale.Client.Controller;
 
 import com.jfoenix.controls.JFXButton;
+import edu.AP.Project.ClashRoyale.Client.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -9,11 +10,14 @@ import javafx.scene.input.MouseEvent;
 
 import java.util.Objects;
 
-import static edu.AP.Project.ClashRoyale.Client.Main.changeScene;
+
 
 
 public class BattleController {
-
+    private Client client;
+    public BattleController(Client client){
+        this.client = client;
+    }
 
     @FXML
     private ImageView battleDeckImage;
@@ -77,17 +81,17 @@ public class BattleController {
 
     @FXML
     void battleDeckClick(ActionEvent event) {
-        changeScene("Views/BattleDeck.fxml");
+        client.changeScene("Views/BattleDeck.fxml", new BattleDeckController(client));
     }
 
     @FXML
     void battleHistoryClick(ActionEvent event) {
-        changeScene("Views/BattleHistory.fxml");
+        client.changeScene("Views/BattleHistory.fxml", new BattleHistoryController(client));
     }
 
     @FXML
     void profileClick(ActionEvent event) {
-        changeScene("Views/Profile.fxml");
+        client.changeScene("Views/Profile.fxml" , new ProfileController(client));
     }
 
     @FXML

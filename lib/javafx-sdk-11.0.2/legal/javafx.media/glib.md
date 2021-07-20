@@ -22,7 +22,7 @@ You can use Mercurial to clone the repository or you can browse the
 source using a web browser. The root directory of the GNU Glib source
 code is here:
 
-   rt/modules/javafx.media/src/main/native/gstreamer/3rd_party/glib/
+   rt/modules/javafx.media/src/client/native/gstreamer/3rd_party/glib/
 </pre>
 
 ### LGPL 2.1

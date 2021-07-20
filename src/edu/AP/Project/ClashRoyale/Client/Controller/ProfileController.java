@@ -1,6 +1,7 @@
 package edu.AP.Project.ClashRoyale.Client.Controller;
 
 import com.jfoenix.controls.JFXButton;
+import edu.AP.Project.ClashRoyale.Client.Client;
 import edu.AP.Project.ClashRoyale.Client.Models.CardModel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,12 +19,15 @@ import javafx.scene.text.Font;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static edu.AP.Project.ClashRoyale.Client.Main.changeScene;
-import static edu.AP.Project.ClashRoyale.Client.Main.getUsername;
 
 public class ProfileController {
 
     private int counter = 0;
+    private Client client;
+
+    public ProfileController(Client client){
+        this.client = client;
+    }
 
     @FXML
     private ImageView battleImage;
@@ -81,7 +85,7 @@ public class ProfileController {
 
     @FXML
     private void initialize(){
-        username.setText(getUsername());
+        username.setText(client.getUsername());
 //        TODO get League and Cup
         league.setText("Bronze1");
         cup.setText("100");
@@ -154,23 +158,23 @@ public class ProfileController {
 
     @FXML
     void battleClick(ActionEvent event) {
-        changeScene("./Views/Battle.fxml");
+        client.changeScene("./Views/Battle.fxml" , new BattleController(client));
     }
 
     @FXML
     void battleDeckClick(ActionEvent event) {
-        changeScene("Views/BattleDeck.fxml");
+        client.changeScene("Views/BattleDeck.fxml" , new BattleDeckController(client));
     }
 
     @FXML
     void battleHistoryClick(ActionEvent event) {
-        changeScene("Views/BattleHistory.fxml");
+        client.changeScene("Views/BattleHistory.fxml" , new BattleHistoryController(client));
 
     }
 
     @FXML
     void profileClick(ActionEvent event) {
-        changeScene("Views/Profile.fxml");
+        client.changeScene("Views/Profile.fxml" , new ProfileController(client));
 
     }
 
@@ -219,7 +223,7 @@ public class ProfileController {
 
     @FXML
     void signOut(ActionEvent event) {
-        changeScene("Views/login.fxml");
+        client.changeScene("Views/login.fxml" , new LoginController(client));
     }
 
 

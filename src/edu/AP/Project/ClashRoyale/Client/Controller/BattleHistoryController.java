@@ -1,6 +1,7 @@
 package edu.AP.Project.ClashRoyale.Client.Controller;
 
 import com.jfoenix.controls.JFXButton;
+import edu.AP.Project.ClashRoyale.Client.Client;
 import edu.AP.Project.ClashRoyale.Client.Models.Game;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,18 +12,21 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 
 import java.util.Objects;
 
-import static edu.AP.Project.ClashRoyale.Client.Main.changeScene;
+
 
 public class BattleHistoryController {
 
-    ObservableList<Game> games = FXCollections.observableArrayList();
+    private ObservableList<Game> games = FXCollections.observableArrayList();
+    private Client client;
 
+    public BattleHistoryController(Client client){
+        this.client = client;
+    }
 
     @FXML
     private ImageView battleImage;
@@ -53,7 +57,7 @@ public class BattleHistoryController {
 
     @FXML
     void battleClick(ActionEvent event) {
-        changeScene("./Views/Battle.fxml");
+        client.changeScene("./Views/Battle.fxml" , new BattleController(client));
     }
 
     @FXML
@@ -85,7 +89,7 @@ public class BattleHistoryController {
             new Callback<ListView<Game>, ListCell<Game>>() {
                 @Override
                 public ListCell<Game> call(ListView<Game> listView) {
-                    return new BattleGameCellViewerController();
+                    return new BattleGameCellViewerController(client);
                 }
             }
         );
@@ -95,19 +99,19 @@ public class BattleHistoryController {
 
     @FXML
     void battleDeckClick(ActionEvent event) {
-        changeScene("Views/BattleDeck.fxml");
+        client.changeScene("Views/BattleDeck.fxml" , new BattleDeckController(client));
 
     }
 
     @FXML
     void battleHistoryClick(ActionEvent event) {
-        changeScene("Views/BattleHistory.fxml");
+        client.changeScene("Views/BattleHistory.fxml" , new BattleHistoryController(client));
 
     }
 
     @FXML
     void profileClick(ActionEvent event) {
-        changeScene("Views/profile.fxml");
+        client.changeScene("Views/profile.fxml" , new ProfileController(client));
 
     }
 

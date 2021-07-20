@@ -1,6 +1,11 @@
 package edu.AP.Project.ClashRoyale.Client.Controller;
 
 import com.jfoenix.controls.JFXButton;
+import edu.AP.Project.ClashRoyale.Client.Client;
+import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstruction;
+import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstructionKind;
+import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstruction;
+import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstructionKind;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
@@ -8,10 +13,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import static edu.AP.Project.ClashRoyale.Client.Main.changeScene;
-import static edu.AP.Project.ClashRoyale.Client.Main.setUsername;
 
 public class SignUpController {
+    private Client client;
+
+    public SignUpController(Client client){
+        this.client = client;
+    }
 
     @FXML
     private TextField usernameTxt;
@@ -36,16 +44,25 @@ public class SignUpController {
 
     @FXML
     void Login(ActionEvent event) {
-        changeScene("Views/login.fxml");
+        client.changeScene("Views/login.fxml" , new LoginController(client));
     }
 
     @FXML
     void SignUp(ActionEvent event) {
         if (PasswordTxt.getText().equalsIgnoreCase(PasswordTxtRepeat.getText())){
 //            TODO Check and Sign up
-            setUsername(usernameTxt.getText());
-            msgBox.setText("Successfully signed up");
-            changeScene("Views/battle.fxml");
+            ServerInstruction serverInstruction = new ServerInstruction(ServerInstructionKind.SIGNUP,usernameTxt.getText() , PasswordTxt.getText());
+
+
+            ClientInstruction clientInstruction = client.getClientHandler().signupCheck(serverInstruction);
+            if (clientInstruction.getKind() == ClientInstructionKind.SUCCESS){
+                client.setUsername(usernameTxt.getText());
+                msgBox.setText("Successfully signed up");
+                client.changeScene("Views/battle.fxml" , new BattleController(client));
+            }else {
+                msgBox.setText((String) clientInstruction.getArg(0));
+            }
+
         }else{
             msgBox.setText("Password Fields are NOT the same.");
         }

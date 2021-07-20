@@ -1,6 +1,7 @@
 package edu.AP.Project.ClashRoyale.Client.Controller;
 
 import com.jfoenix.controls.JFXButton;
+import edu.AP.Project.ClashRoyale.Client.Client;
 import edu.AP.Project.ClashRoyale.Client.Models.Game;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +18,10 @@ import java.util.Objects;
 
 public class BattleGameCellViewerController extends ListCell<Game> {
 
+    private Client client;
+    public BattleGameCellViewerController(Client client){
+        this.client = client;
+    }
 
     @FXML
     private GridPane gridPane;

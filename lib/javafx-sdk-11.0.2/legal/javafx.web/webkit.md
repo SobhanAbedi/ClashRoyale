@@ -22,7 +22,7 @@ You can use Mercurial to clone the repository or you can browse the
 source using a web browser. The root directory of the WebKit source
 code is here:
 
-   rt/modules/javafx.web/src/main/native/
+   rt/modules/javafx.web/src/client/native/
 </pre>
 
 ### LGPL 2.1

@@ -130,7 +130,7 @@ public class ClientHandler{
 
     }
 
-    public void signupCheck(ServerInstruction instruction) {
+    public ClientInstruction signupCheck(ServerInstruction instruction) {
         String username = (String) instruction.getArg(0);
         String password = (String) instruction.getArg(1);
 
@@ -140,22 +140,26 @@ public class ClientHandler{
             case -1:
                 //send connection problem message
                 transmitter.setInstruction(new ClientInstruction(ClientInstructionKind.FAIL, "Connection Problem"));
-                break;
+                return new ClientInstruction(ClientInstructionKind.FAIL, "Connection Problem");
+//                break;
             case -2:
                 //send username already taken message
                 transmitter.setInstruction(new ClientInstruction(ClientInstructionKind.FAIL, "Username Already Taken"));
-                break;
+                return new ClientInstruction(ClientInstructionKind.FAIL, "Username Already Taken");
+//                break;
             case -5:
             case -6:
                 //send something went wrong message
                 transmitter.setInstruction(new ClientInstruction(ClientInstructionKind.FAIL, "Something Went Wrong"));
-                break;
+                return new ClientInstruction(ClientInstructionKind.FAIL, "Something Went Wrong");
+//                break;
             default:
                 //send signup successful message with userid
                 transmitter.setInstruction(new ClientInstruction(ClientInstructionKind.SUCCESS, res));
-                break;
+                return new ClientInstruction(ClientInstructionKind.SUCCESS, res);
+//                break;
         }
-        new Thread(transmitter).start();
+//        new Thread(transmitter).start();
     }
 
     public void getPlayerInfo(ServerInstruction instruction) {

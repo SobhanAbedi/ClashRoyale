@@ -22,7 +22,7 @@ You can use Mercurial to clone the repository or you can browse the
 source using a web browser. The root directory of the GStreamer source
 code is here:
 
-   rt/modules/javafx.media/src/main/native/gstreamer/gstreamer-lite/
+   rt/modules/javafx.media/src/client/native/gstreamer/gstreamer-lite/
 </pre>
 
 ### LGPL 2.1

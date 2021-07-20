@@ -1,9 +1,9 @@
 package edu.AP.Project.ClashRoyale.Client.Controller;
 
 import com.jfoenix.controls.JFXButton;
-import edu.AP.Project.ClashRoyale.Client.Main;
+import edu.AP.Project.ClashRoyale.Client.Client;
 import edu.AP.Project.ClashRoyale.Client.Models.*;
-import edu.AP.Project.ClashRoyale.Client.State.CardState;
+import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstruction;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -20,13 +20,18 @@ import javafx.scene.text.Font;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static edu.AP.Project.ClashRoyale.Client.Main.changeScene;
+
 
 public class BattleDeckController {
     private int deckCardNumber = 8;
     private int numberPerHBox = 6;
     private int deckCounter = 0;
     private int collectionCounter = 0;
+    private Client client;
+
+    public BattleDeckController(Client client){
+        this.client = client;
+    }
 
 
 
@@ -209,7 +214,7 @@ public class BattleDeckController {
 
     @FXML
     void battleClick(ActionEvent event) {
-        changeScene("./Views/Battle.fxml");
+        client.changeScene("./Views/Battle.fxml", new BattleController(client));
     }
 
     @FXML
@@ -221,12 +226,12 @@ public class BattleDeckController {
 
     @FXML
     void battleHistoryClick(ActionEvent event) {
-        changeScene("Views/BattleHistory.fxml");
+        client.changeScene("Views/BattleHistory.fxml" , new BattleHistoryController(client));
     }
 
     @FXML
     void profileClick(ActionEvent event) {
-        changeScene("Views/Profile.fxml");
+        client.changeScene("Views/Profile.fxml", new ProfileController(client));
     }
 
     @FXML

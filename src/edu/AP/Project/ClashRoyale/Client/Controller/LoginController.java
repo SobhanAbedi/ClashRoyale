@@ -1,8 +1,7 @@
 package edu.AP.Project.ClashRoyale.Client.Controller;
 
 import com.jfoenix.controls.JFXButton;
-import edu.AP.Project.ClashRoyale.Client.Main;
-import edu.AP.Project.ClashRoyale.Client.Network.ServerTransmitter;
+import edu.AP.Project.ClashRoyale.Client.Client;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstruction;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstructionKind;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstruction;
@@ -14,10 +13,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import static edu.AP.Project.ClashRoyale.Client.Main.*;
+import static edu.AP.Project.ClashRoyale.Client.Client.*;
 
 
 public class LoginController {
+    private Client client;
+    public LoginController(Client client){
+        this.client = client;
+    }
 
     @FXML
     private TextField usernameTxt;
@@ -39,12 +42,11 @@ public class LoginController {
 
     @FXML
     void SignUpFunc(ActionEvent event) {
-        changeScene("Views/SignUp.fxml");
+        client.changeScene("Views/SignUp.fxml" , new SignUpController(client));
     }
 
     @FXML
     void login(ActionEvent event) {
-//        TODO Login
 //        System.out.println(usernameTxt.getText()  + "  " +PasswordTxt.getText());
 //        System.out.println(getSocket().isClosed());
         ServerInstruction serverInstruction = new ServerInstruction(ServerInstructionKind.LOGIN,usernameTxt.getText() , PasswordTxt.getText());
@@ -58,11 +60,11 @@ public class LoginController {
 //
 //        System.out.println(getSocket().isClosed());
 
-        ClientInstruction clientInstruction = Main.getClientHandler().loginCheck(serverInstruction);
+        ClientInstruction clientInstruction = client.getClientHandler().loginCheck(serverInstruction);
         if (clientInstruction.getKind() == ClientInstructionKind.SUCCESS){
-            setUsername(usernameTxt.getText());
+            client.setUsername(usernameTxt.getText());
             msgBox.setText("Loged in Successfully");
-            changeScene("Views/Battle.fxml");
+            client.changeScene("Views/Battle.fxml" , new BattleController(client));
         }else{
             msgBox.setText((String) clientInstruction.getArg(0));
 

@@ -43,12 +43,12 @@ public class ServerTransmitter implements Runnable{
 //            }
         }
         System.out.println(socket.isClosed());
-        int counter =0;
-        while(true){
-            if (counter % 100000 == 0){
-                System.out.println("server Transmitter is ON");
-            }
-            counter++;
-        }
+//        int counter =0;
+//        while(true){
+//            if (counter % 100000 == 0){
+//                System.out.println("server Transmitter is ON");
+//            }
+//            counter++;
+//        }
     }
 }
