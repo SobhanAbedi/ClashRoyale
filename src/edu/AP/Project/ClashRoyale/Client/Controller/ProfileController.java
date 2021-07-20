@@ -3,6 +3,7 @@ package edu.AP.Project.ClashRoyale.Client.Controller;
 import com.jfoenix.controls.JFXButton;
 import edu.AP.Project.ClashRoyale.Client.Models.CardModel;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -120,6 +121,29 @@ public class ProfileController {
         card1View.setPreserveRatio(true);
         card1View.setFitWidth(100);
         card1View.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(card.getCardImageAddress()))));
+        card1View.opacityProperty().set(0.8);
+        card1View.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+//                TODO use this handler to identify and change Deck
+//                cardInitializer();
+                System.out.println( card.getName() + " pressed");
+
+//                mouseEvent.consume();
+            }
+        });
+        card1View.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                card1View.opacityProperty().set(1);
+            }
+        });
+        card1View.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                card1View.opacityProperty().set(0.8);
+            }
+        });
         Label levelTxt = new Label();
         levelTxt.setText("Level " + card.getLevel());
         levelTxt.setFont(Font.font("Lilita One",20));
