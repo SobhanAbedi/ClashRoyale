@@ -10,15 +10,18 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Main extends Application {
     private static Stage stage;
+    private static String username;
+
 //    private static CardState cardState;
     @Override
     public void start(Stage primaryStage) throws Exception{
 
         stage = primaryStage;
-        Parent root = FXMLLoader.load(getClass().getResource("Views/login.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Views/login.fxml")));
         primaryStage.setTitle("ClashRoyal");
         primaryStage.setScene(new Scene(root, 1200, 800));
         primaryStage.setResizable(false);
@@ -50,6 +53,14 @@ public class Main extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public static void setUsername(String username1){
+        username = username1;
+    }
+
+    public static String getUsername(){
+        return username;
     }
 
 //    private static void initializeCards(){

@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -73,7 +74,7 @@
          <children>
             <Label alignment="TOP_CENTER" contentDisplay="TOP" text="Battle Deck" textFill="#b5b2ff">
                <font>
-                  <Font name="Lilita One" size="50.0" />
+                  <Font name="Lilita One" size="40.0" />
                </font>
                <padding>
                   <Insets top="30.0" />
@@ -90,7 +91,7 @@
          <children>
             <Label alignment="TOP_CENTER" contentDisplay="TOP" text="Card Collection" textFill="#b5b2ff">
                <font>
-                  <Font name="Lilita One" size="50.0" />
+                  <Font name="Lilita One" size="40.0" />
                </font>
                <padding>
                   <Insets top="30.0" />
@@ -98,6 +99,7 @@
             </Label>
             <HBox fx:id="collectionHBox1" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" />
             <HBox fx:id="collectionHBox2" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" />
+            <TilePane prefHeight="200.0" prefWidth="200.0" />
          </children>
          <GridPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
