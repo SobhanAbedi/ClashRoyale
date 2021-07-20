@@ -5,6 +5,7 @@ import edu.AP.Project.ClashRoyale.Server.Model.ClientHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
@@ -36,6 +37,9 @@ public class ClientReceiver implements Runnable {
             } catch (ClassNotFoundException e){
                 System.out.println("Class of Serialized Object cannot be found: " + e.toString());
                 continue;
+            } catch (InterruptedIOException e){
+                Thread.currentThread().interrupt();
+                continue;
             } catch (IOException e) {
                 System.out.println("Error while trying to receive a message from client: " + e.toString());
                 continue;
@@ -65,6 +69,17 @@ public class ClientReceiver implements Runnable {
                 case UPDATE_DECK:
                     handler.updateDeck(instruction);
                     break;
+                case START_TRAINING_CAMP:
+                    handler.startTrainingCamp(false, instruction);
+                    break;
+                case START_TRAINING_CAMP_SMART:
+                    handler.startTrainingCamp(true, instruction);
+                    break;
+                case JOIN_1V1_POOL:
+                    handler.joinPool(false, instruction);
+                    break;
+                case JOIN_2V2_POOL:
+                    handler.joinPool(true, instruction);
             }
         }
 
