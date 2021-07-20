@@ -1,8 +1,6 @@
 package edu.AP.Project.ClashRoyale.Server.Network;
 
-import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstruction;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstruction;
-import edu.AP.Project.ClashRoyale.Server.Controller.Server;
 import edu.AP.Project.ClashRoyale.Server.Model.ClientHandler;
 
 import java.io.IOException;
@@ -51,6 +49,21 @@ public class ClientReceiver implements Runnable {
                     break;
                 case SIGNUP:
                     handler.signupCheck(instruction);
+                    break;
+                case GET_PLAYER_INFO:
+                    handler.getPlayerInfo(instruction);
+                    break;
+                case GET_ALL_CARDS:
+                    handler.getAllCards(instruction);
+                    break;
+                case GET_FORCE_INFO:
+                    handler.getForceInfo(instruction);
+                    break;
+                case GET_ALL_FORCES:
+                    handler.getAllForces(instruction);
+                    break;
+                case UPDATE_DECK:
+                    handler.updateDeck(instruction);
                     break;
             }
         }

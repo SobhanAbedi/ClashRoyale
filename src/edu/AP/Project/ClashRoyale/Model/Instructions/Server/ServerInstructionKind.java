@@ -4,7 +4,9 @@ import java.util.HashMap;
 
 public enum ServerInstructionKind {
 
-    LOGIN((char)0, "login"), SIGNUP((char)1, "signup");
+    LOGIN((char)0, "login"), SIGNUP((char)1, "signup"), GET_PLAYER_INFO((char)2, "get player info"),
+    GET_ALL_CARDS((char)3, "get all cards"), GET_FORCE_INFO((char)4, "get force info"),
+    GET_ALL_FORCES((char)5, "get all forces"), UPDATE_DECK((char)6, "update deck");
 
     public final char code;
     public final String name;

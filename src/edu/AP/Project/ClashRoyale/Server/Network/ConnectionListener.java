@@ -40,7 +40,7 @@ public class ConnectionListener implements Runnable {
             try {
                 socket = serverSocket.accept();
                 ui.sendMessage("New Client Connected " + socket.getRemoteSocketAddress(), "\n", ConsoleColors.GREEN);
-                //TODO: Send the connection to server for it to be dealt with
+                server.newClient(socket);
             } catch (SocketTimeoutException e) {
 
             } catch (IOException e) {
