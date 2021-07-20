@@ -6,6 +6,7 @@ import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstruction;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstructionKind;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstruction;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstructionKind;
+import edu.AP.Project.ClashRoyale.Model.PlayerInfo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
@@ -13,7 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import static edu.AP.Project.ClashRoyale.Client.Client.*;
+
 
 
 public class LoginController {
@@ -61,9 +62,19 @@ public class LoginController {
 //        System.out.println(getSocket().isClosed());
 
         ClientInstruction clientInstruction = client.getClientHandler().loginCheck(serverInstruction);
+//        System.out.println(clientInstruction.getArg(0));
         if (clientInstruction.getKind() == ClientInstructionKind.SUCCESS){
             client.setUsername(usernameTxt.getText());
             msgBox.setText("Loged in Successfully");
+            ServerInstruction serverInstruction1 = new ServerInstruction(ServerInstructionKind.GET_PLAYER_INFO,clientInstruction.getArg(0),false);
+            ClientInstruction clientInstruction1 = client.getClientHandler().getPlayerInfo(serverInstruction1);
+            if (clientInstruction1.getKind() == ClientInstructionKind.USER_INFO){
+                PlayerInfo playerInfo = (PlayerInfo) clientInstruction1.getArg(0);
+                client.setPlayerInfo(playerInfo);
+                System.out.println(playerInfo);
+            }else{
+                serverResponse.setText((String) clientInstruction1.getArg(0));
+            }
             client.changeScene("Views/Battle.fxml" , new BattleController(client));
         }else{
             msgBox.setText((String) clientInstruction.getArg(0));

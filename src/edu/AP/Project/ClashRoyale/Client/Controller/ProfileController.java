@@ -87,8 +87,31 @@ public class ProfileController {
     private void initialize(){
         username.setText(client.getUsername());
 //        TODO get League and Cup
-        league.setText("Bronze1");
-        cup.setText("100");
+        int level = client.getPlayerInfo().getLevel();
+        String levelLabel;
+        switch (level){
+            case 2:
+                levelLabel = "Stone League";
+                break;
+            case 3:
+                levelLabel = "Bronze League";
+                break;
+            case 4:
+                levelLabel = "Silver League";
+                break;
+            case 5:
+                levelLabel = "Gold League";
+                break;
+            default:
+                levelLabel = "Wooden League";
+        }
+        int cups = client.getPlayerInfo().getScore();
+
+
+//        TODO Get cards from Server
+
+        league.setText(levelLabel);
+        cup.setText(String.valueOf(cups));
 
         ArrayList<CardModel> cardModels = new ArrayList<>();
         cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/archers.png" , "archer"));
@@ -223,6 +246,8 @@ public class ProfileController {
 
     @FXML
     void signOut(ActionEvent event) {
+        client.setPlayerInfo(null);
+        client.setUsername(null);
         client.changeScene("Views/login.fxml" , new LoginController(client));
     }
 

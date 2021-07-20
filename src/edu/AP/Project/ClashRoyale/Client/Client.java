@@ -1,6 +1,7 @@
 package edu.AP.Project.ClashRoyale.Client;
 
 import edu.AP.Project.ClashRoyale.Client.Controller.LoginController;
+import edu.AP.Project.ClashRoyale.Model.PlayerInfo;
 import edu.AP.Project.ClashRoyale.Server.Controller.Server;
 import edu.AP.Project.ClashRoyale.Server.Model.ClientHandler;
 import javafx.application.Application;
@@ -18,6 +19,7 @@ import java.net.Socket;
 public class Client extends Application {
     private  Stage stage;
     private  String username;
+    private PlayerInfo playerInfo;
     private  Socket socket;
     private  Server server;
     private  ClientHandler clientHandler;
@@ -62,6 +64,14 @@ public class Client extends Application {
 
     public  Socket getSocket(){
         return socket;
+    }
+
+    public PlayerInfo getPlayerInfo() {
+        return playerInfo;
+    }
+
+    public void setPlayerInfo(PlayerInfo playerInfo) {
+        this.playerInfo = playerInfo;
     }
 
     public static void main(String[] args) {

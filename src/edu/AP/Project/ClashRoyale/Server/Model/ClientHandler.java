@@ -162,7 +162,7 @@ public class ClientHandler{
 //        new Thread(transmitter).start();
     }
 
-    public void getPlayerInfo(ServerInstruction instruction) {
+    public ClientInstruction getPlayerInfo(ServerInstruction instruction) {
         int id = (Integer) instruction.getArg(0);
         boolean forceCheck = (Boolean) instruction.getArg(1);
 
@@ -171,20 +171,24 @@ public class ClientHandler{
             PlayerInfo res = dbConnector.getUserInfo(id);
             if (res == null) {
                 transmitter.setInstruction(new ClientInstruction(ClientInstructionKind.FAIL, "Wrong userid or Something went wrong"));
+                return new ClientInstruction(ClientInstructionKind.FAIL, "Wrong userid or Something went wrong");
             } else {
                 transmitter.setInstruction(new ClientInstruction(ClientInstructionKind.USER_INFO, res));
+                return new ClientInstruction(ClientInstructionKind.USER_INFO, res);
             }
         } else {
             transmitter.setInstruction(new ClientInstruction(ClientInstructionKind.USER_INFO, clientInfo));
+            return new ClientInstruction(ClientInstructionKind.USER_INFO, clientInfo);
         }
-        new Thread(transmitter).start();
+//        new Thread(transmitter).start();
     }
 
-    public void getAllCards(ServerInstruction instruction) {
+    public ClientInstruction getAllCards(ServerInstruction instruction) {
         //No arguments
         if(cards == null)
             loadAllCards();
         new Thread(new ClientTransmitter(socket, new ClientInstruction(ClientInstructionKind.ALL_CARDS, (Object) cards)));
+        return new ClientInstruction(ClientInstructionKind.ALL_CARDS, (Object) cards);
     }
 
     public void getForceInfo(ServerInstruction instruction) {

@@ -3,7 +3,11 @@ package edu.AP.Project.ClashRoyale.Client.Controller;
 import com.jfoenix.controls.JFXButton;
 import edu.AP.Project.ClashRoyale.Client.Client;
 import edu.AP.Project.ClashRoyale.Client.Models.*;
+import edu.AP.Project.ClashRoyale.Model.Card;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstruction;
+import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstructionKind;
+import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstruction;
+import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstructionKind;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -114,6 +118,17 @@ public class BattleDeckController {
 //        addCardToCollection("../Images/Cards/buildings/inferno.png", 1);
     }
     private void cardInitializer(){
+        ServerInstruction serverInstruction = new ServerInstruction(ServerInstructionKind.GET_ALL_CARDS);
+        ClientInstruction clientInstruction = client.getClientHandler().getAllCards(serverInstruction);
+        if (clientInstruction.getKind() == ClientInstructionKind.ALL_CARDS){
+            Card[] cards = (Card[]) clientInstruction.getArg(0);
+            System.out.println("card Get");
+            for (Card card: cards){
+                System.out.println("Card");
+            }
+        }
+
+
         deckCounter = 0;
         collectionCounter = 0;
         ArrayList<CardModel> cardModels = new ArrayList<>();

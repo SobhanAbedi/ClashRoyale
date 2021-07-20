@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import edu.AP.Project.ClashRoyale.Client.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -68,9 +69,34 @@ public class BattleController {
     private ImageView imageBox;
 
     @FXML
+    private Label cups;
+
+    @FXML
+    private Label coins;
+
+    @FXML
     void initialize(){
-        Image arena = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/arenas/arena1.png")));
+        Image arena ;
+        switch (client.getPlayerInfo().getLevel()){
+            case 2:
+                arena = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/arenas/arena2.png")));
+                break;
+            case 3:
+                arena = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/arenas/arena3.png")));
+                break;
+            case 4:
+                arena = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/arenas/arena4.png")));
+                break;
+            case 5:
+                arena = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/arenas/arena5.png")));
+                break;
+            default:
+                arena = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/arenas/arena1.png")));
+        }
         imageBox.setImage(arena);
+        coins.setText(String.valueOf(client.getPlayerInfo().getCoins()));
+        cups.setText(String.valueOf(client.getPlayerInfo().getScore()));
+
     }
 
 
