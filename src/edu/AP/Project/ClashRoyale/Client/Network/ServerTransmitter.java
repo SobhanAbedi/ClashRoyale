@@ -33,14 +33,22 @@ public class ServerTransmitter implements Runnable{
         } catch (IOException e) {
             System.out.println("Error while trying to send a message to Server: " + e.toString());
         } finally {
-            try {
-                if (oos != null)
-                    oos.close();
-                if (os != null)
-                    os.close();
-            } catch (IOException e) {
-                System.out.println("Error while trying to close ServerTransmitter connection : " + e.toString());
+//            try {
+//                if (oos != null)
+//                    oos.close();
+//                if (os != null)
+//                    os.close();
+//            } catch (IOException e) {
+//                System.out.println("Error while trying to close ServerTransmitter connection : " + e.toString());
+//            }
+        }
+        System.out.println(socket.isClosed());
+        int counter =0;
+        while(true){
+            if (counter % 100000 == 0){
+                System.out.println("server Transmitter is ON");
             }
+            counter++;
         }
     }
 }

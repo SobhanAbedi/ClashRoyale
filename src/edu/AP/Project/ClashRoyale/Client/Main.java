@@ -2,6 +2,9 @@ package edu.AP.Project.ClashRoyale.Client;
 
 import edu.AP.Project.ClashRoyale.Client.Models.*;
 import edu.AP.Project.ClashRoyale.Client.State.CardState;
+import edu.AP.Project.ClashRoyale.Model.GlobalVariables;
+import edu.AP.Project.ClashRoyale.Server.Controller.Server;
+import edu.AP.Project.ClashRoyale.Server.Model.ClientHandler;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,12 +12,17 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Main extends Application {
     private static Stage stage;
     private static String username;
+    private static Socket socket;
+    private static Server server;
+    private static ClientHandler clientHandler;
+    private static Thread IranServer;
 
 //    private static CardState cardState;
     @Override
@@ -26,16 +34,45 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 1200, 800));
         primaryStage.setResizable(false);
         primaryStage.show();
+        try {
+            socket = new Socket(GlobalVariables.SERVER_ADDRESS, GlobalVariables.PORT);
+        }catch (IOException io){
+            System.err.println("Error connecting to server");
+        }
         //
 //        initializeCards();
         //
     }
 
+    public static Socket getSocket(){
+        return socket;
+    }
+
     public static void main(String[] args) {
+        server = new Server();
+        IranServer = new Thread(server);
+        IranServer.start();
+        clientHandler = new ClientHandler(null , server);
         launch(args);
     }
 
-//    public static ArrayList<Card> getCards(){
+
+    public static Stage getStage() {
+        return stage;
+    }
+
+    public static Server getServer() {
+        return server;
+    }
+
+    public static ClientHandler getClientHandler() {
+        return clientHandler;
+    }
+
+    public static Thread getIranServer() {
+        return IranServer;
+    }
+    //    public static ArrayList<Card> getCards(){
 //        return cardState.getCards();
 //    }
 

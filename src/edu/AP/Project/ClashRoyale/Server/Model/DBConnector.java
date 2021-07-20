@@ -21,7 +21,7 @@ import java.util.HashMap;
 public class DBConnector {
     private static final String URL = "jdbc:mysql://localhost:3306/clash_royale";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "TestPass12345";
+    private static final String PASSWORD = "hamidreza";
     private static final int SALT_LEN = 16;
     private static final int PASS_LEN = 128;
     private Connection connection;

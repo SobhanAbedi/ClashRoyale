@@ -48,6 +48,7 @@ public class Server implements Runnable{
         gamePool1v1 = new GamePool(2);
         gamePool2v2 = new GamePool(4);
         engines = new HashMap<>();
+        handlerList = new ArrayList<>();
     }
 
     @Override

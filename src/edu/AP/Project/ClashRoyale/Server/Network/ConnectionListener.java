@@ -29,11 +29,11 @@ public class ConnectionListener implements Runnable {
             ui.sendError("Couldn't start a ServerSocket with the given port: " + e.toString());
             return;
         }
-        try {
-            serverSocket.setSoTimeout(GlobalVariables.LISTENER_TIMEOUT_DURATION);
-        } catch (SocketException e) {
-            ui.sendError("Couldn't set timout for Listener " + e.toString());
-        }
+//        try {
+//            serverSocket.setSoTimeout(GlobalVariables.LISTENER_TIMEOUT_DURATION);
+//        } catch (SocketException e) {
+//            ui.sendError("Couldn't set timout for Listener " + e.toString());
+//        }
         ui.sendVerification("Listener Started " + serverSocket.getLocalSocketAddress());
         while (!Thread.interrupted()) {
             Socket socket;

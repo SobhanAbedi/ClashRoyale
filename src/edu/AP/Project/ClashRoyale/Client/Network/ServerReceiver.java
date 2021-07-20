@@ -47,6 +47,8 @@ public class ServerReceiver implements Runnable{
                 continue;
 
             //TODO: Do something with the received message
+
+            System.out.println(instruction.getKind() + "   "+ instruction.getArg(0));
         }
 
         try {

@@ -95,7 +95,7 @@ public class ClientHandler{
     }
 
     //TODO: move encryption to client side.(you can send byte[] as Objects)
-    public void loginCheck(ServerInstruction instruction) {
+    public ClientInstruction loginCheck(ServerInstruction instruction) {
         String username = (String) instruction.getArg(0);
         String password = (String) instruction.getArg(1);
 
@@ -105,24 +105,29 @@ public class ClientHandler{
             case -1:
                 //send connection problem message
                 transmitter.setInstruction(new ClientInstruction(ClientInstructionKind.FAIL, "Connection Problem"));
-                break;
+                return new ClientInstruction(ClientInstructionKind.FAIL, "Connection Problem");
+//                break;
             case -2:
             case -3:
                 //send wrong password or username message
                 transmitter.setInstruction(new ClientInstruction(ClientInstructionKind.FAIL, "Wrong Username or Password"));
-                break;
+                return new ClientInstruction(ClientInstructionKind.FAIL, "Wrong Username or Password");
+//                break;
             case -5:
             case -6:
                 //send something went wrong message
                 transmitter.setInstruction(new ClientInstruction(ClientInstructionKind.FAIL, "Something Went Wrong"));
-                break;
+                return new ClientInstruction(ClientInstructionKind.FAIL, "Something Went Wrong");
+//                break;
             default:
                 //send login successful message with userid
                 clientInfo = dbConnector.getUserInfo(res);
                 transmitter.setInstruction(new ClientInstruction(ClientInstructionKind.SUCCESS, res));
-                break;
+                return new ClientInstruction(ClientInstructionKind.SUCCESS , res);
+//                break;
         }
-        new Thread(transmitter).start();
+//        new Thread(transmitter).start();
+
     }
 
     public void signupCheck(ServerInstruction instruction) {

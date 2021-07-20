@@ -30,14 +30,16 @@ public class ClientTransmitter implements Runnable{
         } catch (IOException e) {
             System.out.println("Error while trying to send a message to client: " + e.toString());
         } finally {
-            try {
-                if (oos != null)
-                    oos.close();
-                if (os != null)
-                    os.close();
-            } catch (IOException e) {
-                System.out.println("Error while trying to close ClientTransmitter connection : " + e.toString());
+//            try {
+//                if (oos != null)
+//                    oos.close();
+//                if (os != null)
+//                    os.close();
+//            } catch (IOException e) {
+//                System.out.println("Error while trying to close ClientTransmitter connection : " + e.toString());
             }
+        while (!Thread.interrupted()){
+
         }
     }
 }
