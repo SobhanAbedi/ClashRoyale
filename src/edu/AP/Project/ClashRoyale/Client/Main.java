@@ -37,11 +37,11 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 1200, 800));
         primaryStage.setResizable(false);
         primaryStage.show();
-        try {
-            socket = new Socket(GlobalVariables.SERVER_ADDRESS, GlobalVariables.PORT);
-        }catch (IOException io){
-            System.err.println("Error connecting to server");
-        }
+//        try {
+//            socket = new Socket(GlobalVariables.SERVER_ADDRESS, GlobalVariables.PORT);
+//        }catch (IOException io){
+//            System.err.println("Error connecting to server");
+//        }
         //
 //        initializeCards();
         //

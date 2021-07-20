@@ -30,7 +30,7 @@ public class ClientHandler{
         this.server = server;
         dbConnector = new DBConnector();
         dbConnector.connect();
-        this.clientReceiver = new ClientReceiver(this.socket, this);
+//        this.clientReceiver = new ClientReceiver(this.socket, this);
         receiverThread = new Thread(clientReceiver);
         receiverThread.start();
         clientInfo = null;

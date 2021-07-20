@@ -55,9 +55,9 @@ public class Server implements Runnable{
     public void run() {
         ServerUI ui = new ServerCLUI(this);
         ui.start();
-        listener = new ConnectionListener(ui, this);
-        listenerThread = new Thread(listener);
-        listenerThread.start();
+//        listener = new ConnectionListener(ui, this);
+//        listenerThread = new Thread(listener);
+//        listenerThread.start();
         byte[] bArray = new byte[2];
         bArray[0] = 12;
         bArray[1] = 25;
