@@ -135,7 +135,7 @@ public class ClientHandler{
         String password = (String) instruction.getArg(1);
 
         ClientTransmitter transmitter = new ClientTransmitter(socket, null);
-        int res = dbConnector.login(username, password);
+        int res = dbConnector.signup(username, password);
         switch (res) {
             case -1:
                 //send connection problem message

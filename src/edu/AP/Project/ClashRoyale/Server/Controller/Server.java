@@ -65,7 +65,7 @@ public class Server implements Runnable{
         System.out.println(instruction.toString());
         if(dbConnector.connect() == 0)
             ui.sendVerification("DataBase Connected");
-        ui.sendMessage(Integer.toString(dbConnector.signup("SobhanAbedi", "TestPass")), "\n", null);
+        ui.sendMessage(Integer.toString(dbConnector.signup("Hamidreza", "hamid")), "\n", null);
         try {
             System.out.println(dbConnector.usernameExists("SobhanAbedi"));
         } catch (SQLException e) {
