@@ -128,7 +128,7 @@ public class Server implements Runnable{
 
     public void stop() {
         System.out.println("Trying to stop the server");
-        listenerThread.interrupt();
+        //listenerThread.interrupt();
         synchronized (stateLock) {
             state = "Interrupted";
         }

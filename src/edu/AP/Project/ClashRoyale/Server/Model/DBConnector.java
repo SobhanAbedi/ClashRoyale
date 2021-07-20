@@ -21,7 +21,7 @@ import java.util.HashMap;
 public class DBConnector {
     private static final String URL = "jdbc:mysql://localhost:3306/clash_royale";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "hamidreza";
+    private static final String PASSWORD = "TestPass12345";
     private static final int SALT_LEN = 16;
     private static final int PASS_LEN = 128;
     private Connection connection;
@@ -363,13 +363,14 @@ public class DBConnector {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("INSERT INTO deck (`userid`, `place`) VALUES");
             for(int i = 1; i <= GlobalVariables.DECK_SIZE; i++) {
-                stringBuilder.append(" (").append(userid).append(", ").append(i).append(")");
                 if(i > 1)
                     stringBuilder.append(",");
+                stringBuilder.append(" (").append(userid).append(", ").append(i).append(")");
+
             }
             stringBuilder.append(";");
             String query = stringBuilder.toString();
-
+            System.out.println("query: " + query);
             Statement statement = connection.createStatement();
             int res = statement.executeUpdate(query);
             closeStatement(statement);
