@@ -1,12 +1,15 @@
 package edu.AP.Project.ClashRoyale.Client.Controller;
 
+import com.jfoenix.controls.JFXButton;
 import edu.AP.Project.ClashRoyale.Client.Models.Game;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
@@ -32,6 +35,12 @@ public class BattleGameCellViewerController extends ListCell<Game> {
 
     @FXML
     private Label score;
+
+    @FXML
+    private ImageView viewImage;
+
+    @FXML
+    private JFXButton viewBtn;
 
     private FXMLLoader mLLoader;
 
@@ -60,6 +69,23 @@ public class BattleGameCellViewerController extends ListCell<Game> {
             score.setText(String.valueOf(item.getScore()));
             setGraphic(gridPane);
         }
+    }
+
+    @FXML
+    void mouseEntered(MouseEvent event) {
+        Image goldButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/gold.png")));
+        viewImage.setImage(goldButtonImage);
+    }
+
+    @FXML
+    void mouseExited(MouseEvent event) {
+        Image silverButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/silver.png")));
+        viewImage.setImage(silverButtonImage);
+    }
+
+    @FXML
+    void viewClicked(ActionEvent event) {
+
     }
 
 
