@@ -6,4 +6,5 @@ public class GlobalVariables {
     public final static int LISTENER_TIMEOUT_DURATION = 5000;
     public final static int MAX_LEVEL = 5;
     public final static int DECK_SIZE = 8;
+    public final static float DELTA_TIME =0.1f;
 }
