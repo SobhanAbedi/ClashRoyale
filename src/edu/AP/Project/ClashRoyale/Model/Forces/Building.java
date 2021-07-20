@@ -10,7 +10,7 @@ public class Building extends Force{
     private int projectile;
 
     public Building(String name, int HP, int damage, float hitSpeed, TargetKind target, float range, int lifeTime, int projectile) {
-        super(name);
+        super(name, ForceKind.BUILDING);
         this.HP = HP;
         this.damage = damage;
         this.hitSpeed = hitSpeed;

@@ -12,7 +12,7 @@ public class Soldier extends Force{
     private int projectile;
 
     public Soldier(String name, int HP, int damage, float hitSpeed, SpeedTier speed, TargetKind target, float range, boolean areaSplash, boolean flies, int projectile) {
-        super(name);
+        super(name, ForceKind.SOLDIER);
         this.HP = HP;
         this.damage = damage;
         this.hitSpeed = hitSpeed;

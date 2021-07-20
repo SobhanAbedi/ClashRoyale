@@ -1,6 +1,7 @@
 package edu.AP.Project.ClashRoyale.Server.Model;
 
 import edu.AP.Project.ClashRoyale.Model.Card;
+import edu.AP.Project.ClashRoyale.Model.Forces.Force;
 import edu.AP.Project.ClashRoyale.Model.GlobalVariables;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstruction;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstructionKind;
@@ -117,13 +118,17 @@ public class ClientHandler{
 
     public void getAllCards(ServerInstruction instruction) {
         //No arguments
-        if(clientInfo == null)
+        if(clientInfo == null) {
             sendUserInfoInvalid();
+            return;
+        }
 
         Card[] cards = server.getCards(true);
         String[] deck = dbConnector.getDeck(clientInfo.getUserID());
-        if(deck == null)
+        if(deck == null) {
             sendUserInfoInvalid();
+            return;
+        }
 
         HashMap<String, Integer> deckMap = new HashMap<>();
         for(int i = 0; i < GlobalVariables.DECK_SIZE; i++) {
@@ -141,9 +146,52 @@ public class ClientHandler{
     public void getForceInfo(ServerInstruction instruction) {
         String forceName = (String) instruction.getArg(0);
 
-        if(clientInfo == null)
+        if(clientInfo == null) {
             sendUserInfoInvalid();
+            return;
+        }
 
+        Force force = server.getForceInfo(forceName, clientInfo.getLevel());
+        if(force == null) {
+            sendUserInfoInvalid();
+            return;
+        }
+        new Thread(new ClientTransmitter(socket, new ClientInstruction(ClientInstructionKind.FORCE_INFO, force)));
+    }
+
+    public void getAllForces(ServerInstruction instruction) {
+        if(clientInfo == null) {
+            sendUserInfoInvalid();
+            return;
+        }
+        HashMap<String, Force> forces = server.getAllForcesOfLevel(clientInfo.getLevel());
+        if(forces == null) {
+            sendUserInfoInvalid();
+            return;
+        }
+        new Thread(new ClientTransmitter(socket, new ClientInstruction(ClientInstructionKind.ALL_FORCES_INFO, forces)));
+    }
+
+    public void updateScore(int newScore) {
+        int userid = clientInfo.getUserID();
+        if(dbConnector.updateUserScore(userid, newScore) == 0) {
+            clientInfo = dbConnector.getUserInfo(userid);
+        }
+    }
+
+    public void updateDeck(ServerInstruction instruction) {
+        int place = (Integer) instruction.getArg(0);
+        String cardName = (String) instruction.getArg(1);
+        if(clientInfo == null) {
+            sendUserInfoInvalid();
+            return;
+        }
+
+        if(dbConnector.updateDeck(clientInfo.getUserID(), place, cardName) == 0) {
+            new Thread(new ClientTransmitter(socket, new ClientInstruction(ClientInstructionKind.SUCCESS, "Deck Changed")));
+        } else {
+            new Thread(new ClientTransmitter(socket, new ClientInstruction(ClientInstructionKind.FAIL, "Wrong Deck Location")));
+        }
     }
 
     private void sendUserInfoInvalid() {

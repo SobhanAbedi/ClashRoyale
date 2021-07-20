@@ -12,8 +12,9 @@ public enum SpeedTier {
     private static HashMap<Integer, SpeedTier> list;
 
     static {
+        list = new HashMap<>();
         for(SpeedTier tierItr : SpeedTier.values()) {
-            list.put(tierItr.tier, tierItr);
+            SpeedTier.list.put(tierItr.tier, tierItr);
         }
     }
 
@@ -24,6 +25,6 @@ public enum SpeedTier {
     }
 
     public static SpeedTier getSpeedTier(int tier) {
-        return list.get(tier);
+        return SpeedTier.list.get(tier);
     }
 }

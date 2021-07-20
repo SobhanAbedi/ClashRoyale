@@ -16,6 +16,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class DBConnector {
     private static final String URL = "jdbc:mysql://localhost:3306/clash_royale";
@@ -157,7 +158,9 @@ public class DBConnector {
             System.out.println(e.toString());
             return -1; //connection error
         }
-        return login(username, password);
+        int userid = login(username, password);
+        insertDeck(userid);
+        return userid;
     }
 
     public PlayerInfo getUserInfo(int userid) {
@@ -222,6 +225,61 @@ public class DBConnector {
         }
     }
 
+    public HashMap<String, Force[]> getAllForces () {
+        HashMap<String , Force[]> forceList = new HashMap<>();
+        String query;
+        Statement statement;
+        ResultSet resultSet;
+        try {
+            //Get Soldiers
+            query = "SELECT ca.name, va.level, va.hp, va.damage, ca.hit_speed, ca.speed_tier, ca.target, ca.range, ca.area_splash, ca.flies, ca.projectile FROM soldiers_constant_attributes AS ca JOIN variable_attributes AS va WHERE ca.name=va.name";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                String name = resultSet.getString("name");
+                if(!forceList.containsKey(name)){
+                    forceList.put(name, new Force[GlobalVariables.MAX_LEVEL]);
+                }
+                Force[] force = forceList.get(name);
+                force[resultSet.getInt("level") - 1] = new Soldier(resultSet.getString("name"), resultSet.getInt("hp"), resultSet.getInt("damage"), resultSet.getFloat("hit_speed"), SpeedTier.getSpeedTier(resultSet.getInt("speed_tier")), TargetKind.getTargetKind(resultSet.getString("target")), resultSet.getFloat("range"), resultSet.getBoolean("area_splash"), resultSet.getBoolean("flies"), resultSet.getInt("projectile"));
+            }
+            closeStatement(statement);
+
+            //Get Buildings
+            query = "SELECT ca.name, va.level, va.hp, va.damage, ca.hit_speed, ca.target, ca.range, ca.lifetime, ca.projectile FROM building_constant_attributes AS ca JOIN variable_attributes AS va WHERE ca.name=va.name";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                String name = resultSet.getString("name");
+                if(!forceList.containsKey(name)){
+                    forceList.put(name, new Force[GlobalVariables.MAX_LEVEL]);
+                }
+                Force[] force = forceList.get(name);
+                force[resultSet.getInt("level") - 1] = new Building(resultSet.getString("name"), resultSet.getInt("hp"), resultSet.getInt("damage"), resultSet.getFloat("hit_speed"),  TargetKind.getTargetKind(resultSet.getString("target")), resultSet.getFloat("range"), resultSet.getInt("lifetime"), resultSet.getInt("projectile"));
+            }
+            closeStatement(statement);
+
+            //Get Spells
+            query = "SELECT ca.name, va.level, ca.radius, va.damage, va.duration FROM spell_constant_attributes AS ca JOIN spell_variable_attributes AS va WHERE ca.name=va.name";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                String name = resultSet.getString("name");
+                if(!forceList.containsKey(name)){
+                    forceList.put(name, new Force[GlobalVariables.MAX_LEVEL]);
+                }
+                Force[] force = forceList.get(name);
+                force[resultSet.getInt("level") - 1] = new Spell(resultSet.getString("name"),resultSet.getFloat("radius"), resultSet.getInt("damage"), resultSet.getFloat("duration"));
+            }
+            closeStatement(statement);
+
+            return forceList;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return null;
+        }
+    }
+
     public String[] getDeck(int userid) {
         String query = "SELECT place, card_name FROM deck WHERE userid=" + userid + " ORDER BY place ASC";
         String[] deck = new String[GlobalVariables.DECK_SIZE];
@@ -241,7 +299,7 @@ public class DBConnector {
         }
     }
 
-    public Force getForceInfo(int userid, String forceName) {
+    public Force getForceInfo(String forceName, int userLevel) {
         String query1 = "SELECT kind FROM force_kind WHERE name='" + forceName +"'";
         int forceKind = 0;
         try {
@@ -252,40 +310,93 @@ public class DBConnector {
             forceKind = resultSet.getInt("kind");
             closeStatement(statement);
 
-
             String query2;
             statement = connection.createStatement();
             switch (forceKind) {
                 case 1:
-                    query2 = "SELECT ca.name, va.hp, va.damage, ca.hit_speed, ca.speed_tier, ca.target, ca.range, ca.area_splash, ca.flies, ca.projectile FROM soldiers_constant_attributes AS ca JOIN variable_attributes AS va WHERE ca.name='"+forceName+"' and va.name='"+forceName+"' and va.level="+userid;
+                    query2 = "SELECT ca.name, va.hp, va.damage, ca.hit_speed, ca.speed_tier, ca.target, ca.range, ca.area_splash, ca.flies, ca.projectile FROM soldiers_constant_attributes AS ca JOIN variable_attributes AS va WHERE ca.name='"+forceName+"' and va.name='"+forceName+"' and va.level="+userLevel;
                     resultSet = statement.executeQuery(query2);
                     closeStatement(statement);
                     if(!resultSet.next())
                         return null;
                     return new Soldier(resultSet.getString("name"), resultSet.getInt("hp"), resultSet.getInt("damage"), resultSet.getFloat("hit_speed"), SpeedTier.getSpeedTier(resultSet.getInt("speed_tier")), TargetKind.getTargetKind(resultSet.getString("target")), resultSet.getFloat("range"), resultSet.getBoolean("area_splash"), resultSet.getBoolean("flies"), resultSet.getInt("projectile"));
                 case 2:
-                    query2 = "SELECT ca.name, va.hp, va.damage, ca.hit_speed, ca.target, ca.range, ca.lifetime, ca.projectile FROM building_constant_attributes AS ca JOIN variable_attributes AS va WHERE ca.name='"+forceName+"' and va.name='"+forceName+"' and va.level="+userid;
+                    query2 = "SELECT ca.name, va.hp, va.damage, ca.hit_speed, ca.target, ca.range, ca.lifetime, ca.projectile FROM building_constant_attributes AS ca JOIN variable_attributes AS va WHERE ca.name='"+forceName+"' and va.name='"+forceName+"' and va.level="+userLevel;
                     resultSet = statement.executeQuery(query2);
                     closeStatement(statement);
                     if(!resultSet.next())
                         return null;
                     return new Building(resultSet.getString("name"), resultSet.getInt("hp"), resultSet.getInt("damage"), resultSet.getFloat("hit_speed"),  TargetKind.getTargetKind(resultSet.getString("target")), resultSet.getFloat("range"), resultSet.getInt("lifetime"), resultSet.getInt("projectile"));
                 case 3:
-                    //TODO: finish spell condition
-                    query2 = "";
+                    query2 = "SELECT ca.name, ca.radius, va.damage, va.duration FROM spell_constant_attributes AS ca JOIN spell_variable_attributes AS va WHERE ca.name='"+forceName+"' and va.name='"+forceName+"' and va.level="+userLevel;
                     resultSet = statement.executeQuery(query2);
                     closeStatement(statement);
-                    break;
+                    if(!resultSet.next())
+                        return null;
+                    return new Spell(resultSet.getString("name"),resultSet.getFloat("radius"), resultSet.getInt("damage"), resultSet.getFloat("duration"));
                 default:
                     return null;
             }
-
-
         } catch (SQLException e) {
             System.out.println(e.toString());
             return null;
         }
-        return null;
+    }
+
+    public int updateUserScore(int userid, int newScore) {
+        try {
+            String query = "UPDATE users SET score=" +newScore+ " WHERE userid=" +userid;
+            Statement statement = connection.createStatement();
+            int res = statement.executeUpdate(query);
+            closeStatement(statement);
+            if(res == 0)
+                return -1;
+            return 0;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return -1;
+        }
+    }
+
+    private int insertDeck(int userid) {
+        try {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("INSERT INTO deck (`userid`, `place`) VALUES");
+            for(int i = 1; i <= GlobalVariables.DECK_SIZE; i++) {
+                stringBuilder.append(" (").append(userid).append(", ").append(i).append(")");
+                if(i > 1)
+                    stringBuilder.append(",");
+            }
+            stringBuilder.append(";");
+            String query = stringBuilder.toString();
+
+            Statement statement = connection.createStatement();
+            int res = statement.executeUpdate(query);
+            closeStatement(statement);
+            if(res == 0)
+                return -1;
+            return 0;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return -1;
+        }
+    }
+
+    public int updateDeck(int userid, int place, String cardName) {
+        if(place > GlobalVariables.DECK_SIZE)
+            return -1;
+        try {
+            String query = "UPDATE deck SET card_name='" +cardName+ "' WHERE userid=" +userid+ " AND place=" +place;
+            Statement statement = connection.createStatement();
+            int res = statement.executeUpdate(query);
+            closeStatement(statement);
+            if(res == 0)
+                return -1;
+            return 0;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return -1;
+        }
     }
 
     private int closeStatement(Statement statement) {

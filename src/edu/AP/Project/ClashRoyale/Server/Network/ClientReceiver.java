@@ -57,6 +57,14 @@ public class ClientReceiver implements Runnable {
                     handler.getAllCards(instruction);
                     break;
                 case GET_FORCE_INFO:
+                    handler.getForceInfo(instruction);
+                    break;
+                case GET_ALL_FORCES:
+                    handler.getAllForces(instruction);
+                    break;
+                case UPDATE_DECK:
+                    handler.updateDeck(instruction);
+                    break;
             }
         }
 
