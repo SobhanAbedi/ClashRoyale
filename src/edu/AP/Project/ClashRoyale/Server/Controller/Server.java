@@ -10,6 +10,8 @@ import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstruction;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstructionKind;
 import edu.AP.Project.ClashRoyale.Server.Model.ClientHandler;
 import edu.AP.Project.ClashRoyale.Server.Model.DBConnector;
+import edu.AP.Project.ClashRoyale.Server.Model.GameEngine.GameEngine;
+import edu.AP.Project.ClashRoyale.Server.Model.GamePool;
 import edu.AP.Project.ClashRoyale.Server.Network.ConnectionListener;
 import edu.AP.Project.ClashRoyale.Server.View.ServerCLUI;
 import edu.AP.Project.ClashRoyale.Server.View.ServerUI;
@@ -31,6 +33,11 @@ public class Server implements Runnable{
     private DBConnector dbConnector;
     private Card[] cards;
     private HashMap<String, Force[]> forceList;
+    private GamePool gamePool1v1;
+    private Thread pool1v1Thread;
+    private GamePool gamePool2v2;
+    private Thread pool2v2Thread;
+    private HashMap<GameEngine, Thread> engines;
 
     public Server() {
         stateLock = new Object();
@@ -38,6 +45,9 @@ public class Server implements Runnable{
         dbConnector = new DBConnector();
         cards = null;
         forceList = null;
+        gamePool1v1 = new GamePool(2);
+        gamePool2v2 = new GamePool(4);
+        engines = new HashMap<>();
     }
 
     @Override
@@ -85,6 +95,11 @@ public class Server implements Runnable{
                 }
             }
         }
+
+        pool1v1Thread = new Thread(gamePool1v1);
+        pool1v1Thread.start();
+        pool2v2Thread = new Thread(gamePool2v2);
+        pool2v2Thread.start();
 
 
         if(dbConnector.disconnect() == 0)

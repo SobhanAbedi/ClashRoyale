@@ -21,6 +21,9 @@ public class ClientHandler{
     private ClientReceiver clientReceiver;
     private Thread receiverThread;
     private PlayerInfo clientInfo;
+    private HashMap<String, Force> forces;
+    private String[] deck;
+    private Card[] cards;
 
     public ClientHandler(Socket socket, Server server) {
         this.socket = socket;
@@ -31,12 +34,64 @@ public class ClientHandler{
         receiverThread = new Thread(clientReceiver);
         receiverThread.start();
         clientInfo = null;
+        forces = null;
+        deck = null;
+        cards = null;
     }
 
     public void close() {
         receiverThread.interrupt();
         dbConnector.disconnect();
         server.closeClient(this);
+    }
+
+    private void loadUser(boolean reloadClientInfo) {
+        if(reloadClientInfo)
+            clientInfo = dbConnector.getUserInfo(clientInfo.getUserID());
+        loadDeck();
+        loadAllForces();
+        loadAllCards();
+    }
+
+    private void loadDeck() {
+        deck = dbConnector.getDeck(clientInfo.getUserID());
+    }
+
+    private void loadAllForces() {
+        if(clientInfo == null) {
+            sendUserInfoInvalid();
+            return;
+        }
+        HashMap<String, Force> forces = server.getAllForcesOfLevel(clientInfo.getLevel());
+        if(forces == null) {
+            sendUserInfoInvalid();
+            return;
+        }
+    }
+
+    private void loadAllCards() {
+        if(clientInfo == null) {
+            sendUserInfoInvalid();
+            return;
+        }
+
+        Card[] cards = server.getCards(true);
+        String[] deck = dbConnector.getDeck(clientInfo.getUserID());
+        if(deck == null) {
+            sendUserInfoInvalid();
+            return;
+        }
+
+        HashMap<String, Integer> deckMap = new HashMap<>();
+        for(int i = 0; i < GlobalVariables.DECK_SIZE; i++) {
+            if(deck[i] != null)
+                deckMap.put(deck[i], i);
+        }
+        for(Card card : cards) {
+            Integer loc = deckMap.get(card.getName());
+            if(loc != null)
+                card.setDeckLocation(loc);
+        }
     }
 
     //TODO: move encryption to client side.(you can send byte[] as Objects)
@@ -118,28 +173,8 @@ public class ClientHandler{
 
     public void getAllCards(ServerInstruction instruction) {
         //No arguments
-        if(clientInfo == null) {
-            sendUserInfoInvalid();
-            return;
-        }
-
-        Card[] cards = server.getCards(true);
-        String[] deck = dbConnector.getDeck(clientInfo.getUserID());
-        if(deck == null) {
-            sendUserInfoInvalid();
-            return;
-        }
-
-        HashMap<String, Integer> deckMap = new HashMap<>();
-        for(int i = 0; i < GlobalVariables.DECK_SIZE; i++) {
-            if(deck[i] != null)
-                deckMap.put(deck[i], i);
-        }
-        for(Card card : cards) {
-            Integer loc = deckMap.get(card.getName());
-            if(loc != null)
-                card.setDeckLocation(loc);
-        }
+        if(cards == null)
+            loadAllCards();
         new Thread(new ClientTransmitter(socket, new ClientInstruction(ClientInstructionKind.ALL_CARDS, (Object) cards)));
     }
 
@@ -160,15 +195,8 @@ public class ClientHandler{
     }
 
     public void getAllForces(ServerInstruction instruction) {
-        if(clientInfo == null) {
-            sendUserInfoInvalid();
-            return;
-        }
-        HashMap<String, Force> forces = server.getAllForcesOfLevel(clientInfo.getLevel());
-        if(forces == null) {
-            sendUserInfoInvalid();
-            return;
-        }
+        if(forces == null)
+            loadAllForces();
         new Thread(new ClientTransmitter(socket, new ClientInstruction(ClientInstructionKind.ALL_FORCES_INFO, forces)));
     }
 
@@ -192,6 +220,32 @@ public class ClientHandler{
         } else {
             new Thread(new ClientTransmitter(socket, new ClientInstruction(ClientInstructionKind.FAIL, "Wrong Deck Location")));
         }
+    }
+
+    public void startTrainingCamp(boolean smart, ServerInstruction instruction) {
+        //TODO: Finish this function
+    }
+
+    public void joinPool(boolean withAlly, ServerInstruction instruction) {
+        //TODO: Finish this function
+    }
+
+    public String getUsername() {
+        if(clientInfo == null)
+            return null;
+        return clientInfo.getUsername();
+    }
+
+    public Card[] getDeckCards() {
+        if(cards == null)
+            loadAllCards();
+        Card[] deckCards = new Card[GlobalVariables.DECK_SIZE];
+        for(Card card : cards) {
+            int deckLocation = card.getDeckLocation();
+            if(deckLocation > 0)
+                deckCards[deckLocation - 1] = card;
+        }
+        return deckCards;
     }
 
     private void sendUserInfoInvalid() {
