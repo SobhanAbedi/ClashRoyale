@@ -30,7 +30,15 @@ public class GameEngine implements Runnable{
     public void removeForce(int forceID) {
         deadForces.put(forceID, currentForces.get(forceID));
         currentForces.remove(forceID);
-        //TODO:Check if a king or princess tower is hig
+        //TODO:Check if a king or princess tower is hit
+    }
+
+    public ForceEngine getForce(int forceID){
+        return currentForces.get(forceID);
+    }
+
+    public void addForce(ForceEngine force) {
+        currentForces.put(force.getForceID(), force);
     }
 
     @Override

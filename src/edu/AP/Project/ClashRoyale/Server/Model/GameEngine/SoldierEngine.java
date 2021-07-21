@@ -5,7 +5,6 @@ import edu.AP.Project.ClashRoyale.Model.Forces.Soldier;
 import edu.AP.Project.ClashRoyale.Model.GlobalVariables;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class SoldierEngine extends ForceEngine{
     private Soldier referenceSoldier;
@@ -15,16 +14,16 @@ public class SoldierEngine extends ForceEngine{
     private ForceEngine target;
     private Point direction;
     private boolean recheckTarget;
-    private float lastAttackTime;
+    private float timeSinceLastAttack;
     private float targetMinDist;
 
-    public SoldierEngine(GameEngine gameEngine, Soldier referenceSoldier, Point initialLocation) {
-        super(gameEngine, 0.5f);
+    public SoldierEngine(GameEngine gameEngine, int side, Soldier referenceSoldier, Point initialLocation) {
+        super(gameEngine, 0.5f, side);
         this.referenceSoldier = referenceSoldier;
         target = null;
         recheckTarget = false;
         soldierState = new SoldierState(referenceSoldier.getName(), forceID, initialLocation, 90, referenceSoldier.getHP(), ActionKind.CREATE);
-        lastAttackTime = -1;
+        timeSinceLastAttack = getAttackTime();
         targetMinDist = 0;
         modifier = new PowerModifier();
         direction = new Point(0, 0);
@@ -42,6 +41,14 @@ public class SoldierEngine extends ForceEngine{
         return referenceSoldier.getDamage() * modifier.getDamageModifier();
     }
 
+    public void setModifier(float damageBoost, float speedBoost, float hitSpeedBoost) {
+        modifier.setModifiers(damageBoost, speedBoost, hitSpeedBoost);
+    }
+
+    public void setModifierZero() {
+        modifier.setModifiers(0, 0, 0);
+    }
+
     @Override
     public void genNextState() {
         try {
@@ -49,6 +56,7 @@ public class SoldierEngine extends ForceEngine{
         } catch (CloneNotSupportedException e) {
             System.out.println("Couldn't Clone the state: " + e.toString());
         }
+        setModifierZero();
     }
 
     @Override
@@ -72,10 +80,14 @@ public class SoldierEngine extends ForceEngine{
     }
 
     @Override
-    public void doAction(float time) {
+    public void doAction() {
         direction.setLocation(0, 0);
-        if(isDead())
+        if(isDead()) {
             gameEngine.removeForce(forceID);
+            nextState.setActionKind(ActionKind.DEAD);
+            return;
+        }
+        timeSinceLastAttack += deltaTime;
         if(soldierState.getActionKind() == ActionKind.MOVE || soldierState.getActionKind() == ActionKind.ATTACK) {
             if (target == null) {
                 findTarget();
@@ -109,12 +121,15 @@ public class SoldierEngine extends ForceEngine{
             if(target.getLocation().distance(getLocation()) - targetMinDist > referenceSoldier.getRange() * 1.3){
                 nextState.setActionKind(ActionKind.MOVE);
             }
-            if(lastAttackTime == -1 || time - lastAttackTime > getAttackTime()) {
-                lastAttackTime = time;
+            if(timeSinceLastAttack > getAttackTime()) {
+                timeSinceLastAttack = 0;
                 if(referenceSoldier.getProjectile() == 0) {
                     doDamage(target, referenceSoldier);
                 } else {
-                    //TODO: create Projectile with appropriate damage and target
+                    Point deltaLocation = ForceEngine.pointCombination(target.getLocation(), getLocation(), true);
+                    ForceEngine.scalePoint(deltaLocation, deltaTime/GlobalVariables.PROJECTILE_TIME);
+                    ProjectileEngine projectile = new ProjectileEngine(gameEngine, side, referenceSoldier.getProjectile(), getLocation(), target.getForceID(), getDamage(), deltaLocation);
+                    gameEngine.addForce(projectile);
                 }
             }
         } else if (target.getLocation().distance(getLocation()) - targetMinDist < referenceSoldier.getRange()) {
@@ -133,7 +148,14 @@ public class SoldierEngine extends ForceEngine{
     }
 
     private void findTarget() {
-        //TODO: find target
+        ForceEngine[] currentForces = gameEngine.getCurrentForces();
+        double minDist = 100;
+        ForceEngine possibleTarget = null;
+        for(ForceEngine forceItr : currentForces) {
+            if(forceItr.isSoldierOrBuilding() && side != forceItr.getSide() && forceItr.getLocation().distance(getLocation()) < minDist && canHit(forceItr))
+                possibleTarget = forceItr;
+        }
+        target = possibleTarget;
         setTargetMinDist();
     }
 
@@ -157,6 +179,33 @@ public class SoldierEngine extends ForceEngine{
 
     public void kill() {
         nextState.setActionKind(ActionKind.DIE);
+    }
+
+    public boolean doesFly(){
+        return referenceSoldier.doesFly();
+    }
+
+    public boolean canHit(ForceEngine possibleTarget) {
+        if(!possibleTarget.isSoldierOrBuilding())
+            return false;
+        switch (referenceSoldier.getTarget()) {
+            case GROUND_AND_AIR:
+                return true;
+            case AIR:
+                if(possibleTarget instanceof SoldierEngine && ((SoldierEngine) possibleTarget).doesFly())
+                    return true;
+                return false;
+            case GROUND:
+                if(possibleTarget instanceof BuildingEngine || (possibleTarget instanceof  SoldierEngine && !((SoldierEngine) possibleTarget).doesFly()))
+                    return true;
+                return false;
+            case BUILDINGS:
+                if(possibleTarget instanceof BuildingEngine)
+                    return true;
+                return false;
+            default:
+                return false;
+        }
     }
 
     private void findDirection() {

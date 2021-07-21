@@ -47,4 +47,12 @@ public class Building extends Force{
     public float getHealthGradiant() {
         return -(((float)HP)/((float)lifeTime));
     }
+
+    public int getProjectile() {
+        return projectile;
+    }
+
+    public TargetKind getTarget() {
+        return target;
+    }
 }

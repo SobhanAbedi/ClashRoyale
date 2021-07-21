@@ -59,4 +59,8 @@ public class Soldier extends Force{
     public int getProjectile() {
         return projectile;
     }
+
+    public boolean doesFly() {
+        return flies;
+    }
 }
