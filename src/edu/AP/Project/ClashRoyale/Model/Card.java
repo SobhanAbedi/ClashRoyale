@@ -35,7 +35,7 @@ public class Card implements Serializable, Cloneable {
     }
 
     public boolean isInDeck() {
-        return deckLocation > 0;
+        return deckLocation >= 0;
     }
 
     public void setDeckLocation(int deckLocation) {

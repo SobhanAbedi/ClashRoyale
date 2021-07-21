@@ -35,13 +35,18 @@ public class BattleDeckController {
     private int cardsInDeckCounter;
     private final String cardRelativePath = "../Images/Cards/";
     private ArrayList<String> cardsInDeck;
+    private ArrayList<Card> cards;
+    private ArrayList<Card> sortedCards;
 
 
     public BattleDeckController(Client client){
         this.client = client;
         selected = new ArrayList<>();
         cardsInDeck = new ArrayList<>();
+        cards = new ArrayList<>();
+        sortedCards = new ArrayList<>();
     }
+
 
 
 
@@ -122,6 +127,29 @@ public class BattleDeckController {
 //        addCardToDeck("../Images/Cards/buildings/cannon.png", 2);
 //        addCardToCollection("../Images/Cards/buildings/inferno.png", 1);
     }
+    private void addCards(Card card){
+        cards.add(card);
+    }
+    private void sortCardsByDeckPlace(){
+        sortedCards.clear();
+        for (int i = 0; i < cardsInDeck.size(); i++) {
+            for(Card card: cards){
+                if(i == card.getDeckLocation()) {
+                    sortedCards.add(card);
+                }
+            }
+        }
+
+    }
+    private void showDeckCards(){
+        for (Card card: sortedCards){
+//            System.out.println(card.getName() +  card.getDeckLocation());
+            addCardToDeck(card);
+        }
+        cards.clear();
+
+    }
+
     private void cardInitializer(){
         resetDeckCollection();
         ServerInstruction serverInstruction = new ServerInstruction(ServerInstructionKind.GET_ALL_CARDS);
@@ -136,14 +164,18 @@ public class BattleDeckController {
                 if (card.getDeckLocation()<0){
                     addCardToCollection(card);
                 }else{
-                    addCardToDeck(card);
+                    addCards(card);
                     cardsInDeckCounter++;
                     cardsInDeck.add(card.getName());
 //                    System.out.println(cardsInDeckCounter);
-
                 }
+
+
             }
+            sortCardsByDeckPlace();
+            showDeckCards();
         }
+
 
 
 //        deckCounter = 0;
@@ -240,7 +272,7 @@ public class BattleDeckController {
                 System.out.println( card.getName() + " pressed");
                 if (deckCounter  < deckCardNumber){
                     if (!card.isInDeck()) {
-//                        System.out.println("Deck Counter " + deckCounter + 1);
+                        System.out.println("Deck Counter " + deckCounter + 1);
                         ServerInstruction serverInstruction = new ServerInstruction(ServerInstructionKind.UPDATE_DECK,deckCounter + 1 , card.getName());
                         client.getClientHandler().updateDeck(serverInstruction);
                     }
@@ -255,8 +287,10 @@ public class BattleDeckController {
 //                        for(Card s: selected){
 //                            System.out.println(s.getName() + s.getDeckLocation());
 //                        }
+                        System.out.println(selected.get(0).getName() +selected.get(0).isInDeck()+ selected.get(1).getName() + selected.get(1).isInDeck());
                         if (selected.get(0).isInDeck() || selected.get(1).isInDeck()){
                             if (!selected.get(0).isInDeck() || !selected.get(1).isInDeck()){
+                                System.out.println("Requirements Approved");
                                 ServerInstruction serverInstruction;
                                 if(selected.get(0).isInDeck()){
                                     System.out.println(selected.get(0).getDeckLocation());
