@@ -84,27 +84,37 @@ public class ProfileController {
     private Label cup;
 
     @FXML
+    private ImageView leagueImage;
+
+    @FXML
     private void initialize(){
         username.setText(client.getUsername());
 //        TODO get League and Cup
         int level = client.getPlayerInfo().getLevel();
         String levelLabel;
+        String leagueImageAddress;
         switch (level){
             case 2:
+                leagueImageAddress = "/Images/League/Stone.png";
                 levelLabel = "Stone League";
                 break;
             case 3:
+                leagueImageAddress = "/Images/League/Bronze.png";
                 levelLabel = "Bronze League";
                 break;
             case 4:
+                leagueImageAddress = "/Images/League/Silver.png";
                 levelLabel = "Silver League";
                 break;
             case 5:
+                leagueImageAddress = "/Images/League/Golden.png";
                 levelLabel = "Gold League";
                 break;
             default:
+                leagueImageAddress = "/Images/League/Wooden.png";
                 levelLabel = "Wooden League";
         }
+        leagueImage.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(leagueImageAddress))));
         int cups = client.getPlayerInfo().getScore();
 
 

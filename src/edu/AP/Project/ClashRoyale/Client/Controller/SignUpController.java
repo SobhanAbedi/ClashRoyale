@@ -42,6 +42,7 @@ public class SignUpController {
     @FXML
     private Label msgBox;
 
+
     @FXML
     void Login(ActionEvent event) {
         client.changeScene("Views/login.fxml" , new LoginController(client));
