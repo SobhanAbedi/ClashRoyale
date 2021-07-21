@@ -86,7 +86,6 @@ public class BattleDeckController {
 
     @FXML
     void initialize(){
-//         TODO
 //        CardState cardState = new CardState();
 
 //        cardState.addCard(new Buildings("Inferno" , 5,2,
@@ -162,7 +161,7 @@ public class BattleDeckController {
 //        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/rage.png","rage"));
 //        cardModels.add(new CardModel(false , 1, "../Images/Cards/buildings/cannon.png","cannon"));
 //        cardModels.add(new CardModel(true , 1, "../Images/Cards/buildings/inferno.png","inferno"));
-//        TODO Request server for battleDeck Cards and their specifications
+
 //
 //        ArrayList<Card> cards = cardState.getCards();
 
@@ -237,7 +236,6 @@ public class BattleDeckController {
         card1View.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-//                TODO use this handler to identify and change Deck
 //                cardInitializer();
                 System.out.println( card.getName() + " pressed");
                 if (deckCounter  < deckCardNumber){

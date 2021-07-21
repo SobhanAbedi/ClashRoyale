@@ -96,7 +96,6 @@ public class ProfileController {
     @FXML
     private void initialize() {
         username.setText(client.getUsername());
-//        TODO get League and Cup
         int level = client.getPlayerInfo().getLevel();
         String levelLabel;
         String leagueImageAddress;

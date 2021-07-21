@@ -52,7 +52,6 @@ public class SignUpController {
     @FXML
     void SignUp(ActionEvent event) {
         if (PasswordTxt.getText().equalsIgnoreCase(PasswordTxtRepeat.getText())){
-//            TODO Check and Sign up
             ServerInstruction serverInstruction = new ServerInstruction(ServerInstructionKind.SIGNUP,usernameTxt.getText() , PasswordTxt.getText());
 
 
