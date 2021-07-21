@@ -55,4 +55,8 @@ public class Soldier extends Force{
     public boolean isAreaSplash() {
         return areaSplash;
     }
+
+    public int getProjectile() {
+        return projectile;
+    }
 }

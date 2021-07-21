@@ -1,5 +1,6 @@
 package edu.AP.Project.ClashRoyale.Server.Model;
 
+import edu.AP.Project.ClashRoyale.Client.Models.GameModel;
 import edu.AP.Project.ClashRoyale.Model.Card;
 import edu.AP.Project.ClashRoyale.Model.Forces.Force;
 import edu.AP.Project.ClashRoyale.Model.GlobalVariables;
@@ -24,6 +25,7 @@ public class ClientHandler{
     private HashMap<String, Force> forces;
     private String[] deck;
     private Card[] cards;
+    private GameModel gameModel;
 
     public ClientHandler(Socket socket, Server server) {
         this.socket = socket;
@@ -37,6 +39,7 @@ public class ClientHandler{
         forces = null;
         deck = null;
         cards = null;
+        gameModel = null;
     }
 
     public void close() {
@@ -75,8 +78,8 @@ public class ClientHandler{
             return;
         }
 
-        Card[] cards = server.getCards(true);
-        String[] deck = dbConnector.getDeck(clientInfo.getUserID());
+        cards = server.getCards(true);
+        deck = dbConnector.getDeck(clientInfo.getUserID());
         if(deck == null) {
             sendUserInfoInvalid();
             return;
@@ -237,6 +240,11 @@ public class ClientHandler{
 
     public void startTrainingCamp(boolean smart, ServerInstruction instruction) {
         //TODO: Finish this function
+        gameModel = (GameModel) instruction.getArg(0);
+    }
+
+    public GameModel getGameModel() {
+        return gameModel;
     }
 
     public void joinPool(boolean withAlly, ServerInstruction instruction) {
