@@ -23,6 +23,7 @@ public abstract class ForceEngine {
     public abstract void next();
     public abstract void doAction(float time);
     public abstract Point getLocation();
+    public abstract boolean isSoldierOrBuilding();
 
     public float getRadius() {
         return radius;
@@ -55,8 +56,7 @@ public abstract class ForceEngine {
             ((SoldierEngine)target).acceptDamage(reference.getDamage());
         }
         if(target instanceof BuildingEngine) {
-            //TODO: uncomment next line when you have written Building Engine
-            //((BuildingEngine)target).acceptDamage(reference.getDamage());
+            ((BuildingEngine)target).acceptDamage(reference.getDamage());
         }
     }
 }

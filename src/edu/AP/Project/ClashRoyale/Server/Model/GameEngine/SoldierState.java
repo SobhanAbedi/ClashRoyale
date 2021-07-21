@@ -9,7 +9,6 @@ public class SoldierState extends ForceState implements Cloneable{
 
     public SoldierState(String forceName, int forceID, Point location, float angle, float HP, ActionKind actionKind) {
         super(forceName, forceID, location);
-        this.location = location;
         this.angle = angle;
         this.HP = HP;
         this.actionKind = actionKind;
@@ -18,10 +17,6 @@ public class SoldierState extends ForceState implements Cloneable{
     @Override
     public Object clone() throws CloneNotSupportedException{
         return new SoldierState(forceName, forceID, new Point(location), angle, HP, ActionKind.values()[actionKind.ordinal()]);
-    }
-
-    public Point getLocation() {
-        return location;
     }
 
     public float getAngle() {
@@ -34,10 +29,6 @@ public class SoldierState extends ForceState implements Cloneable{
 
     public ActionKind getActionKind() {
         return actionKind;
-    }
-
-    public void setLocation(Point location) {
-        this.location = location;
     }
 
     public void setAngle(float angle) {

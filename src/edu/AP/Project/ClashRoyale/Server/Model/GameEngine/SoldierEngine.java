@@ -1,5 +1,6 @@
 package edu.AP.Project.ClashRoyale.Server.Model.GameEngine;
 
+import edu.AP.Project.ClashRoyale.Model.Forces.Building;
 import edu.AP.Project.ClashRoyale.Model.Forces.Soldier;
 import edu.AP.Project.ClashRoyale.Model.GlobalVariables;
 
@@ -18,12 +19,15 @@ public class SoldierEngine extends ForceEngine{
     private float targetMinDist;
 
     public SoldierEngine(GameEngine gameEngine, Soldier referenceSoldier, Point initialLocation) {
-        super(gameEngine, 0.75f);
+        super(gameEngine, 0.5f);
+        this.referenceSoldier = referenceSoldier;
         target = null;
         recheckTarget = false;
         soldierState = new SoldierState(referenceSoldier.getName(), forceID, initialLocation, 90, referenceSoldier.getHP(), ActionKind.CREATE);
         lastAttackTime = -1;
         targetMinDist = 0;
+        modifier = new PowerModifier();
+        direction = new Point(0, 0);
     }
 
     public float getSpeed() {
@@ -31,7 +35,7 @@ public class SoldierEngine extends ForceEngine{
     }
 
     public float getAttackTime() {
-        return referenceSoldier.getHitSpeed() * modifier.getSpeedModifier();
+        return referenceSoldier.getHitSpeed() * modifier.getHitSpeedModifier();
     }
 
     public float getDamage() {
@@ -63,6 +67,11 @@ public class SoldierEngine extends ForceEngine{
     }
 
     @Override
+    public boolean isSoldierOrBuilding() {
+        return true;
+    }
+
+    @Override
     public void doAction(float time) {
         direction.setLocation(0, 0);
         if(isDead())
@@ -73,6 +82,8 @@ public class SoldierEngine extends ForceEngine{
             } else if (recheckTarget && soldierState.getActionKind() == ActionKind.MOVE) {
                 findTarget();
             }
+            if(target instanceof SoldierEngine && ((SoldierEngine) target).isDead() || target instanceof BuildingEngine && ((BuildingEngine) target).isDead())
+                findTarget();
 
             findDirection();
         }
@@ -81,6 +92,8 @@ public class SoldierEngine extends ForceEngine{
         ForceEngine[] currentForces = gameEngine.getCurrentForces();
         for(ForceEngine force : currentForces) {
             if(force.forceID == forceID)
+                continue;
+            if(!force.isSoldierOrBuilding())
                 continue;
             Point forceDeltaLocation = ForceEngine.pointCombination(force.getLocation(), getLocation(), true);
             double minDist = radius + force.getRadius();
@@ -146,7 +159,6 @@ public class SoldierEngine extends ForceEngine{
         nextState.setActionKind(ActionKind.DIE);
     }
 
-
     private void findDirection() {
         if(Math.abs(getLocation().y) > 1 && target.getLocation().y * getLocation().y < 0) {
             float averageX = (target.getLocation().x + getLocation().x) / 2f;
@@ -159,8 +171,10 @@ public class SoldierEngine extends ForceEngine{
             direction.setLocation(target.getLocation());
         }
         translateDirection(getLocation(), true);
-        ForceEngine.normalizePoint(direction);
-        ForceEngine.scalePoint(direction, getSpeed() * deltaTime);
-        soldierState.setAngle((float) Math.atan2(direction.y, direction.x));
+        if(direction.distance(0, 0) > getSpeed() * deltaTime) {
+            ForceEngine.normalizePoint(direction);
+            ForceEngine.scalePoint(direction, getSpeed() * deltaTime);
+        }
+        nextState.setAngle((float) Math.atan2(direction.y, direction.x));
     }
 }

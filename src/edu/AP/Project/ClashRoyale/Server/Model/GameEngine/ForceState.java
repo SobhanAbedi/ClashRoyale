@@ -19,4 +19,12 @@ public abstract class ForceState {
         else
             location.translate(direction.x, direction.y);
     }
+
+    public Point getLocation() {
+        return location;
+    }
+
+    public void setLocation(Point location) {
+        this.location = location;
+    }
 }
