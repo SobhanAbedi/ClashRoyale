@@ -188,7 +188,7 @@ public class ClientHandler{
 
     public ClientInstruction getAllCards(ServerInstruction instruction) {
         //No arguments
-        if(cards == null)
+//        if(cards == null)
             loadAllCards();
         new Thread(new ClientTransmitter(socket, new ClientInstruction(ClientInstructionKind.ALL_CARDS, (Object) cards)));
         return new ClientInstruction(ClientInstructionKind.ALL_CARDS, (Object) cards);

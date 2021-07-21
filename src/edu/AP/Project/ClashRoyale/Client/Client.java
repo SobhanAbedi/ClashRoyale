@@ -107,7 +107,8 @@ public class Client extends Application {
         try {
             loader.load();
         } catch (IOException e) {
-            System.err.println("Error appeared in loading SignUp FXML");
+            System.err.println("Error appeared in loading FXML");
+            e.printStackTrace();
         }
 
 

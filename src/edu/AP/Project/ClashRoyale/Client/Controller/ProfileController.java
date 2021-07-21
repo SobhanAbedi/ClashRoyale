@@ -3,6 +3,11 @@ package edu.AP.Project.ClashRoyale.Client.Controller;
 import com.jfoenix.controls.JFXButton;
 import edu.AP.Project.ClashRoyale.Client.Client;
 import edu.AP.Project.ClashRoyale.Client.Models.CardModel;
+import edu.AP.Project.ClashRoyale.Model.Card;
+import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstruction;
+import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstructionKind;
+import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstruction;
+import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstructionKind;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,6 +26,8 @@ import java.util.Objects;
 
 
 public class ProfileController {
+
+    private final String cardRelativePath = "../Images/Cards/";
 
     private int counter = 0;
     private Client client;
@@ -95,69 +102,86 @@ public class ProfileController {
         String leagueImageAddress;
         switch (level){
             case 2:
-                leagueImageAddress = "/Images/League/Stone.png";
+                leagueImageAddress = "../Images/League/Stone.png";
                 levelLabel = "Stone League";
                 break;
             case 3:
-                leagueImageAddress = "/Images/League/Bronze.png";
+                leagueImageAddress = "../Images/League/Bronze.png";
                 levelLabel = "Bronze League";
                 break;
             case 4:
-                leagueImageAddress = "/Images/League/Silver.png";
+                leagueImageAddress = "../Images/League/Silver.png";
                 levelLabel = "Silver League";
                 break;
             case 5:
-                leagueImageAddress = "/Images/League/Golden.png";
+                leagueImageAddress = "../Images/League/Golden.png";
                 levelLabel = "Gold League";
                 break;
             default:
-                leagueImageAddress = "/Images/League/Wooden.png";
+                leagueImageAddress = "../Images/League/Wooden.png";
                 levelLabel = "Wooden League";
         }
         leagueImage.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(leagueImageAddress))));
         int cups = client.getPlayerInfo().getScore();
 
 
-//        TODO Get cards from Server
 
         league.setText(levelLabel);
         cup.setText(String.valueOf(cups));
 
-        ArrayList<CardModel> cardModels = new ArrayList<>();
-        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/archers.png" , "archer"));
-        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/baby_dragon.png","baby_dragon"));
-        cardModels.add(new CardModel(false , 1, "../Images/Cards/Troops/barbarians.png","barbarians"));
-        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/giant.png","giant"));
-        cardModels.add(new CardModel(false , 2, "../Images/Cards/Troops/mini_pekka.png" ,"mini_pekka"));
-        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/valkyrie.png","valkyrie"));
-        cardModels.add(new CardModel(false , 1, "../Images/Cards/Troops/wizard.png","wizard"));
-        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/arrows.png","arrows"));
-        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/fireball.png","fireball"));
-        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/rage.png","rage"));
-        cardModels.add(new CardModel(false , 1, "../Images/Cards/buildings/cannon.png","cannon"));
-        cardModels.add(new CardModel(true , 1, "../Images/Cards/buildings/inferno.png","inferno"));
 
-        for (CardModel card: cardModels){
-            if (card.isInDeck()){
-                addCardToDeck(card);
+        ServerInstruction serverInstruction = new ServerInstruction(ServerInstructionKind.GET_ALL_CARDS);
+        ClientInstruction clientInstruction = client.getClientHandler().getAllCards(serverInstruction);
+        if (clientInstruction.getKind() == ClientInstructionKind.ALL_CARDS){
+            Card[] cards = (Card[]) clientInstruction.getArg(0);
+            for (Card card: cards){
+                if (card.getDeckLocation()>=0){
+                    addCardToDeck(card);
+
+
+                }
             }
         }
+//        ArrayList<CardModel> cardModels = new ArrayList<>();
+//        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/archers.png" , "archer"));
+//        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/baby_dragon.png","baby_dragon"));
+//        cardModels.add(new CardModel(false , 1, "../Images/Cards/Troops/barbarians.png","barbarians"));
+//        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/giant.png","giant"));
+//        cardModels.add(new CardModel(false , 2, "../Images/Cards/Troops/mini_pekka.png" ,"mini_pekka"));
+//        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/valkyrie.png","valkyrie"));
+//        cardModels.add(new CardModel(false , 1, "../Images/Cards/Troops/wizard.png","wizard"));
+//        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/arrows.png","arrows"));
+//        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/fireball.png","fireball"));
+//        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/rage.png","rage"));
+//        cardModels.add(new CardModel(false , 1, "../Images/Cards/buildings/cannon.png","cannon"));
+//        cardModels.add(new CardModel(true , 1, "../Images/Cards/buildings/inferno.png","inferno"));
+
+//        for (CardModel card: cardModels){
+//            if (card.isInDeck()){
+//                addCardToDeck(card);
+//            }
+//        }
     }
-    private void addCardToDeck(CardModel card){
+    private void addCardToDeck(Card card){
         VBox newObject = creatCardView(card);
         cardDeck.getChildren().add(counter,newObject);
         counter++;
 
     }
 
-    private VBox creatCardView(CardModel card){
+    private String getPath(String cardName){
+        return cardRelativePath + cardName.toLowerCase() +".png";
+    }
+
+
+    private VBox creatCardView(Card card){
         VBox vBox = new VBox();
         vBox.alignmentProperty().set(Pos.CENTER);
 //        Image card1 = new Image (Objects.requireNonNull(getClass().getResourceAsStream(address)));
         ImageView card1View = new ImageView();
         card1View.setPreserveRatio(true);
         card1View.setFitWidth(100);
-        card1View.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(card.getCardImageAddress()))));
+        card1View.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(getPath(card.getName())))));
         card1View.opacityProperty().set(0.8);
         card1View.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
@@ -182,7 +206,7 @@ public class ProfileController {
             }
         });
         Label levelTxt = new Label();
-        levelTxt.setText("Level " + card.getLevel());
+        levelTxt.setText("Level " + client.getPlayerInfo().getLevel());
         levelTxt.setFont(Font.font("Lilita One",20));
         levelTxt.textFillProperty().set(Paint.valueOf("#b5b2ff"));
         vBox.getChildren().addAll(card1View,levelTxt);
