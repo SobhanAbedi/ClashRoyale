@@ -19,6 +19,11 @@ import java.util.Objects;
 public class BattleGameCellViewerController extends ListCell<Game> {
 
     private Client client;
+
+    /**
+     * constructor
+     * @param client
+     */
     public BattleGameCellViewerController(Client client){
         this.client = client;
     }
@@ -49,6 +54,11 @@ public class BattleGameCellViewerController extends ListCell<Game> {
 
     private FXMLLoader mLLoader;
 
+    /**
+     * update Item
+     * @param item game
+     * @param empty is empty or not
+     */
     protected void updateItem(Game item, boolean empty) {
 
         super.updateItem(item, empty);
@@ -76,18 +86,30 @@ public class BattleGameCellViewerController extends ListCell<Game> {
         }
     }
 
+    /**
+     * mouse entered to change Image
+     * @param event mouse event
+     */
     @FXML
     void mouseEntered(MouseEvent event) {
         Image goldButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/gold.png")));
         viewImage.setImage(goldButtonImage);
     }
 
+    /**
+     * mouse exited change button image
+     * @param event Mouse event
+     */
     @FXML
     void mouseExited(MouseEvent event) {
         Image silverButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/silver.png")));
         viewImage.setImage(silverButtonImage);
     }
 
+    /**
+     * view clicked
+     * @param event action event
+     */
     @FXML
     void viewClicked(ActionEvent event) {
 

@@ -18,6 +18,10 @@ import javafx.scene.control.TextField;
 public class SignUpController {
     private Client client;
 
+    /**
+     * Constructor
+     * @param client client to access common data
+     */
     public SignUpController(Client client){
         this.client = client;
     }
@@ -43,12 +47,19 @@ public class SignUpController {
     @FXML
     private Label msgBox;
 
-
+    /**
+     * login Page
+     * @param event action event
+     */
     @FXML
     void Login(ActionEvent event) {
         client.changeScene("Views/login.fxml" , new LoginController(client));
     }
 
+    /**
+     * Sign up  process
+     * @param event action event
+     */
     @FXML
     void SignUp(ActionEvent event) {
         if (PasswordTxt.getText().equalsIgnoreCase(PasswordTxtRepeat.getText())){

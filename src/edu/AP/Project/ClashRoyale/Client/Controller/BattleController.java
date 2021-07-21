@@ -11,9 +11,10 @@ import javafx.scene.input.MouseEvent;
 
 import java.util.Objects;
 
-
-
-
+/**
+ * Clash Royale
+ * @author Hamidreza Abooei & Sobhan Abedi
+ */
 public class BattleController {
     private Client client;
     public BattleController(Client client){
@@ -74,6 +75,9 @@ public class BattleController {
     @FXML
     private Label coins;
 
+    /**
+     * initialize data for Battle Menu
+     */
     @FXML
     void initialize(){
         Image arena ;
@@ -99,48 +103,83 @@ public class BattleController {
 
     }
 
-
+    /**
+     * Battle Menu
+     * @param event action event
+     */
     @FXML
     void battleClick(ActionEvent event) {
 
     }
 
+    /**
+     * BattleDeck Menu
+     * @param event action event
+     */
     @FXML
     void battleDeckClick(ActionEvent event) {
         client.changeScene("Views/BattleDeck.fxml", new BattleDeckController(client));
     }
 
+    /**
+     * Battle History Menu
+     * @param event action event
+     */
     @FXML
     void battleHistoryClick(ActionEvent event) {
         client.changeScene("Views/BattleHistory.fxml", new BattleHistoryController(client));
     }
 
+    /**
+     * Profile Menu
+     * @param event action event
+     */
     @FXML
     void profileClick(ActionEvent event) {
         client.changeScene("Views/Profile.fxml" , new ProfileController(client));
     }
 
+    /**
+     * One By One Game
+     * @param event
+     */
     @FXML
     void oneClick(ActionEvent event) {
 
     }
 
+    /**
+     * training with Bot
+     * @param event action event
+     */
     @FXML
     void trainingClick(ActionEvent event) {
 //        client.changeScene("Views/Board.fxml", new BoardController(client));
         client.changeScene("Views/GameBoard.fxml" , new GameBoardController(client));
     }
 
+    /**
+     * training with smart Bot
+     * @param event action event
+     */
     @FXML
     void trainingSmartClick(ActionEvent event) {
 
     }
 
+    /**
+     * Two by two Game
+     * @param event action event
+     */
     @FXML
     void twoClick(ActionEvent event) {
 
     }
 
+    /**
+     * mouse enter a button to change its image
+     * @param event action event
+     */
     @FXML
     void mouseEntered(MouseEvent event) {
         Image silverButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/silver.png")));
@@ -152,6 +191,10 @@ public class BattleController {
             profileImage.setImage(silverButtonImage);
     }
 
+    /**
+     * mouse exited to turn back button image
+     * @param event action event
+     */
     @FXML
     void mouseExited(MouseEvent event) {
         Image grayButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/gray.png")));
@@ -164,6 +207,10 @@ public class BattleController {
 
     }
 
+    /**
+     * mouse enter a  long button to change its image
+     * @param event action event
+     */
     @FXML
     void longEntered(MouseEvent event) {
         Image goldButtonLongImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/goldSolong.png")));
@@ -177,6 +224,10 @@ public class BattleController {
             twoImage.setImage(goldButtonLongImage);
     }
 
+    /**
+     * mouse exited a  long button to change its image
+     * @param event
+     */
     @FXML
     void longExited(MouseEvent event) {
         Image silverButtonLongImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/silverSolong.png")));

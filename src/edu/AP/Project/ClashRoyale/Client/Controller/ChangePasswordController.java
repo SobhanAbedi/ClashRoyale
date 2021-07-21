@@ -9,7 +9,13 @@ import javafx.fxml.FXML;
 
 public class ChangePasswordController {
 
+
     private Client client;
+
+    /**
+     * constructor
+     * @param client to reach common date
+     */
     public ChangePasswordController(Client client){
         this.client = client;
     }
@@ -35,11 +41,19 @@ public class ChangePasswordController {
     @FXML
     private Label serverResponse;
 
+    /**
+     * back to Profile menu
+     * @param event action event
+     */
     @FXML
     void back(ActionEvent event) {
         client.changeScene("Views/Profile.fxml" , new ProfileController(client));
     }
 
+    /**
+     * change Password
+     * @param event action event
+     */
     @FXML
     void change(ActionEvent event) {
 // TODO change Password in server

@@ -19,6 +19,11 @@ import javafx.scene.control.TextField;
 
 public class LoginController {
     private Client client;
+
+    /**
+     * constructor
+     * @param client to access common data
+     */
     public LoginController(Client client){
         this.client = client;
     }
@@ -41,11 +46,19 @@ public class LoginController {
     @FXML
     private Label serverResponse;
 
+    /**
+     * Sign up Page
+     * @param event action evnet
+     */
     @FXML
     void SignUpFunc(ActionEvent event) {
         client.changeScene("Views/SignUp.fxml" , new SignUpController(client));
     }
 
+    /**
+     * login
+     * @param event action event
+     */
     @FXML
     void login(ActionEvent event) {
 //        System.out.println(usernameTxt.getText()  + "  " +PasswordTxt.getText());
@@ -62,7 +75,6 @@ public class LoginController {
 //        System.out.println(getSocket().isClosed());
 
         ClientInstruction clientInstruction = client.getClientHandler().loginCheck(serverInstruction);
-//        System.out.println(clientInstruction.getArg(0));
         if (clientInstruction.getKind() == ClientInstructionKind.SUCCESS){
             client.setUsername(usernameTxt.getText());
             msgBox.setText("Loged in Successfully");

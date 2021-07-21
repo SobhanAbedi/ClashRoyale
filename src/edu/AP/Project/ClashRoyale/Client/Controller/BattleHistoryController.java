@@ -24,6 +24,10 @@ public class BattleHistoryController {
     private ObservableList<Game> games = FXCollections.observableArrayList();
     private Client client;
 
+    /**
+     * Constructor
+     * @param client client to access common date
+     */
     public BattleHistoryController(Client client){
         this.client = client;
     }
@@ -55,11 +59,18 @@ public class BattleHistoryController {
     @FXML
     private ListView<Game> listView;
 
+    /**
+     * Battle Menu
+     * @param event action event
+     */
     @FXML
     void battleClick(ActionEvent event) {
         client.changeScene("./Views/Battle.fxml" , new BattleController(client));
     }
 
+    /**
+     * initialize model and history model
+     */
     @FXML
     void initialize(){
         // TODO get from server
@@ -68,21 +79,21 @@ public class BattleHistoryController {
         games.add(new Game(false,"Abedi" , 2,3,70));
         games.add(new Game(true,"hamid" , 3,2,200));
         games.add(new Game(false,"Abooei" , 1,2,70));
-        games.add(new Game(true,"Hamidreza" , 2,1,200));
-        games.add(new Game(false,"Sobhan" , 0,3,70));
-        games.add(new Game(false,"Abedi" , 2,3,70));
-        games.add(new Game(true,"hamid" , 3,2,200));
-        games.add(new Game(false,"Abooei" , 1,2,70));
-        games.add(new Game(true,"Hamidreza" , 2,1,200));
-        games.add(new Game(false,"Sobhan" , 0,3,70));
-        games.add(new Game(false,"Abedi" , 2,3,70));
-        games.add(new Game(true,"hamid" , 3,2,200));
-        games.add(new Game(false,"Abooei" , 1,2,70));
-        games.add(new Game(true,"Hamidreza" , 2,1,200));
-        games.add(new Game(false,"Sobhan" , 0,3,70));
-        games.add(new Game(false,"Abedi" , 2,3,70));
-        games.add(new Game(true,"hamid" , 3,2,200));
-        games.add(new Game(false,"Abooei" , 1,2,70));
+//        games.add(new Game(true,"Hamidreza" , 2,1,200));
+//        games.add(new Game(false,"Sobhan" , 0,3,70));
+//        games.add(new Game(false,"Abedi" , 2,3,70));
+//        games.add(new Game(true,"hamid" , 3,2,200));
+//        games.add(new Game(false,"Abooei" , 1,2,70));
+//        games.add(new Game(true,"Hamidreza" , 2,1,200));
+//        games.add(new Game(false,"Sobhan" , 0,3,70));
+//        games.add(new Game(false,"Abedi" , 2,3,70));
+//        games.add(new Game(true,"hamid" , 3,2,200));
+//        games.add(new Game(false,"Abooei" , 1,2,70));
+//        games.add(new Game(true,"Hamidreza" , 2,1,200));
+//        games.add(new Game(false,"Sobhan" , 0,3,70));
+//        games.add(new Game(false,"Abedi" , 2,3,70));
+//        games.add(new Game(true,"hamid" , 3,2,200));
+//        games.add(new Game(false,"Abooei" , 1,2,70));
 
         listView.setItems(games);
         listView.setCellFactory(
@@ -96,30 +107,49 @@ public class BattleHistoryController {
     }
 
 
-
+    /**
+     * Battle Deck Menu
+     * @param event action event
+     */
     @FXML
     void battleDeckClick(ActionEvent event) {
         client.changeScene("Views/BattleDeck.fxml" , new BattleDeckController(client));
 
     }
 
+    /**
+     * Battle History Menu
+     * @param event
+     */
     @FXML
     void battleHistoryClick(ActionEvent event) {
         client.changeScene("Views/BattleHistory.fxml" , new BattleHistoryController(client));
 
     }
 
+    /**
+     * Profile Menu
+     * @param event
+     */
     @FXML
     void profileClick(ActionEvent event) {
         client.changeScene("Views/profile.fxml" , new ProfileController(client));
 
     }
 
+    /**
+     * mouseClicked
+     * @param event Mouse Clicked
+     */
     @FXML
     void mouseClicked(MouseEvent event) {
 
     }
 
+    /**
+     * mouse entered change button image
+     * @param event Mouse event
+     */
     @FXML
     void mouseEntered(MouseEvent event) {
         Image silverButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/silver.png")));
@@ -131,6 +161,10 @@ public class BattleHistoryController {
             profileImage.setImage(silverButtonImage);
     }
 
+    /**
+     * mouse exited change button image
+     * @param event Mouse event
+     */
     @FXML
     void mouseExited(MouseEvent event) {
         Image grayButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/gray.png")));

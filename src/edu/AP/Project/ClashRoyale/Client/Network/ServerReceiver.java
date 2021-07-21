@@ -9,6 +9,9 @@ import java.io.InterruptedIOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
+/**
+ * This class remain unused because of Socket Problem
+ */
 public class ServerReceiver implements Runnable{
     private Socket socket;
     //You also need to add some kind of controller connection

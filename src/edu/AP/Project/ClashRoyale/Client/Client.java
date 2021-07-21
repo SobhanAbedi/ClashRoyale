@@ -25,7 +25,11 @@ public class Client extends Application {
     private  ClientHandler clientHandler;
     private  Thread IranServer;
 
-//    private static CardState cardState;
+    /**
+     * start of application
+     * @param primaryStage primary stage
+     * @throws Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception{
 
@@ -35,13 +39,9 @@ public class Client extends Application {
         clientHandler = new ClientHandler(null , server);
 
         stage = primaryStage;
-//
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Views/login.fxml"));
         loader.setController(new LoginController(this));
         Parent root = loader.load();
-
-//
-//        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Views/login.fxml")));
         primaryStage.setTitle("ClashRoyal");
         primaryStage.setScene(new Scene(root, 1200, 800));
 
@@ -57,48 +57,75 @@ public class Client extends Application {
         //
     }
 
-//    FXMLLoader loader = new FXMLLoader ( getClass().getResource( "Calculator.fxml" ));
-//    CalculatorCon calculatorCon = new CalculatorCon();
-//            loader.setController(calculatorCon);
-//    Parent root = loader.load();
-
+    /**
+     * get socket
+     * @return socket
+     */
     public  Socket getSocket(){
         return socket;
     }
 
+    /**
+     *
+     * @return player Signed in info
+     */
     public PlayerInfo getPlayerInfo() {
         return playerInfo;
     }
 
+    /**
+     * set player info
+     * @param playerInfo to store
+     */
     public void setPlayerInfo(PlayerInfo playerInfo) {
         this.playerInfo = playerInfo;
     }
 
+    /**
+     * main
+     * @param args input arguments
+     */
     public static void main(String[] args) {
-
         launch(args);
     }
 
-
+    /**
+     * get stage
+     * @return primary stage
+     */
     public  Stage getStage() {
         return stage;
     }
 
-    public  Server getServer() {
+    /**
+     * get server
+     * @return server
+     */
+    public Server getServer() {
         return server;
     }
 
+    /**
+     * Access to client handler Without Socket
+     * @return client handler
+     */
     public  ClientHandler getClientHandler() {
         return clientHandler;
     }
 
-    public  Thread getIranServer() {
+    /**
+     * access to Server Thread
+     * @return server Thread
+     */
+    public Thread getIranServer() {
         return IranServer;
     }
-    //    public static ArrayList<Card> getCards(){
-//        return cardState.getCards();
-//    }
 
+    /**
+     * change scene
+     * @param address address of fxml file
+     * @param controller related controller
+     */
     public void changeScene(String address , Object controller){
         FXMLLoader loader = new FXMLLoader();
 
@@ -111,13 +138,16 @@ public class Client extends Application {
             e.printStackTrace();
         }
 
-
         Parent root = loader.getRoot();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
 
+    /**
+     * Play sound
+     * @param url sound to play
+     */
     public static synchronized void playSound(final String url) {
         new Thread(new Runnable() {
             public void run() {
@@ -134,42 +164,20 @@ public class Client extends Application {
         }).start();
     }
 
-    public  void setUsername(String username1){
-        username = username1;
+    /**
+     * set username after login
+     * @param username username
+     */
+    public  void setUsername(String username){
+        this.username = username;
     }
 
+    /**
+     * get username
+     * @return username
+     */
     public  String getUsername(){
         return username;
     }
-
-//    private static void initializeCards(){
-//        cardState = new CardState();
-//        cardState.addCard(new Buildings("Inferno" , 5,1,
-//                true,"Images/Cards/buildings/inferno.png",
-//                0.4f, Target.AIRANDGROUND,6,40,800,400));
-//        cardState.addCard(new Buildings("Canon" , 6,1,
-//                false,"Images/Cards/buildings/cannon.png",
-//                0.8f, Target.GROUND,5.5f,30,380,60));
-//        cardState.addCard(new Troops("Barbarians",5,1,
-//                false, "Images/Cards/Troops/barbarians.png",
-//                1.5f, Speed.Medium,Target.GROUND,1,false,
-//                4,300,75));
-//        cardState.addCard(new Spells("Rage",3,1,true,
-//                "Images/Cards/spells/rage.png","Description" ,
-//                5,6));
-//        addCardToDeck("../Images/Cards/Troops/archers.png" ,4);
-//        addCardToDeck("../Images/Cards/Troops/baby_dragon.png" , 2);
-//        addCardToCollection("../Images/Cards/Troops/barbarians.png", 1);
-//        addCardToDeck("../Images/Cards/Troops/giant.png", 1);
-//        addCardToDeck("../Images/Cards/Troops/mini_pekka.png", 1);
-//        addCardToCollection("../Images/Cards/Troops/valkyrie.png", 3);
-//        addCardToDeck("../Images/Cards/Troops/wizard.png", 1);
-//        addCardToDeck("../Images/Cards/spells/arrows.png", 2);
-//        addCardToCollection("../Images/Cards/spells/fireball.png", 2);
-//        addCardToDeck("../Images/Cards/spells/rage.png", 1);
-//        addCardToDeck("../Images/Cards/buildings/cannon.png", 2);
-//        addCardToCollection("../Images/Cards/buildings/inferno.png", 1);
-//    }
-
 
 }

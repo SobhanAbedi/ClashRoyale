@@ -9,6 +9,11 @@ import javafx.fxml.FXML;
 
 public class ChangeUsernameController {
     private Client client;
+
+    /**
+     * Constructor
+     * @param client client to reach common data
+     */
     public ChangeUsernameController(Client client){
         this.client = client;
     }
@@ -28,11 +33,19 @@ public class ChangeUsernameController {
     @FXML
     private Label serverResponse;
 
+    /**
+     * Back to Profile menu
+     * @param event action event
+     */
     @FXML
     void Back(ActionEvent event) {
         client.changeScene("Views/Profile.fxml" , new ProfileController(client));
     }
 
+    /**
+     * Change Username
+     * @param event action event
+     */
     @FXML
     void change(ActionEvent event) {
 // TODO change username in server

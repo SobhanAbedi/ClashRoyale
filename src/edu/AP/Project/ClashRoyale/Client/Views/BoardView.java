@@ -25,7 +25,9 @@ public class BoardView extends Group {
     private Image greenImage;
     private boolean redRegionActivated;
 
-
+    /**
+     * Board View Constructor
+     */
     public BoardView(){
 //        TODO uploadImages
         wallImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Board/wall.png")));
@@ -40,7 +42,7 @@ public class BoardView extends Group {
     }
 
     /**
-     * Constructs an empty grid of ImageViews
+     * initialize an empty grid of ImageViews
      */
     private void initializeGrid() {
         cellViews = new ImageView[rowCount][columnCount];
@@ -56,9 +58,9 @@ public class BoardView extends Group {
             }
         }
     }
-    /** Updates the view to reflect the state of the model
-     *
-     * @param model
+    /**
+     * Updates the view to reflect the state of the model
+     * @param model board Model
      */
     public void update(BoardModel model) {
         //for each ImageView, set the image to correspond with the CellValue of that cell
@@ -99,19 +101,35 @@ public class BoardView extends Group {
         }
     }
 
+    /**
+     * get rows
+     * @return rows
+     */
     public int getRowCount() {
         return rowCount;
     }
 
+    /**
+     *
+     * @return column
+     */
     public int getColumnCount() {
         return columnCount;
     }
 
+    /**
+     *
+     * @param rowCount set row count
+     */
     public void setRowCount(int rowCount) {
         this.rowCount = rowCount;
         this.initializeGrid();
     }
 
+    /**
+     *
+     * @param columnCount set column count
+     */
     public void setColumnCount(int columnCount) {
         this.columnCount = columnCount;
         this.initializeGrid();

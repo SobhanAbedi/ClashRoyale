@@ -9,6 +9,9 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+/**
+ * This class remain unused because of Socket Problem
+ */
 public class ServerTransmitter implements Runnable{
     private Socket socket;
     private ServerInstruction instruction;

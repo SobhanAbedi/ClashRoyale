@@ -10,6 +10,10 @@ public class GameBoardController {
 
     private Client client;
 
+    /**
+     * Game Board Controller constructor
+     * @param client client to access commmon data
+     */
     public GameBoardController(Client client){
         this.client = client;
     }

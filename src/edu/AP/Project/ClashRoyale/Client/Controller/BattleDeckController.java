@@ -38,7 +38,10 @@ public class BattleDeckController {
     private ArrayList<Card> cards;
     private ArrayList<Card> sortedCards;
 
-
+    /**
+     * Constructor
+     * @param client client
+     */
     public BattleDeckController(Client client){
         this.client = client;
         selected = new ArrayList<>();
@@ -89,47 +92,25 @@ public class BattleDeckController {
     @FXML
     private HBox collectionHBox2;
 
+    /**
+     * initialize update requirements
+     */
     @FXML
     void initialize(){
-//        CardState cardState = new CardState();
-
-//        cardState.addCard(new Buildings("Inferno" , 5,2,
-//                true,"../Images/Cards/buildings/inferno.png",
-//                0.4f, Target.AIRANDGROUND,6,40,800,400));
-//
-//        cardState.addCard(new Buildings("Canon" , 6,1,
-//                false,"../Images/Cards/buildings/cannon.png",
-//                0.8f, Target.GROUND,5.5f,30,380,60));
-//
-//        cardState.addCard(new Troops("Barbarians",5,3,
-//                false, "../Images/Cards/Troops/barbarians.png",
-//                1.5f, Speed.Medium,Target.GROUND,1,false,
-//                4,300,75));
-//
-//        cardState.addCard(new Spells("Rage",3,2,true,
-//                "../Images/Cards/spells/rage.png","Description" ,
-//                5,6));
-
         cardInitializer();
-
-
-
-//        addCardToDeck("../Images/Cards/Troops/archers.png" ,4);
-//        addCardToDeck("../Images/Cards/Troops/baby_dragon.png" , 2);
-//        addCardToCollection("../Images/Cards/Troops/barbarians.png", 1);
-//        addCardToDeck("../Images/Cards/Troops/giant.png", 1);
-//        addCardToDeck("../Images/Cards/Troops/mini_pekka.png", 1);
-//        addCardToCollection("../Images/Cards/Troops/valkyrie.png", 3);
-//        addCardToDeck("../Images/Cards/Troops/wizard.png", 1);
-//        addCardToDeck("../Images/Cards/spells/arrows.png", 2);
-//        addCardToCollection("../Images/Cards/spells/fireball.png", 2);
-//        addCardToDeck("../Images/Cards/spells/rage.png", 1);
-//        addCardToDeck("../Images/Cards/buildings/cannon.png", 2);
-//        addCardToCollection("../Images/Cards/buildings/inferno.png", 1);
     }
+
+    /**
+     * add Deck cards
+     * @param card card to add
+     */
     private void addCards(Card card){
         cards.add(card);
     }
+
+    /**
+     * sort cards by their Dheck Location
+     */
     private void sortCardsByDeckPlace(){
         sortedCards.clear();
         for (int i = 0; i < cardsInDeck.size(); i++) {
@@ -141,6 +122,10 @@ public class BattleDeckController {
         }
 
     }
+
+    /**
+     * show deck cards (add Deck cards to Deck section)
+     */
     private void showDeckCards(){
         for (Card card: sortedCards){
 //            System.out.println(card.getName() +  card.getDeckLocation());
@@ -150,62 +135,33 @@ public class BattleDeckController {
 
     }
 
+    /**
+     * card initiator
+     */
     private void cardInitializer(){
         resetDeckCollection();
         ServerInstruction serverInstruction = new ServerInstruction(ServerInstructionKind.GET_ALL_CARDS);
         ClientInstruction clientInstruction = client.getClientHandler().getAllCards(serverInstruction);
-//        System.out.println(clientInstruction.getKind().toString() + " " + clientInstruction.getArg(0).toString() );
         if (clientInstruction.getKind() == ClientInstructionKind.ALL_CARDS){
             Card[] cards = (Card[]) clientInstruction.getArg(0);
-//            System.out.println("card Get");
             cardsInDeckCounter = 0;
             for (Card card: cards){
-//                System.out.println(card.getName() + card.getDeckLocation());
                 if (card.getDeckLocation()<0){
                     addCardToCollection(card);
                 }else{
                     addCards(card);
                     cardsInDeckCounter++;
                     cardsInDeck.add(card.getName());
-//                    System.out.println(cardsInDeckCounter);
                 }
-
-
             }
             sortCardsByDeckPlace();
             showDeckCards();
         }
-
-
-
-//        deckCounter = 0;
-//        collectionCounter = 0;
-//        ArrayList<CardModel> cardModels = new ArrayList<>();
-//        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/archers.png" , "archer"));
-//        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/baby_dragon.png","baby_dragon"));
-//        cardModels.add(new CardModel(false , 1, "../Images/Cards/Troops/barbarians.png","barbarians"));
-//        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/giant.png","giant"));
-//        cardModels.add(new CardModel(false , 2, "../Images/Cards/Troops/mini_pekka.png" ,"mini_pekka"));
-//        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/valkyrie.png","valkyrie"));
-//        cardModels.add(new CardModel(false , 1, "../Images/Cards/Troops/wizard.png","wizard"));
-//        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/arrows.png","arrows"));
-//        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/fireball.png","fireball"));
-//        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/rage.png","rage"));
-//        cardModels.add(new CardModel(false , 1, "../Images/Cards/buildings/cannon.png","cannon"));
-//        cardModels.add(new CardModel(true , 1, "../Images/Cards/buildings/inferno.png","inferno"));
-
-//
-//        ArrayList<Card> cards = cardState.getCards();
-
-//        for (CardModel card: cardModels){
-//            if (card.isInDeck()){
-//                addCardToDeck(card);
-//            }else{
-//                addCardToCollection(card);
-//            }
-//        }
     }
 
+    /**
+     * Reset deck collection to rewrite
+     */
     private void resetDeckCollection(){
         deckHBox1.getChildren().clear();
         deckHBox2.getChildren().clear();
@@ -214,22 +170,27 @@ public class BattleDeckController {
         deckCounter = 0;
         collectionCounter = 0;
         cardsInDeck.clear();
-//        System.out.println(deckHBox1.getChildren().size());
     }
 
+    /**
+     * add card to deck part
+     * @param card card to be added
+     */
     private void addCardToDeck(Card card){
         VBox newObject = creatCardView(card);
         if(deckCounter < numberPerHBox){
-//            System.out.println("Add to deck deck hbox1  " + deckHBox1.getChildren().size() );
             deckHBox1.getChildren().add(deckCounter,newObject);
             deckCounter++;
         }else{
             deckHBox2.getChildren().add(deckCounter-numberPerHBox , newObject);
             deckCounter++;
         }
-
     }
 
+    /**
+     * add new card to collection
+     * @param card add card to collection
+     */
     private void addCardToCollection(Card card){
         VBox newObject = creatCardView(card);
         if(collectionCounter < numberPerHBox){
@@ -241,14 +202,23 @@ public class BattleDeckController {
         }
     }
 
+    /**
+     * get the full relative path of image
+     * @param cardName cardName
+     * @return
+     */
     private String getPath(String cardName){
         return cardRelativePath + cardName.toLowerCase() +".png";
     }
 
+    /**
+     * Create card Views
+     * @param card card to show 
+     * @return VBox to add to Main HBox
+     */
     private VBox creatCardView(Card card){
         VBox vBox = new VBox();
         vBox.alignmentProperty().set(Pos.CENTER);
-//        System.out.println((getPath(card.getName())));
         Image card1 = new Image (Objects.requireNonNull(getClass().getResourceAsStream(getPath(card.getName()))));
         ImageView card1View = new ImageView();
         card1View.setPreserveRatio(true);
@@ -263,16 +233,11 @@ public class BattleDeckController {
         if (!isCardSelected) {
             card1View.opacityProperty().set(0.8);
         }
-
-
         card1View.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-//                cardInitializer();
-                System.out.println( card.getName() + " pressed");
                 if (deckCounter  < deckCardNumber){
                     if (!card.isInDeck()) {
-                        System.out.println("Deck Counter " + deckCounter + 1);
                         ServerInstruction serverInstruction = new ServerInstruction(ServerInstructionKind.UPDATE_DECK,deckCounter + 1 , card.getName());
                         client.getClientHandler().updateDeck(serverInstruction);
                     }
@@ -284,19 +249,12 @@ public class BattleDeckController {
                     }
                     selected.add(card);
                     if (selected.size() == 2){
-//                        for(Card s: selected){
-//                            System.out.println(s.getName() + s.getDeckLocation());
-//                        }
-                        System.out.println(selected.get(0).getName() +selected.get(0).isInDeck()+ selected.get(1).getName() + selected.get(1).isInDeck());
                         if (selected.get(0).isInDeck() || selected.get(1).isInDeck()){
                             if (!selected.get(0).isInDeck() || !selected.get(1).isInDeck()){
-                                System.out.println("Requirements Approved");
                                 ServerInstruction serverInstruction;
                                 if(selected.get(0).isInDeck()){
-                                    System.out.println(selected.get(0).getDeckLocation());
                                     serverInstruction = new ServerInstruction(ServerInstructionKind.UPDATE_DECK,selected.get(0).getDeckLocation()+1,selected.get(1).getName());
                                 }else {
-                                    System.out.println(selected.get(1).getDeckLocation());
                                     serverInstruction = new ServerInstruction(ServerInstructionKind.UPDATE_DECK,selected.get(1).getDeckLocation()+1,selected.get(0).getName());
                                 }
                                 client.getClientHandler().updateDeck(serverInstruction);
@@ -307,11 +265,9 @@ public class BattleDeckController {
 
                     }
                 }
-
                 cardInitializer();
 
-
-//                mouseEvent.consume();
+                mouseEvent.consume();
             }
         });
         card1View.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
@@ -340,37 +296,49 @@ public class BattleDeckController {
         levelTxt.setFont(Font.font("Lilita One",20));
         levelTxt.textFillProperty().set(Paint.valueOf("#b5b2ff"));
         vBox.getChildren().addAll(card1View,levelTxt);
-//        vBox.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent actionEvent) {
-//                vBox.opacityProperty().set(0.5);
-//            }
-//        });
         return vBox;
     }
 
+    /**
+     * Battle Menu Click
+     * @param event action event
+     */
     @FXML
     void battleClick(ActionEvent event) {
         client.changeScene("./Views/Battle.fxml", new BattleController(client));
     }
 
+    /**
+     * battle deck menu
+     * @param event action event
+     */
     @FXML
     void battleDeckClick(ActionEvent event) {
 
-//        Image image = new Image();
-//        hbox.
     }
 
+    /**
+     * battle History Menu
+     * @param event action event
+     */
     @FXML
     void battleHistoryClick(ActionEvent event) {
         client.changeScene("Views/BattleHistory.fxml" , new BattleHistoryController(client));
     }
 
+    /**
+     * Profile Menu
+     * @param event action event
+     */
     @FXML
     void profileClick(ActionEvent event) {
         client.changeScene("Views/Profile.fxml", new ProfileController(client));
     }
 
+    /**
+     * mouse entered change button image
+     * @param event Mouse event
+     */
     @FXML
     void mouseEntered(MouseEvent event) {
         Image silverButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/silver.png")));
@@ -382,6 +350,10 @@ public class BattleDeckController {
             profileImage.setImage(silverButtonImage);
     }
 
+    /**
+     * mouse exited change button image
+     * @param event Mouse event
+     */
     @FXML
     void mouseExited(MouseEvent event) {
         Image grayButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/gray.png")));

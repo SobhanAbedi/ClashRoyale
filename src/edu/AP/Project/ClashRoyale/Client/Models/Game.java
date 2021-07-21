@@ -13,7 +13,14 @@ public class Game {
     private final String winImagePath = "../Images/check.png";
     private final String loseImagePath = "../Images/x.png";
 
-
+    /**
+     * new game Constructor
+     * @param win win or loose
+     * @param enemyUsername enemy Username
+     * @param clientCups client Cups
+     * @param enemyCups enemy Cups
+     * @param score score earned
+     */
     public Game(boolean win, String enemyUsername, int clientCups, int enemyCups, int score) {
         this.win = win;
         this.enemyUsername = enemyUsername;
@@ -22,6 +29,10 @@ public class Game {
         this.score = score;
     }
 
+    /**
+     * get win/loose game
+     * @return address of image
+     */
     public String getImageAddress(){
         String address;
         if (win){
@@ -40,6 +51,10 @@ public class Game {
         this.win = win;
     }
 
+    /**
+     * get enemy username
+     * @return name of enemy
+     */
     public String getEnemyUsername() {
         return enemyUsername;
     }
@@ -48,6 +63,10 @@ public class Game {
         this.enemyUsername = enemyUsername;
     }
 
+    /**
+     *
+     * @return the client cups earned in this game
+     */
     public int getClientCups() {
         return clientCups;
     }
@@ -56,6 +75,10 @@ public class Game {
         this.clientCups = clientCups;
     }
 
+    /**
+     *
+     * @returnthe enemy cups earned in this game
+     */
     public int getEnemyCups() {
         return enemyCups;
     }
@@ -64,10 +87,18 @@ public class Game {
         this.enemyCups = enemyCups;
     }
 
+    /**
+     *
+     * @return scores earned
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     * set score
+     * @param score score earned
+     */
     public void setScore(int score) {
         this.score = score;
     }

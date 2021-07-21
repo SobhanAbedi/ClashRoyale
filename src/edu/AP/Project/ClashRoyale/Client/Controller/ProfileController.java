@@ -32,6 +32,10 @@ public class ProfileController {
     private int counter = 0;
     private Client client;
 
+    /**
+     * Profile Constructor
+     * @param client to access common data
+     */
     public ProfileController(Client client) {
         this.client = client;
     }
@@ -93,6 +97,9 @@ public class ProfileController {
     @FXML
     private ImageView leagueImage;
 
+    /**
+     * initialize data
+     */
     @FXML
     private void initialize() {
         username.setText(client.getUsername());
@@ -135,44 +142,35 @@ public class ProfileController {
             for (Card card : cards) {
                 if (card.getDeckLocation() >= 0) {
                     addCardToDeck(card);
-
-
                 }
             }
         }
-//        ArrayList<CardModel> cardModels = new ArrayList<>();
-//        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/archers.png" , "archer"));
-//        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/baby_dragon.png","baby_dragon"));
-//        cardModels.add(new CardModel(false , 1, "../Images/Cards/Troops/barbarians.png","barbarians"));
-//        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/giant.png","giant"));
-//        cardModels.add(new CardModel(false , 2, "../Images/Cards/Troops/mini_pekka.png" ,"mini_pekka"));
-//        cardModels.add(new CardModel(true , 1, "../Images/Cards/Troops/valkyrie.png","valkyrie"));
-//        cardModels.add(new CardModel(false , 1, "../Images/Cards/Troops/wizard.png","wizard"));
-//        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/arrows.png","arrows"));
-//        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/fireball.png","fireball"));
-//        cardModels.add(new CardModel(true , 1, "../Images/Cards/spells/rage.png","rage"));
-//        cardModels.add(new CardModel(false , 1, "../Images/Cards/buildings/cannon.png","cannon"));
-//        cardModels.add(new CardModel(true , 1, "../Images/Cards/buildings/inferno.png","inferno"));
-
-//        for (CardModel card: cardModels){
-//            if (card.isInDeck()){
-//                addCardToDeck(card);
-//            }
-//        }
     }
 
+    /**
+     * Add card to deck part
+     * @param card to add
+     */
     private void addCardToDeck(Card card) {
         VBox newObject = creatCardView(card);
         cardDeck.getChildren().add(counter, newObject);
         counter++;
-
     }
 
+    /**
+     * get relative path of image from Name String
+     * @param cardName string card name
+     * @return address
+     */
     private String getPath(String cardName) {
         return cardRelativePath + cardName.toLowerCase() + ".png";
     }
 
-
+    /**
+     * create view of that card
+     * @param card card to create its image
+     * @return VBox to add to Profile HBox
+     */
     private VBox creatCardView(Card card) {
         VBox vBox = new VBox();
         vBox.alignmentProperty().set(Pos.CENTER);
@@ -187,9 +185,9 @@ public class ProfileController {
             public void handle(MouseEvent mouseEvent) {
 //                TODO use this handler to identify and change Deck
 //                cardInitializer();
-                System.out.println(card.getName() + " pressed");
+//                System.out.println(card.getName() + " pressed");
 
-//                mouseEvent.consume();
+                mouseEvent.consume();
             }
         });
         card1View.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
@@ -212,28 +210,49 @@ public class ProfileController {
         return vBox;
     }
 
+    /**
+     * Battle Menu
+     * @param event action event
+     */
     @FXML
     void battleClick(ActionEvent event) {
         client.changeScene("./Views/Battle.fxml", new BattleController(client));
     }
 
+    /**
+     * Battle Deck Menu
+     * @param event action event
+     */
     @FXML
     void battleDeckClick(ActionEvent event) {
         client.changeScene("Views/BattleDeck.fxml", new BattleDeckController(client));
     }
 
+    /**
+     * Battle History Menu
+     * @param event
+     */
     @FXML
     void battleHistoryClick(ActionEvent event) {
         client.changeScene("Views/BattleHistory.fxml", new BattleHistoryController(client));
 
     }
 
+    /**
+     * Profile menu
+     * Reload
+     * @param event action event
+     */
     @FXML
     void profileClick(ActionEvent event) {
         client.changeScene("Views/Profile.fxml", new ProfileController(client));
 
     }
 
+    /**
+     *  set silver image when clicked
+     * @param event action event
+     */
     @FXML
     void mouseClicked(MouseEvent event) {
         Image silverButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/silver.png")));
@@ -241,6 +260,10 @@ public class ProfileController {
         battleImage.setImage(silverButtonImage);
     }
 
+    /**
+     * mouse entered change button image
+     * @param event Mouse event
+     */
     @FXML
     void mouseEntered(MouseEvent event) {
         Image silverButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/silver.png")));
@@ -259,6 +282,10 @@ public class ProfileController {
             signOutImage.setImage(goldButtonImage);
     }
 
+    /**
+     * mouse exited change button image
+     * @param event Mouse event
+     */
     @FXML
     void mouseExited(MouseEvent event) {
         Image grayButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/gray.png")));
@@ -277,6 +304,10 @@ public class ProfileController {
             signOutImage.setImage(silverButtonImage);
     }
 
+    /**
+     * Sign out
+     * @param event action event
+     */
     @FXML
     void signOut(ActionEvent event) {
         client.setPlayerInfo(null);
@@ -284,11 +315,19 @@ public class ProfileController {
         client.changeScene("Views/login.fxml", new LoginController(client));
     }
 
+    /**
+     * change Password View
+     * @param event action event
+     */
     @FXML
     void changePassword(ActionEvent event) {
         client.changeScene("Views/ChangePassword.fxml" , new ChangePasswordController(client));
     }
 
+    /**
+     * change username View
+     * @param event action event
+     */
     @FXML
     void changeUsername(ActionEvent event) {
         client.changeScene("Views/ChangeUsername.fxml", new ChangeUsernameController(client));

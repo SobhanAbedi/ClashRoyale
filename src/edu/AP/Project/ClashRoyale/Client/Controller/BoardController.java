@@ -12,15 +12,24 @@ import java.util.TimerTask;
 public class BoardController {
     final private static double FRAMES_PER_SECOND = 5.0;
     Client client;
+
+    /**
+     * constructor
+     * @param client client to reach common data
+     */
     public BoardController(Client client){
         this.client = client;
     }
+
     private BoardModel boardModel;
     private Timer timer;
 
     @FXML
     private BoardView board;
 
+    /**
+     * initialize board Model
+     */
     public void initialize(){
         boardModel =new BoardModel();
         update();
@@ -46,6 +55,9 @@ public class BoardController {
         this.timer.schedule(timerTask, 0, frameTimeInMilliseconds);
     }
 
+    /**
+     * Update View
+     */
     private void update(){
         this.boardModel.update();
     }

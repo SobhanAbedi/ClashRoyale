@@ -7,6 +7,9 @@ import java.util.Scanner;
 public class BoardModel {
     private final String fileLocation = "../Board/Board.txt";
 
+    /**
+     * constructor
+     */
     public BoardModel(){
         initializeBoard(fileLocation);
     }
@@ -14,10 +17,14 @@ public class BoardModel {
     private int columnCount;
     private CellValue[][] grid;
 
+    /**
+     * initialize board
+     * @param fileName board
+     */
     public void initializeBoard(String fileName){
         // there is two more cells for border Wall
-        rowCount = 34;
-        columnCount = 20;
+        rowCount = 32 + 2;
+        columnCount = 18 + 2;
 
         File file = new File(fileName);
         Scanner scanner = null;
@@ -133,6 +140,13 @@ public class BoardModel {
         }
 
     }
+
+    /**
+     * get cell value
+     * @param row of board
+     * @param column of board
+     * @return Cell value
+     */
     public CellValue getCellValue(int row, int column) {
         assert row >= 0 && row < this.grid.length && column >= 0 && column < this.grid[0].length;
         return this.grid[row][column];
