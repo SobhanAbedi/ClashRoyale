@@ -1,4 +1,10 @@
 package edu.AP.Project.ClashRoyale.Server.Model.GameEngine;
 
-public class BuildingState {
+import java.awt.*;
+
+public class BuildingState extends ForceState{
+    private Point location;
+    private float angle;
+    private float HP;
+    private ActionKind actionKind;
 }

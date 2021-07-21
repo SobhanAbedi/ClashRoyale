@@ -27,7 +27,7 @@ public class GamePool implements Runnable{
                         Player[] players = new Player[groupSize];
                         for(int i = 0; i < groupSize; i++) {
                             ClientHandler handler = list.poll();
-                            players[i] = new ClientPlayer(handler.getUsername(), handler.getDeckCards(), (i/(groupSize/2))%2, handler);
+                            players[i] = new ClientPlayer(handler.getUsername(), handler.getDeckCards(), (i/(groupSize/2))%2, handler, handler.getGameModel());
                             if(players[i] == null) {
                                 System.out.println("Null Player entering a game");
                                 //TODO: return other players to the queue

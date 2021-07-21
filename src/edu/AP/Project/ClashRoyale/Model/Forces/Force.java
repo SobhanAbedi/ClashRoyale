@@ -18,4 +18,6 @@ public abstract class Force implements Serializable {
     public ForceKind getForceKind() {
         return forceKind;
     }
+
+    public abstract int getDamage();
 }
