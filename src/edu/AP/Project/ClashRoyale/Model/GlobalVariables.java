@@ -8,4 +8,6 @@ public class GlobalVariables {
     public final static int DECK_SIZE = 8;
     public final static float DELTA_TIME =0.1f;
     public final static float BRIDGE_X = 5.5f;
+    public final static float INSTANT_SPELLS_TIME = 0.5f;
+    public final static float PROJECTILE_TIME = 0.8f;
 }

@@ -10,18 +10,20 @@ public abstract class ForceEngine {
     protected final int forceID;
     protected final float radius;
     protected final float deltaTime;
+    protected final int side;
 
-    public ForceEngine(GameEngine gameEngine, float radius) {
+    public ForceEngine(GameEngine gameEngine, float radius, int side) {
         this.gameEngine = gameEngine;
         this.forceID = gameEngine.getID();
         this.radius = radius;
         deltaTime = GlobalVariables.DELTA_TIME;
+        this.side = side;
     }
 
     public abstract void genNextState();
     public abstract ForceState getNextState();
     public abstract void next();
-    public abstract void doAction(float time);
+    public abstract void doAction();
     public abstract Point getLocation();
     public abstract boolean isSoldierOrBuilding();
 
@@ -58,5 +60,13 @@ public abstract class ForceEngine {
         if(target instanceof BuildingEngine) {
             ((BuildingEngine)target).acceptDamage(reference.getDamage());
         }
+    }
+
+    public int getForceID() {
+        return forceID;
+    }
+
+    public int getSide() {
+        return side;
     }
 }
