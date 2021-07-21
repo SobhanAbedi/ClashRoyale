@@ -83,7 +83,7 @@
                   <Image url="@../Images/Button/silver.png" />
                </image>
             </ImageView>
-            <JFXButton fx:id="changeUsernameBtn" onMouseEntered="#mouseEntered" onMouseExited="#mouseExited" prefHeight="100.0" prefWidth="230.0" text="Change Username" textFill="#b5b2ff" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <JFXButton fx:id="changeUsernameBtn" onAction="#changeUsername" onMouseEntered="#mouseEntered" onMouseExited="#mouseExited" prefHeight="100.0" prefWidth="230.0" text="Change Username" textFill="#b5b2ff" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <font>
                   <Font name="Lilita One" size="24.0" />
                </font>
@@ -93,7 +93,7 @@
                   <Image url="@../Images/Button/silver.png" />
                </image>
             </ImageView>
-            <JFXButton fx:id="changePasswordBtn" onMouseEntered="#mouseEntered" onMouseExited="#mouseExited" prefHeight="100.0" prefWidth="230.0" text="Change Password" textFill="#b5b2ff" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+            <JFXButton fx:id="changePasswordBtn" onAction="#changePassword" onMouseEntered="#mouseEntered" onMouseExited="#mouseExited" prefHeight="100.0" prefWidth="230.0" text="Change Password" textFill="#b5b2ff" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                <font>
                   <Font name="Lilita One" size="24.0" />
                </font>

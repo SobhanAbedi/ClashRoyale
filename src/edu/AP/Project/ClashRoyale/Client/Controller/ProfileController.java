@@ -32,7 +32,7 @@ public class ProfileController {
     private int counter = 0;
     private Client client;
 
-    public ProfileController(Client client){
+    public ProfileController(Client client) {
         this.client = client;
     }
 
@@ -94,13 +94,13 @@ public class ProfileController {
     private ImageView leagueImage;
 
     @FXML
-    private void initialize(){
+    private void initialize() {
         username.setText(client.getUsername());
 //        TODO get League and Cup
         int level = client.getPlayerInfo().getLevel();
         String levelLabel;
         String leagueImageAddress;
-        switch (level){
+        switch (level) {
             case 2:
                 leagueImageAddress = "../Images/League/Stone.png";
                 levelLabel = "Stone League";
@@ -125,17 +125,16 @@ public class ProfileController {
         int cups = client.getPlayerInfo().getScore();
 
 
-
         league.setText(levelLabel);
         cup.setText(String.valueOf(cups));
 
 
         ServerInstruction serverInstruction = new ServerInstruction(ServerInstructionKind.GET_ALL_CARDS);
         ClientInstruction clientInstruction = client.getClientHandler().getAllCards(serverInstruction);
-        if (clientInstruction.getKind() == ClientInstructionKind.ALL_CARDS){
+        if (clientInstruction.getKind() == ClientInstructionKind.ALL_CARDS) {
             Card[] cards = (Card[]) clientInstruction.getArg(0);
-            for (Card card: cards){
-                if (card.getDeckLocation()>=0){
+            for (Card card : cards) {
+                if (card.getDeckLocation() >= 0) {
                     addCardToDeck(card);
 
 
@@ -162,19 +161,20 @@ public class ProfileController {
 //            }
 //        }
     }
-    private void addCardToDeck(Card card){
+
+    private void addCardToDeck(Card card) {
         VBox newObject = creatCardView(card);
-        cardDeck.getChildren().add(counter,newObject);
+        cardDeck.getChildren().add(counter, newObject);
         counter++;
 
     }
 
-    private String getPath(String cardName){
-        return cardRelativePath + cardName.toLowerCase() +".png";
+    private String getPath(String cardName) {
+        return cardRelativePath + cardName.toLowerCase() + ".png";
     }
 
 
-    private VBox creatCardView(Card card){
+    private VBox creatCardView(Card card) {
         VBox vBox = new VBox();
         vBox.alignmentProperty().set(Pos.CENTER);
 //        Image card1 = new Image (Objects.requireNonNull(getClass().getResourceAsStream(address)));
@@ -188,7 +188,7 @@ public class ProfileController {
             public void handle(MouseEvent mouseEvent) {
 //                TODO use this handler to identify and change Deck
 //                cardInitializer();
-                System.out.println( card.getName() + " pressed");
+                System.out.println(card.getName() + " pressed");
 
 //                mouseEvent.consume();
             }
@@ -207,31 +207,31 @@ public class ProfileController {
         });
         Label levelTxt = new Label();
         levelTxt.setText("Level " + client.getPlayerInfo().getLevel());
-        levelTxt.setFont(Font.font("Lilita One",20));
+        levelTxt.setFont(Font.font("Lilita One", 20));
         levelTxt.textFillProperty().set(Paint.valueOf("#b5b2ff"));
-        vBox.getChildren().addAll(card1View,levelTxt);
+        vBox.getChildren().addAll(card1View, levelTxt);
         return vBox;
     }
 
     @FXML
     void battleClick(ActionEvent event) {
-        client.changeScene("./Views/Battle.fxml" , new BattleController(client));
+        client.changeScene("./Views/Battle.fxml", new BattleController(client));
     }
 
     @FXML
     void battleDeckClick(ActionEvent event) {
-        client.changeScene("Views/BattleDeck.fxml" , new BattleDeckController(client));
+        client.changeScene("Views/BattleDeck.fxml", new BattleDeckController(client));
     }
 
     @FXML
     void battleHistoryClick(ActionEvent event) {
-        client.changeScene("Views/BattleHistory.fxml" , new BattleHistoryController(client));
+        client.changeScene("Views/BattleHistory.fxml", new BattleHistoryController(client));
 
     }
 
     @FXML
     void profileClick(ActionEvent event) {
-        client.changeScene("Views/Profile.fxml" , new ProfileController(client));
+        client.changeScene("Views/Profile.fxml", new ProfileController(client));
 
     }
 
@@ -282,8 +282,16 @@ public class ProfileController {
     void signOut(ActionEvent event) {
         client.setPlayerInfo(null);
         client.setUsername(null);
-        client.changeScene("Views/login.fxml" , new LoginController(client));
+        client.changeScene("Views/login.fxml", new LoginController(client));
     }
 
+    @FXML
+    void changePassword(ActionEvent event) {
+        client.changeScene("Views/ChangePassword.fxml" , new ChangePasswordController(client));
+    }
 
+    @FXML
+    void changeUsername(ActionEvent event) {
+        client.changeScene("Views/ChangeUsername.fxml", new ChangeUsernameController(client));
+    }
 }
