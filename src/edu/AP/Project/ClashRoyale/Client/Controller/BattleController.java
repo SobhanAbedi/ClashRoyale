@@ -127,7 +127,7 @@ public class BattleController {
 
     @FXML
     void trainingClick(ActionEvent event) {
-
+        client.changeScene("Views/Board.fxml", new BoardController(client));
     }
 
     @FXML

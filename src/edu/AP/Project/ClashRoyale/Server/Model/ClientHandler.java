@@ -158,6 +158,7 @@ public class ClientHandler{
 //                break;
             default:
                 //send signup successful message with userid
+                clientInfo = dbConnector.getUserInfo(res);
                 transmitter.setInstruction(new ClientInstruction(ClientInstructionKind.SUCCESS, res));
                 return new ClientInstruction(ClientInstructionKind.SUCCESS, res);
 //                break;

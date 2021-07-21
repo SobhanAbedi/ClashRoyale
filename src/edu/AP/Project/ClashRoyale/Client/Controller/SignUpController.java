@@ -6,6 +6,7 @@ import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstruction;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstructionKind;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstruction;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstructionKind;
+import edu.AP.Project.ClashRoyale.Model.PlayerInfo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
@@ -59,6 +60,15 @@ public class SignUpController {
             if (clientInstruction.getKind() == ClientInstructionKind.SUCCESS){
                 client.setUsername(usernameTxt.getText());
                 msgBox.setText("Successfully signed up");
+                ServerInstruction serverInstruction1 = new ServerInstruction(ServerInstructionKind.GET_PLAYER_INFO,clientInstruction.getArg(0),true);
+                ClientInstruction clientInstruction1 = client.getClientHandler().getPlayerInfo(serverInstruction1);
+                if (clientInstruction1.getKind() == ClientInstructionKind.USER_INFO){
+                    PlayerInfo playerInfo = (PlayerInfo) clientInstruction1.getArg(0);
+                    client.setPlayerInfo(playerInfo);
+                    System.out.println(client.getPlayerInfo().getUsername() + " " + client.getUsername());
+                }else{
+                    serverResponse.setText((String) clientInstruction1.getArg(0));
+                }
                 client.changeScene("Views/battle.fxml" , new BattleController(client));
             }else {
                 msgBox.setText((String) clientInstruction.getArg(0));

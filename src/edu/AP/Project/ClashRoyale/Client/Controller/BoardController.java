@@ -1,5 +1,6 @@
 package edu.AP.Project.ClashRoyale.Client.Controller;
 
+import edu.AP.Project.ClashRoyale.Client.Client;
 import edu.AP.Project.ClashRoyale.Client.Models.BoardModel;
 import edu.AP.Project.ClashRoyale.Client.Views.BoardView;
 import javafx.application.Platform;
@@ -10,7 +11,10 @@ import java.util.TimerTask;
 
 public class BoardController {
     final private static double FRAMES_PER_SECOND = 5.0;
-
+    Client client;
+    public BoardController(Client client){
+        this.client = client;
+    }
     private BoardModel boardModel;
     private Timer timer;
 
