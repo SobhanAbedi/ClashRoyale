@@ -11,7 +11,10 @@ import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstructionKin
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,7 +23,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -186,13 +192,31 @@ public class ProfileController {
 //                TODO use this handler to identify and change Deck
 //                cardInitializer();
 //                System.out.println(card.getName() + " pressed");
-
+                client.buttonClickSound();
+                final Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../Views/CardDetail.fxml"));
+                CardDetailController cardDetailController = new CardDetailController(client , card);
+                loader.setController(cardDetailController);
+                Parent root = null;
+                try {
+                    root = loader.load();
+                } catch (IOException e) {
+                    System.out.println("Something went wrong in loading Card.fxml");
+                }
+                stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Card.png"))));
+                Scene scene = new Scene(root, 600, 400);
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.show();
+                cardDetailController.update();
                 mouseEvent.consume();
             }
         });
         card1View.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                client.buttonEnterSound();
                 card1View.opacityProperty().set(1);
             }
         });
@@ -217,6 +241,7 @@ public class ProfileController {
     @FXML
     void battleClick(ActionEvent event) {
         client.changeScene("./Views/Battle.fxml", new BattleController(client));
+        client.buttonClickSound();
     }
 
     /**
@@ -226,6 +251,7 @@ public class ProfileController {
     @FXML
     void battleDeckClick(ActionEvent event) {
         client.changeScene("Views/BattleDeck.fxml", new BattleDeckController(client));
+        client.buttonClickSound();
     }
 
     /**
@@ -235,7 +261,7 @@ public class ProfileController {
     @FXML
     void battleHistoryClick(ActionEvent event) {
         client.changeScene("Views/BattleHistory.fxml", new BattleHistoryController(client));
-
+        client.buttonClickSound();
     }
 
     /**
@@ -246,7 +272,7 @@ public class ProfileController {
     @FXML
     void profileClick(ActionEvent event) {
         client.changeScene("Views/Profile.fxml", new ProfileController(client));
-
+        client.buttonClickSound();
     }
 
     /**
@@ -256,8 +282,8 @@ public class ProfileController {
     @FXML
     void mouseClicked(MouseEvent event) {
         Image silverButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/silver.png")));
-
         battleImage.setImage(silverButtonImage);
+        client.buttonClickSound();
     }
 
     /**
@@ -280,6 +306,7 @@ public class ProfileController {
             changePasswordImage.setImage(goldButtonImage);
         if (event.getSource().equals(signOutBtn))
             signOutImage.setImage(goldButtonImage);
+        client.buttonEnterSound();
     }
 
     /**
@@ -313,6 +340,7 @@ public class ProfileController {
         client.setPlayerInfo(null);
         client.setUsername(null);
         client.changeScene("Views/login.fxml", new LoginController(client));
+        client.buttonClickSound();
     }
 
     /**
@@ -322,6 +350,7 @@ public class ProfileController {
     @FXML
     void changePassword(ActionEvent event) {
         client.changeScene("Views/ChangePassword.fxml" , new ChangePasswordController(client));
+        client.buttonClickSound();
     }
 
     /**
@@ -331,5 +360,6 @@ public class ProfileController {
     @FXML
     void changeUsername(ActionEvent event) {
         client.changeScene("Views/ChangeUsername.fxml", new ChangeUsernameController(client));
+        client.buttonClickSound();
     }
 }

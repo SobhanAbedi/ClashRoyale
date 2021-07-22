@@ -4,10 +4,15 @@ import com.jfoenix.controls.JFXButton;
 import edu.AP.Project.ClashRoyale.Client.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.util.Objects;
 
@@ -109,7 +114,8 @@ public class BattleController {
      */
     @FXML
     void battleClick(ActionEvent event) {
-
+        client.changeScene("Views/Battle.fxml", new BattleDeckController(client));
+        client.buttonClickSound();
     }
 
     /**
@@ -119,6 +125,7 @@ public class BattleController {
     @FXML
     void battleDeckClick(ActionEvent event) {
         client.changeScene("Views/BattleDeck.fxml", new BattleDeckController(client));
+        client.buttonClickSound();
     }
 
     /**
@@ -128,6 +135,7 @@ public class BattleController {
     @FXML
     void battleHistoryClick(ActionEvent event) {
         client.changeScene("Views/BattleHistory.fxml", new BattleHistoryController(client));
+        client.buttonClickSound();
     }
 
     /**
@@ -137,6 +145,7 @@ public class BattleController {
     @FXML
     void profileClick(ActionEvent event) {
         client.changeScene("Views/Profile.fxml" , new ProfileController(client));
+        client.buttonClickSound();
     }
 
     /**
@@ -145,7 +154,7 @@ public class BattleController {
      */
     @FXML
     void oneClick(ActionEvent event) {
-
+        client.buttonClickSound();
     }
 
     /**
@@ -156,6 +165,7 @@ public class BattleController {
     void trainingClick(ActionEvent event) {
 //        client.changeScene("Views/Board.fxml", new BoardController(client));
         client.changeScene("Views/GameBoard.fxml" , new GameBoardController(client));
+        client.buttonClickSound();
     }
 
     /**
@@ -164,7 +174,7 @@ public class BattleController {
      */
     @FXML
     void trainingSmartClick(ActionEvent event) {
-
+        client.buttonClickSound();
     }
 
     /**
@@ -189,6 +199,7 @@ public class BattleController {
             battleHistoryImage.setImage(silverButtonImage);
         if (event.getSource().equals(profileBtn))
             profileImage.setImage(silverButtonImage);
+        client.buttonEnterSound();
     }
 
     /**
@@ -222,6 +233,7 @@ public class BattleController {
             oneImage.setImage(goldButtonLongImage);
         if (event.getSource().equals(twoBtn))
             twoImage.setImage(goldButtonLongImage);
+        client.buttonEnterSound();
     }
 
     /**

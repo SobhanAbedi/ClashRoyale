@@ -94,6 +94,7 @@ public class BattleGameCellViewerController extends ListCell<Game> {
     void mouseEntered(MouseEvent event) {
         Image goldButtonImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Button/gold.png")));
         viewImage.setImage(goldButtonImage);
+        client.buttonEnterSound();
     }
 
     /**
@@ -112,7 +113,7 @@ public class BattleGameCellViewerController extends ListCell<Game> {
      */
     @FXML
     void viewClicked(ActionEvent event) {
-
+        client.buttonClickSound();
     }
 
 

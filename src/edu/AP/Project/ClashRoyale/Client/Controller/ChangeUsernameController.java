@@ -40,6 +40,7 @@ public class ChangeUsernameController {
     @FXML
     void Back(ActionEvent event) {
         client.changeScene("Views/Profile.fxml" , new ProfileController(client));
+        client.buttonEnterSound();
     }
 
     /**
@@ -50,6 +51,7 @@ public class ChangeUsernameController {
     void change(ActionEvent event) {
 // TODO change username in server
         msgBox.setText("Username Changed");
+        client.buttonClickSound();
     }
 
 }

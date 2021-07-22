@@ -1,5 +1,6 @@
 package edu.AP.Project.ClashRoyale.Server.Model;
 
+import edu.AP.Project.ClashRoyale.Client.Client;
 import edu.AP.Project.ClashRoyale.Client.Models.GameModel;
 import edu.AP.Project.ClashRoyale.Model.Card;
 import edu.AP.Project.ClashRoyale.Model.Forces.Force;
@@ -205,20 +206,21 @@ public class ClientHandler{
         return new ClientInstruction(ClientInstructionKind.ALL_CARDS, (Object) cards);
     }
 
-    public void getForceInfo(ServerInstruction instruction) {
+    public ClientInstruction getForceInfo(ServerInstruction instruction) {
         String forceName = (String) instruction.getArg(0);
 
         if(clientInfo == null) {
             sendUserInfoInvalid();
-            return;
+            return new ClientInstruction(ClientInstructionKind.FAIL,"UserInfo not available.");
         }
 
         Force force = server.getForceInfo(forceName, clientInfo.getLevel());
         if(force == null) {
             sendUserInfoInvalid();
-            return;
+            return new ClientInstruction(ClientInstructionKind.FAIL , "UserInfo not available.");
         }
         new Thread(new ClientTransmitter(socket, new ClientInstruction(ClientInstructionKind.FORCE_INFO, force)));
+        return new ClientInstruction(ClientInstructionKind.FORCE_INFO, force);
     }
 
     public void getAllForces(ServerInstruction instruction) {

@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import javax.sound.sampled.AudioInputStream;
@@ -15,6 +16,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Objects;
 
 public class Client extends Application {
     private  Stage stage;
@@ -42,11 +44,14 @@ public class Client extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Views/login.fxml"));
         loader.setController(new LoginController(this));
         Parent root = loader.load();
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Images/ClashRoyal.png"))));
         primaryStage.setTitle("ClashRoyal");
         primaryStage.setScene(new Scene(root, 1200, 800));
 
+
         primaryStage.setResizable(false);
         primaryStage.show();
+        playSound("Background.wav");
 //        try {
 //            socket = new Socket(GlobalVariables.SERVER_ADDRESS, GlobalVariables.PORT);
 //        }catch (IOException io){
@@ -146,15 +151,15 @@ public class Client extends Application {
 
     /**
      * Play sound
-     * @param url sound to play
+     * @param trackName sound to play
      */
-    public static synchronized void playSound(final String url) {
+    public static synchronized void playSound(final String trackName) {
         new Thread(new Runnable() {
             public void run() {
                 try {
                     Clip clip = AudioSystem.getClip();
                     AudioInputStream inputStream = AudioSystem.getAudioInputStream(
-                            Client.class.getResourceAsStream("Sounds/" + url));
+                            Client.class.getResourceAsStream("Sounds/" + trackName));
                     clip.open(inputStream);
                     clip.start();
                 } catch (Exception e) {
@@ -162,6 +167,20 @@ public class Client extends Application {
                 }
             }
         }).start();
+    }
+
+    /**
+     * play sound when click
+     */
+    public void buttonClickSound(){
+        playSound("Button_Click.wav");
+    }
+
+    /**
+     * play sound when Mouse Enter
+     */
+    public void buttonEnterSound(){
+        playSound("Button.wav");
     }
 
     /**

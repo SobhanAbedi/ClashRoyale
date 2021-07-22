@@ -54,6 +54,7 @@ public class SignUpController {
     @FXML
     void Login(ActionEvent event) {
         client.changeScene("Views/login.fxml" , new LoginController(client));
+        client.buttonEnterSound();
     }
 
     /**
@@ -80,6 +81,7 @@ public class SignUpController {
                     serverResponse.setText((String) clientInstruction1.getArg(0));
                 }
                 client.changeScene("Views/battle.fxml" , new BattleController(client));
+                client.buttonClickSound();
             }else {
                 msgBox.setText((String) clientInstruction.getArg(0));
             }
