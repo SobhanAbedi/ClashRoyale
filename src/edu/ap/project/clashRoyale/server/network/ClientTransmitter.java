@@ -10,15 +10,27 @@ public class ClientTransmitter implements Runnable{
     private Socket socket;
     private ClientInstruction instruction;
 
+    /**
+     * Client transmitter
+     * @param socket socket connection
+     * @param instruction Client instruction to transmit
+     */
     public ClientTransmitter(Socket socket, ClientInstruction instruction) {
         this.socket = socket;
         this.instruction = instruction;
     }
 
+    /**
+     * set client instruction to instruction
+     * @param instruction client instruction
+     */
     public void setInstruction(ClientInstruction instruction) {
         this.instruction = instruction;
     }
 
+    /**
+     * override runnable Interface
+     */
     @Override
     public void run() {
         OutputStream os = null;

@@ -10,11 +10,18 @@ public class GamePool implements Runnable{
     private final Queue<ClientHandler> list;
     private final int groupSize;
 
+    /**
+     * constructor
+     * @param groupSize group size
+     */
     public GamePool(int groupSize) {
         list = new LinkedBlockingQueue<>();
         this.groupSize = groupSize;
     }
 
+    /**
+     * override of runnable Thread
+     */
     @Override
     public void run() {
 
@@ -44,6 +51,10 @@ public class GamePool implements Runnable{
 
     }
 
+    /**
+     * add a new client handler to pool
+     * @param handler new client handler
+     */
     public void addToPool(ClientHandler handler) {
         if(handler == null)
             return;

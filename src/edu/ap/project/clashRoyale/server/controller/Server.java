@@ -38,6 +38,9 @@ public class Server implements Runnable{
     private HashMap<GameEngine, Thread> engines;
     private HashMap<String, CardForces> cardForces;
 
+    /**
+     * Constructor
+     */
     public Server() {
         stateLock = new Object();
         state = "Running";
@@ -51,6 +54,9 @@ public class Server implements Runnable{
         cardForces = new HashMap<>();
     }
 
+    /**
+     * Implement runnable interface
+     */
     @Override
     public void run() {
         ServerUI ui = new ServerCLUI(this);
@@ -135,15 +141,26 @@ public class Server implements Runnable{
         }
     }
 
+    /**
+     * add new client
+     * @param socket socket connection
+     */
     public void newClient(Socket socket) {
         ClientHandler handler = new ClientHandler(socket, this);
         handlerList.add(handler);
     }
 
+    /**
+     * close client
+     * @param handler client handler to remove from handler list
+     */
     public void closeClient(ClientHandler handler) {
         handlerList.remove(handler);
     }
 
+    /**
+     * Stop Server
+     */
     public void stop() {
         System.out.println("Trying to stop the server");
         //listenerThread.interrupt();
@@ -152,6 +169,11 @@ public class Server implements Runnable{
         }
     }
 
+    /**
+     * get cards
+     * @param copy copy
+     * @return array of cads
+     */
     public Card[] getCards(boolean copy) {
         if(cards == null)
             cards = dbConnector.getAllCardsGeneral();
@@ -169,6 +191,12 @@ public class Server implements Runnable{
         return cards;
     }
 
+    /**
+     * get force info
+     * @param name name of force
+     * @param level level of force
+     * @return Force
+     */
     public Force getForceInfo(String name, int level) {
         if(forceList == null)
             forceList = dbConnector.getAllForces();
@@ -178,10 +206,19 @@ public class Server implements Runnable{
         return forceLevels[level - 1];
     }
 
+    /**
+     * get force list
+     * @return
+     */
     public HashMap<String, Force[]> getForceList() {
         return forceList;
     }
 
+    /**
+     * get all forces from a level
+     * @param level specific level to get its levels
+     * @return hash map of name and Force of entered level
+     */
     public HashMap<String , Force> getAllForcesOfLevel(int level) {
         if(level > GlobalVariables.MAX_LEVEL)
             return null;
@@ -192,10 +229,21 @@ public class Server implements Runnable{
         return forces;
     }
 
+    /**
+     * Get forces from card
+     * @param cardName card name
+     * @param round round
+     * @return arraylist of CardForce
+     */
     public ArrayList<CardForce> getCardForces(String cardName, int round) {
         return cardForces.get(cardName).getForcesOfRound(round);
     }
 
+    /**
+     * start game
+     * @param gameEngine game engine
+     * @return game Thread
+     */
     public Thread startGame(GameEngine gameEngine) {
         Thread gameThread = new Thread(gameEngine);
         engines.put(gameEngine, gameThread);

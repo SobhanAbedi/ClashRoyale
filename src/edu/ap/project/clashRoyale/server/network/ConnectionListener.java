@@ -14,11 +14,19 @@ public class ConnectionListener implements Runnable {
     private ServerUI ui;
     private Server server;
 
+    /**
+     * connection listener constructor
+     * @param ui Serrver UI
+     * @param server server
+     */
     public ConnectionListener(ServerUI ui, Server server) {
         this.ui = ui;
         this.server = server;
     }
 
+    /**
+     * implement run method of runnable interface
+     */
     @Override
     public void run() {
         ServerSocket serverSocket;

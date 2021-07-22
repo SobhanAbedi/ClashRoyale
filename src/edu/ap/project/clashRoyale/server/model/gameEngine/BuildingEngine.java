@@ -13,7 +13,13 @@ public class BuildingEngine extends ForceEngine{
     private float timeSinceLastAttack;
     private float targetMinDist;
 
-
+    /**
+     * Constructor
+     * @param gameEngine game engine
+     * @param side side
+     * @param referenceBuilding building
+     * @param location location
+     */
     public BuildingEngine(GameEngine gameEngine, int side, Building referenceBuilding, PointDouble location) {
         super(gameEngine, 0.75f, side);
         this.referenceBuilding = referenceBuilding;
@@ -24,6 +30,10 @@ public class BuildingEngine extends ForceEngine{
         modifier = new PowerModifier();
     }
 
+    /**
+     * get attack Time
+     * @return attack time
+     */
     public float getAttackTime() {
         return referenceBuilding.getHitSpeed() * modifier.getHitSpeedModifier();
     }

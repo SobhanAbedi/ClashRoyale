@@ -13,11 +13,19 @@ public class ClientReceiver implements Runnable {
     private Socket socket;
     private ClientHandler handler;
 
+    /**
+     * Client receiver constructor
+     * @param socket socket connection
+     * @param handler client handler of cleint
+     */
     public ClientReceiver(Socket socket, ClientHandler handler) {
         this.socket = socket;
         this.handler = handler;
     }
 
+    /**
+     * override run of runnable interface Thread
+     */
     @Override
     public void run() {
         InputStream is = null;

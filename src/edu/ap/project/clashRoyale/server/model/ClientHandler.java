@@ -34,6 +34,11 @@ public class ClientHandler{
     private GameEngine gameEngine;
     private Thread gameThread;
 
+    /**
+     * Constructor
+     * @param socket socket
+     * @param server server
+     */
     public ClientHandler(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
@@ -52,12 +57,19 @@ public class ClientHandler{
         gameThread = null;
     }
 
+    /**
+     * close server socket
+     */
     public void close() {
         receiverThread.interrupt();
         dbConnector.disconnect();
         server.closeClient(this);
     }
 
+    /**
+     * load user
+     * @param reloadClientInfo reload from DataBase
+     */
     private void loadUser(boolean reloadClientInfo) {
         if(reloadClientInfo)
             clientInfo = dbConnector.getUserInfo(clientInfo.getUserID());
@@ -66,10 +78,16 @@ public class ClientHandler{
         loadAllCards();
     }
 
+    /**
+     * Load Deck cards
+     */
     private void loadDeck() {
         deck = dbConnector.getDeck(clientInfo.getUserID());
     }
 
+    /**
+     * Load all forces from server
+     */
     private void loadAllForces() {
         if(clientInfo == null) {
             sendUserInfoInvalid();
@@ -82,6 +100,9 @@ public class ClientHandler{
         }
     }
 
+    /**
+     * Load all forces from Database
+     */
     private void loadAllCards() {
         if(clientInfo == null) {
             sendUserInfoInvalid();
@@ -107,6 +128,11 @@ public class ClientHandler{
         }
     }
 
+    /**
+     * Check login
+     * @param instruction server instruction includes instruction that includes username and password
+     * @return Login Pass or fail as a ClientInstruction
+     */
     //TODO: move encryption to client side.(you can send byte[] as Objects)
     public ClientInstruction loginCheck(ServerInstruction instruction) {
         String username = (String) instruction.getArg(0);
@@ -143,6 +169,11 @@ public class ClientHandler{
 
     }
 
+    /**
+     * Check signup and sign up
+     * @param instruction Server instruction that contain new user username and password
+     * @return
+     */
     public ClientInstruction signupCheck(ServerInstruction instruction) {
         String username = (String) instruction.getArg(0);
         String password = (String) instruction.getArg(1);
@@ -176,6 +207,11 @@ public class ClientHandler{
 //        new Thread(transmitter).start();
     }
 
+    /**
+     * get player info from DataBase
+     * @param instruction server instruction include client id and force check that searches the DataBase once again
+     * @return player info as ClientInstruction
+     */
     public ClientInstruction getPlayerInfo(ServerInstruction instruction) {
         int id = (Integer) instruction.getArg(0);
         boolean forceCheck = (Boolean) instruction.getArg(1);
@@ -197,6 +233,11 @@ public class ClientHandler{
 //        new Thread(transmitter).start();
     }
 
+    /**
+     * get all cards
+     * @param instruction server instruction that wants to get all cards
+     * @return all cards as a client instruction
+     */
     public ClientInstruction getAllCards(ServerInstruction instruction) {
         //No arguments
 //        if(cards == null)
@@ -205,6 +246,11 @@ public class ClientHandler{
         return new ClientInstruction(ClientInstructionKind.ALL_CARDS, (Object) cards);
     }
 
+    /**
+     * get force info
+     * @param instruction Server instruction that includes force name
+     * @return Client instruction that contains force info
+     */
     public ClientInstruction getForceInfo(ServerInstruction instruction) {
         String forceName = (String) instruction.getArg(0);
 
@@ -222,12 +268,20 @@ public class ClientHandler{
         return new ClientInstruction(ClientInstructionKind.FORCE_INFO, force);
     }
 
+    /**
+     * get all forces
+     * @param instruction server instruction that contains server instruction
+     */
     public void getAllForces(ServerInstruction instruction) {
         if(forces == null)
             loadAllForces();
         new Thread(new ClientTransmitter(socket, new ClientInstruction(ClientInstructionKind.ALL_FORCES_INFO, forces)));
     }
 
+    /**
+     * update score in DataBase
+     * @param newScore new score
+     */
     public void updateScore(int newScore) {
         int userid = clientInfo.getUserID();
         if(dbConnector.updateUserScore(userid, newScore) == 0) {
@@ -235,6 +289,10 @@ public class ClientHandler{
         }
     }
 
+    /**
+     * Update deck cards
+     * @param instruction server instruction that contains place of Deck and the card name
+     */
     public void updateDeck(ServerInstruction instruction) {
         int place = (Integer) instruction.getArg(0);
         String cardName = (String) instruction.getArg(1);
@@ -250,6 +308,10 @@ public class ClientHandler{
         }
     }
 
+    /**
+     * start training camp (both smart and stochastic bots)
+     * @param instruction Server instruction that contains smart bot and game Model
+     */
     public void startTrainingCamp(ServerInstruction instruction) {
         boolean smart = (Boolean) instruction.getArg(0);
         gameModel = (GameModel) instruction.getArg(1);
@@ -261,24 +323,44 @@ public class ClientHandler{
         gameThread = server.startGame(gameEngine);
     }
 
+    /**
+     * get game model
+     * @return game model
+     */
     public GameModel getGameModel() {
         return gameModel;
     }
 
+    /**
+     * get client player
+     * @return client player
+     */
     public ClientPlayer getClientPlayer() {
         return clientPlayer;
     }
 
+    /**
+     * join a new pool
+     * @param instruction server instruction
+     */
     public void joinPool(ServerInstruction instruction) {
         //TODO: Finish this function
     }
 
+    /**
+     * get username
+     * @return usrename
+     */
     public String getUsername() {
         if(clientInfo == null)
             return null;
         return clientInfo.getUsername();
     }
 
+    /**
+     * get Deck cards
+     * @return Array of cards
+     */
     public Card[] getDeckCards() {
         if(cards == null)
             loadAllCards();
@@ -291,10 +373,17 @@ public class ClientHandler{
         return deckCards;
     }
 
+    /**
+     * send user info invalid to client
+     */
     private void sendUserInfoInvalid() {
         new Thread(new ClientTransmitter(socket, new ClientInstruction(ClientInstructionKind.FAIL, "UserInfo not available. Please Login again.")));
     }
 
+    /**
+     * get level
+     * @return level
+     */
     public int getLevel() {
         if(clientInfo == null) {
             //sendUserInfoInvalid();
