@@ -35,6 +35,7 @@ public class GameEngine implements Runnable{
     private int quarterLength;
     private int currentStep;
     private float currentTime;
+    private int rebaseStep;
 
     public GameEngine(Server server, int playerCount, Player[] players) {
         this.server = server;
@@ -53,6 +54,7 @@ public class GameEngine implements Runnable{
         quarterWidth = GlobalVariables.QUARTER_WIDTH;
         quarterLength = GlobalVariables.QUARTER_LENGTH;
         addInitialBuildings();
+        rebaseStep = 0;
     }
 
     public int getID() {
@@ -215,11 +217,14 @@ public class GameEngine implements Runnable{
                 System.out.println("**GameEngine RoleBack Error**");
         }
         int maxIndex = gameState.size();
+
+        //TODO: make sure this is ok. Intellij changed it to this
         if (maxIndex > roleToStep + 1) {
             gameState.subList(roleToStep + 1, maxIndex).clear();
         }
 
         currentStep = roleToStep;
+        rebaseStep = currentStep;
         currentTime = roleToTime;
     }
 
@@ -236,7 +241,7 @@ public class GameEngine implements Runnable{
         while (!Thread.interrupted()) {
             runSimulation();
             for (Player player : players) {
-                player.updatePlayer(gameState);
+                player.updatePlayer(gameState, rebaseStep);
             }
 
             CardRequest request;

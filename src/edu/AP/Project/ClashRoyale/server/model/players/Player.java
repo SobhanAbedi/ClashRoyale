@@ -15,7 +15,7 @@ public abstract class Player {
         this.side = side;
     }
 
-    public abstract void updatePlayer(ArrayList<ArrayList<ForceState>> stateList);
+    public abstract void updatePlayer(ArrayList<ArrayList<ForceState>> stateList, int rebaseStep);
 
     public abstract int getLevel();
 

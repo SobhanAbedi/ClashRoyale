@@ -27,8 +27,9 @@ public class BoardController  implements EventHandler<KeyEvent> {
      * constructor
      * @param client client to reach common data
      */
-    public BoardController(Client client) {
+    public BoardController(Client client, BoardModel boardModel) {
         this.client = client;
+        this.boardModel = boardModel;
     }
 
     private BoardModel boardModel;
@@ -50,8 +51,6 @@ public class BoardController  implements EventHandler<KeyEvent> {
      * initialize board Model
      */
     public void initialize(){
-
-        boardModel = new BoardModel();
         update();
         startTimer();
     }

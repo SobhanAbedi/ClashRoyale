@@ -1,6 +1,6 @@
 package edu.ap.project.clashRoyale.server.model;
 
-import edu.ap.project.clashRoyale.client.models.GameModel;
+import edu.ap.project.clashRoyale.client.models.BoardModel;
 import edu.ap.project.clashRoyale.model.Card;
 import edu.ap.project.clashRoyale.model.forces.Force;
 import edu.ap.project.clashRoyale.model.GlobalVariables;
@@ -29,7 +29,7 @@ public class ClientHandler{
     private HashMap<String, Force> forces;
     private String[] deck;
     private Card[] cards;
-    private GameModel gameModel;
+    private BoardModel boardModel;
     private ClientPlayer clientPlayer;
     private GameEngine gameEngine;
     private Thread gameThread;
@@ -46,7 +46,7 @@ public class ClientHandler{
         forces = null;
         deck = null;
         cards = null;
-        gameModel = null;
+        boardModel = null;
         clientPlayer = null;
         gameEngine = null;
         gameThread = null;
@@ -252,8 +252,8 @@ public class ClientHandler{
 
     public void startTrainingCamp(ServerInstruction instruction) {
         boolean smart = (Boolean) instruction.getArg(0);
-        gameModel = (GameModel) instruction.getArg(1);
-        clientPlayer = new ClientPlayer(getUsername(), getDeckCards(), 0, this, gameModel);
+        boardModel = (BoardModel) instruction.getArg(1);
+        clientPlayer = new ClientPlayer(getUsername(), getDeckCards(), 0, this, boardModel);
         Player[] players = new Player[2];
         players[0] = clientPlayer;
         players[1] = new BotPlayer("Dummy", getDeckCards(), 1);
@@ -261,8 +261,8 @@ public class ClientHandler{
         gameThread = server.startGame(gameEngine);
     }
 
-    public GameModel getGameModel() {
-        return gameModel;
+    public BoardModel getBoardModel() {
+        return boardModel;
     }
 
     public ClientPlayer getClientPlayer() {
