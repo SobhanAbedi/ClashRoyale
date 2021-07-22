@@ -5,17 +5,19 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class BoardModel {
-    private final String fileLocation = "../Board/Board.txt";
+    private final String fileLocation = "src/edu/AP/Project/ClashRoyale/Client/Board/Board.txt";
+    private int rowCount;
+    private int columnCount;
+    private CellValue[][] grid;
 
     /**
      * constructor
      */
     public BoardModel(){
+        System.out.println("Hi. you got to board model constructor");
         initializeBoard(fileLocation);
     }
-    private int rowCount;
-    private int columnCount;
-    private CellValue[][] grid;
+
 
     /**
      * initialize board
@@ -26,11 +28,14 @@ public class BoardModel {
         rowCount = 32 + 2;
         columnCount = 18 + 2;
 
+        System.out.println(new File("").getAbsolutePath());
+
         File file = new File(fileName);
         Scanner scanner = null;
         try {
             scanner = new Scanner(file);
         } catch (FileNotFoundException e) {
+            System.out.println("Couldn't load file");
             e.printStackTrace();
         }
         grid = new CellValue[rowCount][columnCount];

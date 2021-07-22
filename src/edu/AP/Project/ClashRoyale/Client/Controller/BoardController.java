@@ -3,21 +3,31 @@ package edu.AP.Project.ClashRoyale.Client.Controller;
 import edu.AP.Project.ClashRoyale.Client.Client;
 import edu.AP.Project.ClashRoyale.Client.Models.BoardModel;
 import edu.AP.Project.ClashRoyale.Client.Views.BoardView;
+import edu.AP.Project.ClashRoyale.Model.GlobalVariables;
 import javafx.application.Platform;
+import javafx.scene.control.Label;
+import javafx.scene.input.KeyEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class BoardController {
+public class BoardController  implements EventHandler<KeyEvent> {
     final private static double FRAMES_PER_SECOND = 5.0;
     Client client;
+
+    @Override
+    public void handle(KeyEvent keyEvent) {
+        keyEvent.getCode();
+        keyEvent.consume();
+    }
 
     /**
      * constructor
      * @param client client to reach common data
      */
-    public BoardController(Client client){
+    public BoardController(Client client) {
         this.client = client;
     }
 
@@ -27,11 +37,21 @@ public class BoardController {
     @FXML
     private BoardView board;
 
+    @FXML
+    private Label scoreLabel;
+
+    @FXML
+    private Label gameOverLabel;
+
+    @FXML
+    private Label levelLabel;
+
     /**
      * initialize board Model
      */
     public void initialize(){
-        boardModel =new BoardModel();
+
+        boardModel = new BoardModel();
         update();
         startTimer();
     }
@@ -51,7 +71,7 @@ public class BoardController {
             }
         };
 
-        long frameTimeInMilliseconds = (long)(1000.0 / FRAMES_PER_SECOND);
+        long frameTimeInMilliseconds = (long)(1000.0 * GlobalVariables.DELTA_TIME);
         this.timer.schedule(timerTask, 0, frameTimeInMilliseconds);
     }
 

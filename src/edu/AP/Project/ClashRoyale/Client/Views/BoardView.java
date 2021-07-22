@@ -11,8 +11,8 @@ import java.util.Objects;
 public class BoardView extends Group {
     public final static double CELL_WIDTH = 30.0;
 
-    private int rowCount;
-    private int columnCount;
+    private int rowCount = 0;
+    private int columnCount = 0;
     private ImageView[][] cellViews;
     private Image wallImage;
     private Image enemyKingImage;
@@ -30,6 +30,7 @@ public class BoardView extends Group {
      */
     public BoardView(){
 //        TODO uploadImages
+        System.out.println("We Get To BoardView constructor");
         wallImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Board/wall.png")));
         enemyKingImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Board/enemyKing.png")));
         clientKingImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Board/clientKing.png")));
@@ -45,7 +46,11 @@ public class BoardView extends Group {
      * initialize an empty grid of ImageViews
      */
     private void initializeGrid() {
+        if(rowCount == 0 || columnCount == 0)
+            return;
         cellViews = new ImageView[rowCount][columnCount];
+        System.out.println("rowCount: " + rowCount);
+        System.out.println("columnCount: " + columnCount);
         for (int row = 0; row < rowCount; row++) {
             for (int column = 0; column < columnCount; column++) {
                 ImageView imageView = new ImageView();

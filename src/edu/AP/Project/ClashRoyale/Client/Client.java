@@ -136,17 +136,21 @@ public class Client extends Application {
 
         loader.setLocation(Client.class.getResource(address));
         loader.setController(controller);
+        loader.setClassLoader(getClass().getClassLoader());
         try {
             loader.load();
         } catch (IOException e) {
             System.err.println("Error appeared in loading FXML");
             e.printStackTrace();
+            return;
         }
 
         Parent root = loader.getRoot();
+
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+        root.requestFocus();
     }
 
     /**
