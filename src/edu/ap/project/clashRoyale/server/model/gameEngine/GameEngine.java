@@ -37,6 +37,12 @@ public class GameEngine implements Runnable{
     private float currentTime;
     private int rebaseStep;
 
+    /**
+     * Game Engine Constructor
+     * @param server
+     * @param playerCount
+     * @param players
+     */
     public GameEngine(Server server, int playerCount, Player[] players) {
         this.server = server;
         this.playerCount = playerCount;
@@ -57,15 +63,27 @@ public class GameEngine implements Runnable{
         rebaseStep = 0;
     }
 
+    /**
+     * get id
+     * @return id
+     */
     public int getID() {
         lastForceID++;
         return lastForceID;
     }
 
+    /**
+     * get current Forces
+     * @return array of force engine
+     */
     public ForceEngine[] getCurrentForces() {
         return (ForceEngine[]) currentForces.values().toArray();
     }
 
+    /**
+     * remove force
+     * @param forceID force ID
+     */
     public void removeForce(int forceID) {
         deadForces.put(forceID, currentForces.get(forceID));
         currentForces.remove(forceID);
@@ -112,15 +130,27 @@ public class GameEngine implements Runnable{
         }
     }
 
+    /**
+     * get force
+     * @param forceID force ID
+     * @return Force Engine
+     */
     public ForceEngine getForce(int forceID){
         return currentForces.get(forceID);
     }
 
+    /**
+     * add force
+     * @param force force
+     */
     public void addForce(ForceEngine force) {
         currentForces.put(force.getForceID(), force);
         creationRecords.add(new CreationRecord(force.getForceID(), currentTime));
     }
 
+    /**
+     * add initial buildings
+     */
     private void addInitialBuildings() {
         PointDouble princessLocation0 = new PointDouble(5.5, 6.5 - quarterLength);
         PointDouble princessLocation1 = new PointDouble(-5.5, 6.5 - quarterLength);
@@ -164,6 +194,9 @@ public class GameEngine implements Runnable{
 
     }
 
+    /**
+     * run simulation
+     */
     private void runSimulation() {
         if(currentStep == 0) {
             ArrayList<ForceState> currentState = new ArrayList<>(16);
@@ -190,6 +223,10 @@ public class GameEngine implements Runnable{
         }
     }
 
+    /**
+     * role back simulation
+     * @param time time
+     */
     private void roleBackSimulation(float time) {
         int roleToStep = (int)(time / deltaTime);
         float roleToTime =  roleToStep * deltaTime;
@@ -236,6 +273,9 @@ public class GameEngine implements Runnable{
         }
     }
 
+    /**
+     * run this Thread
+     */
     @Override
     public void run() {
         while (!Thread.interrupted()) {
@@ -287,18 +327,33 @@ public class GameEngine implements Runnable{
 
 }
 
+
 class CreationRecord {
     private final int id;
     private final float time;
+
+    /**
+     * Constructor
+     * @param id id
+     * @param time time
+     */
     public CreationRecord(int id, float time) {
         this.id = id;
         this.time = time;
     }
 
+    /**
+     * get id
+     * @return id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * get time
+     * @return time
+     */
     public float getTime() {
         return time;
     }
@@ -308,15 +363,28 @@ class CardRequest {
     private final ServerInstruction instruction;
     private final Player player;
 
+    /**
+     * request Call Constructor
+     * @param instruction instruction
+     * @param player player
+     */
     public CardRequest(ServerInstruction instruction, Player player) {
         this.instruction = instruction;
         this.player = player;
     }
 
+    /**
+     * get instruction
+     * @return instruction
+     */
     public ServerInstruction getInstruction() {
         return instruction;
     }
 
+    /**
+     * get player
+     * @return player
+     */
     public Player getPlayer() {
         return player;
     }

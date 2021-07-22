@@ -38,18 +38,34 @@ public class BuildingEngine extends ForceEngine{
         return referenceBuilding.getHitSpeed() * modifier.getHitSpeedModifier();
     }
 
+    /**
+     * get damage
+     * @return damage
+     */
     public float getDamage() {
         return referenceBuilding.getDamage() * modifier.getDamageModifier();
     }
 
+    /**
+     * set modifier
+     * @param damageBoost boost damage
+     * @param speedBoost speed boost
+     * @param hitSpeedBoost boost hit speed
+     */
     public void setModifier(float damageBoost, float speedBoost, float hitSpeedBoost) {
         modifier.setModifiers(damageBoost, speedBoost, hitSpeedBoost);
     }
 
+    /**
+     * set modifier as zero
+     */
     public void setModifierZero() {
         modifier.setModifiers(0, 0, 0);
     }
 
+    /**
+     * next state generation
+     */
     @Override
     public void genNextState() {
         try {
@@ -60,21 +76,35 @@ public class BuildingEngine extends ForceEngine{
         setModifierZero();
     }
 
+    /**
+     * get next state
+     * @return next state
+     */
     @Override
     public ForceState getNextState() {
         return nextState;
     }
 
+    /**
+     * get state
+     * @return building state
+     */
     @Override
     public ForceState getState() {
         return buildingState;
     }
 
+    /**
+     * set next state as state
+     */
     @Override
     public void next() {
         buildingState = nextState;
     }
 
+    /**
+     * do action
+     */
     @Override
     public void doAction() {
         if(isDead()) {
@@ -113,16 +143,27 @@ public class BuildingEngine extends ForceEngine{
         acceptDamage(-referenceBuilding.getHealthGradiant()*deltaTime);
     }
 
+    /**
+     * get building location
+     * @return location
+     */
     @Override
     public PointDouble getLocation() {
         return buildingState.getLocation();
     }
 
+    /**
+     * is soldier or building
+     * @return yes
+     */
     @Override
     public boolean isSoldierOrBuilding() {
         return true;
     }
 
+    /**
+     * find target
+     */
     private void findTarget() {
         ForceEngine[] currentForces = gameEngine.getCurrentForces();
         double minDist = 100;
@@ -135,6 +176,11 @@ public class BuildingEngine extends ForceEngine{
         setTargetMinDist();
     }
 
+    /**
+     * can hit to possible target
+     * @param possibleTarget possible target
+     * @return find possible target
+     */
     public boolean canHit(ForceEngine possibleTarget) {
         if(!possibleTarget.isSoldierOrBuilding())
             return false;
@@ -158,10 +204,16 @@ public class BuildingEngine extends ForceEngine{
         }
     }
 
+    /**
+     * set min distance to target
+     */
     private void setTargetMinDist() {
         targetMinDist = radius + target.getRadius();
     }
 
+    /**
+     * set angle
+     */
     private void setAngle() {
         if(target == null)
             return;
@@ -169,10 +221,18 @@ public class BuildingEngine extends ForceEngine{
         nextState.setAngle((float) Math.atan2(direction.y, direction.x));
     }
 
+    /**
+     * is Dead?
+     * @return dead or not
+     */
     public boolean isDead() {
         return buildingState.getActionKind() == ActionKind.DEAD || buildingState.getActionKind() == ActionKind.DIE;
     }
 
+    /**
+     * accept damage
+     * @param damage damage amount
+     */
     public void acceptDamage(float damage) {
         float finalHP = nextState.getHP() - damage;
         if(finalHP <= 0) {

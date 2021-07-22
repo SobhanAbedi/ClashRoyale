@@ -13,6 +13,13 @@ public class SpellEngine extends ForceEngine{
     private float runningTime;
     private boolean effectDone;
 
+    /**
+     * Constructor
+     * @param gameEngine game engine
+     * @param side side
+     * @param referenceSpell reference spell
+     * @param location location
+     */
     public SpellEngine(GameEngine gameEngine, int side, Spell referenceSpell, PointDouble location) {
         super(gameEngine, referenceSpell.getRadius(), side);
         this.referenceSpell = referenceSpell;
@@ -21,6 +28,9 @@ public class SpellEngine extends ForceEngine{
         effectDone = false;
     }
 
+    /**
+     * generate next state
+     */
     @Override
     public void genNextState() {
         try {
@@ -30,21 +40,35 @@ public class SpellEngine extends ForceEngine{
         }
     }
 
+    /**
+     * generate next state
+     * @return state
+     */
     @Override
     public ForceState getNextState() {
         return nextState;
     }
 
+    /**
+     * get state
+     * @return state
+     */
     @Override
     public ForceState getState() {
         return spellState;
     }
 
+    /**
+     * next state as current state
+     */
     @Override
     public void next() {
         spellState = nextState;
     }
 
+    /**
+     * do action
+     */
     @Override
     public void doAction() {
         if(isDead()) {
@@ -91,17 +115,28 @@ public class SpellEngine extends ForceEngine{
 
     }
 
+    /**
+     * get location
+     * @return location
+     */
     @Override
     public PointDouble getLocation() {
         return spellState.getLocation();
     }
 
+    /**
+     * is it soldier or building ?
+     * @return NO
+     */
     @Override
     public boolean isSoldierOrBuilding() {
         return false;
     }
 
-
+    /**
+     * find target
+     * @return targets
+     */
     private ForceEngine[] findTargets() {
         ForceEngine[] currentForces = gameEngine.getCurrentForces();
         ArrayList<ForceEngine> targets = new ArrayList<>();
@@ -112,6 +147,10 @@ public class SpellEngine extends ForceEngine{
         return targets.toArray(new ForceEngine[0]);
     }
 
+    /**
+     * is it dead?
+     * @return dead or not
+     */
     public boolean isDead() {
         return spellState.getActionKind() == ActionKind.DEAD || spellState.getActionKind() == ActionKind.DIE;
     }

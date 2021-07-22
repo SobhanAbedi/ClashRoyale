@@ -11,6 +11,16 @@ public class ProjectileEngine extends ForceEngine{
     private ProjectileState nextState;
     private float runningTime;
 
+    /**
+     * Constructor
+     * @param gameEngine game engine
+     * @param side side
+     * @param projectileKind projectile kind
+     * @param initialLocation initialize modifier
+     * @param targetId target ID
+     * @param damage damage
+     * @param deltaLocation delta location
+     */
     public ProjectileEngine(GameEngine gameEngine, int side, int projectileKind, PointDouble initialLocation, int targetId, float damage, PointDouble deltaLocation) {
         super(gameEngine, 0f, side);
         projectileState = new ProjectileState("Projectile_"+projectileKind, forceID, initialLocation, (float) Math.atan2(deltaLocation.y, deltaLocation.x), ActionKind.CREATE);
@@ -20,7 +30,9 @@ public class ProjectileEngine extends ForceEngine{
         runningTime = 0;
     }
 
-
+    /**
+     * generate next state
+     */
     @Override
     public void genNextState() {
         try {
@@ -30,21 +42,35 @@ public class ProjectileEngine extends ForceEngine{
         }
     }
 
+    /**
+     * get next state
+     * @return next state
+     */
     @Override
     public ForceState getNextState() {
         return nextState;
     }
 
+    /**
+     * get state
+     * @return projectile state
+     */
     @Override
     public ForceState getState() {
         return projectileState;
     }
 
+    /**
+     * next state
+     */
     @Override
     public void next() {
         projectileState = nextState;
     }
 
+    /**
+     * do action
+     */
     @Override
     public void doAction() {
         if(projectileState.getActionKind() == ActionKind.DIE) {
@@ -65,11 +91,19 @@ public class ProjectileEngine extends ForceEngine{
         nextState.setLocation(ForceEngine.pointCombination(getLocation(), deltaLocation, false));
     }
 
+    /**
+     * get location
+     * @return location
+     */
     @Override
     public PointDouble getLocation() {
         return projectileState.getLocation();
     }
 
+    /**
+     * is soldier or building
+     * @return NO
+     */
     @Override
     public boolean isSoldierOrBuilding() {
         return false;
