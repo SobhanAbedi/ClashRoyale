@@ -1,4 +1,4 @@
-package edu.AP.Project.ClashRoyale.Client;
+package edu.ap.project.clashRoyale.client;
 
 public class ServerHandler {
 }

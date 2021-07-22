@@ -1,9 +1,9 @@
-package edu.AP.Project.ClashRoyale.Client;
+package edu.ap.project.clashRoyale.client;
 
-import edu.AP.Project.ClashRoyale.Client.Controller.LoginController;
-import edu.AP.Project.ClashRoyale.Model.PlayerInfo;
-import edu.AP.Project.ClashRoyale.Server.Controller.Server;
-import edu.AP.Project.ClashRoyale.Server.Model.ClientHandler;
+import edu.ap.project.clashRoyale.client.controller.LoginController;
+import edu.ap.project.clashRoyale.model.PlayerInfo;
+import edu.ap.project.clashRoyale.server.controller.Server;
+import edu.ap.project.clashRoyale.server.model.ClientHandler;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -41,7 +41,7 @@ public class Client extends Application {
         clientHandler = new ClientHandler(null , server);
 
         stage = primaryStage;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Views/login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/login.fxml"));
         loader.setController(new LoginController(this));
         Parent root = loader.load();
         primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Images/ClashRoyal.png"))));
