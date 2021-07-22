@@ -9,11 +9,22 @@ public enum ClientInstructionKind {
     public final char code;
     public final String name;
     private final static HashMap<Character, ClientInstructionKind> list;
+
+    /**
+     * Constructor
+     * @param code code
+     * @param name name
+     */
     private ClientInstructionKind(char code, String name) {
         this.code = code;
         this.name = name;
     }
 
+    /**
+     * get instruction kind
+     * @param code kind code
+     * @return client code
+     */
     public static ClientInstructionKind getInstructionKind(char code) {
         return ClientInstructionKind.list.get(code);
     }
