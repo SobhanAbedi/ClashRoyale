@@ -48,6 +48,7 @@ public class ChangePasswordController {
     @FXML
     void back(ActionEvent event) {
         client.changeScene("Views/Profile.fxml" , new ProfileController(client));
+        client.buttonEnterSound();
     }
 
     /**
@@ -58,6 +59,7 @@ public class ChangePasswordController {
     void change(ActionEvent event) {
 // TODO change Password in server
         msgBox.setText("Password Changed");
+        client.buttonClickSound();
     }
 
 }

@@ -66,6 +66,7 @@ public class BattleHistoryController {
     @FXML
     void battleClick(ActionEvent event) {
         client.changeScene("./Views/Battle.fxml" , new BattleController(client));
+        client.buttonClickSound();
     }
 
     /**
@@ -114,7 +115,7 @@ public class BattleHistoryController {
     @FXML
     void battleDeckClick(ActionEvent event) {
         client.changeScene("Views/BattleDeck.fxml" , new BattleDeckController(client));
-
+        client.buttonClickSound();
     }
 
     /**
@@ -124,7 +125,7 @@ public class BattleHistoryController {
     @FXML
     void battleHistoryClick(ActionEvent event) {
         client.changeScene("Views/BattleHistory.fxml" , new BattleHistoryController(client));
-
+        client.buttonClickSound();
     }
 
     /**
@@ -134,7 +135,7 @@ public class BattleHistoryController {
     @FXML
     void profileClick(ActionEvent event) {
         client.changeScene("Views/profile.fxml" , new ProfileController(client));
-
+        client.buttonClickSound();
     }
 
     /**
@@ -143,7 +144,7 @@ public class BattleHistoryController {
      */
     @FXML
     void mouseClicked(MouseEvent event) {
-
+        client.buttonClickSound();
     }
 
     /**
@@ -159,6 +160,7 @@ public class BattleHistoryController {
             battleDeckImage.setImage(silverButtonImage);
         if (event.getSource().equals(profileBtn))
             profileImage.setImage(silverButtonImage);
+        client.buttonEnterSound();
     }
 
     /**

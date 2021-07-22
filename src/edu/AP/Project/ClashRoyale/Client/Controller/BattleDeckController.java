@@ -10,7 +10,10 @@ import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstructionKin
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,7 +22,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -240,6 +247,7 @@ public class BattleDeckController {
                     if (!card.isInDeck()) {
                         ServerInstruction serverInstruction = new ServerInstruction(ServerInstructionKind.UPDATE_DECK,deckCounter + 1 , card.getName());
                         client.getClientHandler().updateDeck(serverInstruction);
+                        client.buttonClickSound();
                     }
 
                 }
@@ -249,6 +257,26 @@ public class BattleDeckController {
                     }
                     selected.add(card);
                     if (selected.size() == 2){
+                        if (selected.get(0).getName().equals(selected.get(1).getName())){
+                            client.buttonClickSound();
+                            final Stage stage = new Stage();
+                            stage.initModality(Modality.APPLICATION_MODAL);
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("../Views/CardDetail.fxml"));
+                            CardDetailController cardDetailController = new CardDetailController(client , selected.get(0));
+                            loader.setController(cardDetailController);
+                            Parent root = null;
+                            try {
+                                root = loader.load();
+                            } catch (IOException e) {
+                                System.out.println("Something went wrong in loading Card.fxml");
+                            }
+                            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Card.png"))));
+                            Scene scene = new Scene(root, 600, 400);
+                            stage.setScene(scene);
+                            stage.setResizable(false);
+                            stage.show();
+                            cardDetailController.update();
+                        }
                         if (selected.get(0).isInDeck() || selected.get(1).isInDeck()){
                             if (!selected.get(0).isInDeck() || !selected.get(1).isInDeck()){
                                 ServerInstruction serverInstruction;
@@ -258,7 +286,7 @@ public class BattleDeckController {
                                     serverInstruction = new ServerInstruction(ServerInstructionKind.UPDATE_DECK,selected.get(1).getDeckLocation()+1,selected.get(0).getName());
                                 }
                                 client.getClientHandler().updateDeck(serverInstruction);
-
+                                client.buttonClickSound();
                             }
 
                         }
@@ -273,6 +301,7 @@ public class BattleDeckController {
         card1View.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                client.buttonEnterSound();
                 card1View.opacityProperty().set(1);
             }
         });
@@ -306,6 +335,8 @@ public class BattleDeckController {
     @FXML
     void battleClick(ActionEvent event) {
         client.changeScene("./Views/Battle.fxml", new BattleController(client));
+        client.buttonClickSound();
+
     }
 
     /**
@@ -314,7 +345,8 @@ public class BattleDeckController {
      */
     @FXML
     void battleDeckClick(ActionEvent event) {
-
+        client.changeScene("./Views/BattleDeck.fxml", new BattleController(client));
+        client.buttonClickSound();
     }
 
     /**
@@ -324,6 +356,7 @@ public class BattleDeckController {
     @FXML
     void battleHistoryClick(ActionEvent event) {
         client.changeScene("Views/BattleHistory.fxml" , new BattleHistoryController(client));
+        client.buttonClickSound();
     }
 
     /**
@@ -333,6 +366,7 @@ public class BattleDeckController {
     @FXML
     void profileClick(ActionEvent event) {
         client.changeScene("Views/Profile.fxml", new ProfileController(client));
+        client.buttonClickSound();
     }
 
     /**
@@ -348,6 +382,7 @@ public class BattleDeckController {
             battleHistoryImage.setImage(silverButtonImage);
         if (event.getSource().equals(profileBtn))
             profileImage.setImage(silverButtonImage);
+        client.buttonEnterSound();
     }
 
     /**

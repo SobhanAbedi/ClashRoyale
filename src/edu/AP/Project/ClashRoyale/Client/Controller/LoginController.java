@@ -53,6 +53,7 @@ public class LoginController {
     @FXML
     void SignUpFunc(ActionEvent event) {
         client.changeScene("Views/SignUp.fxml" , new SignUpController(client));
+        client.buttonEnterSound();
     }
 
     /**
@@ -80,6 +81,7 @@ public class LoginController {
             msgBox.setText("Loged in Successfully");
             ServerInstruction serverInstruction1 = new ServerInstruction(ServerInstructionKind.GET_PLAYER_INFO,clientInstruction.getArg(0),false);
             ClientInstruction clientInstruction1 = client.getClientHandler().getPlayerInfo(serverInstruction1);
+            client.buttonClickSound();
             if (clientInstruction1.getKind() == ClientInstructionKind.USER_INFO){
                 PlayerInfo playerInfo = (PlayerInfo) clientInstruction1.getArg(0);
                 client.setPlayerInfo(playerInfo);
