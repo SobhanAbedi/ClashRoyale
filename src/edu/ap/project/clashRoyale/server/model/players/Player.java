@@ -22,11 +22,7 @@ public abstract class Player {
         this.side = side;
     }
 
-    /**
-     * update player state list
-     * @param stateList state list to update player
-     */
-    public abstract void updatePlayer(ArrayList<ArrayList<ForceState>> stateList);
+    public abstract void updatePlayer(ArrayList<ArrayList<ForceState>> stateList, int rebaseStep);
 
     /**
      * get level

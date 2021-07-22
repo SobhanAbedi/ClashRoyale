@@ -1,20 +1,32 @@
 package edu.ap.project.clashRoyale.client.models;
 
+import edu.ap.project.clashRoyale.model.GlobalVariables;
+import edu.ap.project.clashRoyale.server.model.gameEngine.ForceState;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BoardModel {
-    private final String fileLocation = "src/edu/AP/Project/ClashRoyale/Client/Board/Board.txt";
+    private final String fileLocation = "src/edu/ap/project/clashRoyale/client/board/Board.txt";
     private int rowCount;
     private int columnCount;
     private CellValue[][] grid;
+    private int gameSteps;
+    private int currentStep;
+    private float elixirRemaining;
+    private ArrayList<ArrayList<ForceState>> stateList;
 
     /**
      * constructor
      */
     public BoardModel(){
         System.out.println("Hi. you got to board model constructor");
+        gameSteps = (int) (GlobalVariables.GAME_DURATION / GlobalVariables.DELTA_TIME);
+        stateList = new ArrayList<>(2000);
+        currentStep = 0;
+        elixirRemaining = 4.0f;
         initializeBoard(fileLocation);
     }
 
@@ -25,8 +37,8 @@ public class BoardModel {
      */
     public void initializeBoard(String fileName){
         // there is two more cells for border Wall
-        rowCount = 32 + 2;
-        columnCount = 18 + 2;
+        rowCount = GlobalVariables.QUARTER_LENGTH * 2 + 2;
+        columnCount = GlobalVariables.QUARTER_WIDTH * 2 + 2;
 
         System.out.println(new File("").getAbsolutePath());
 
@@ -157,6 +169,10 @@ public class BoardModel {
         return this.grid[row][column];
     }
     public void update(){
+
+    }
+
+    public void updateStateList(ArrayList<ArrayList<ForceState>> stateList, int rebaseStep) {
 
     }
 

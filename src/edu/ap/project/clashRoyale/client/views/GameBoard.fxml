@@ -18,7 +18,7 @@
    <children>
       <ImageView fitHeight="800.0" fitWidth="1200.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Images/background1.png" />
+            <Image url="@../images/background1.png" />
          </image>
       </ImageView>
       <BorderPane prefHeight="800.0" prefWidth="800.0">
@@ -49,7 +49,7 @@
                      <children>
                         <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                            <image>
-                              <Image url="@../Images/against.png" />
+                              <Image url="@../images/against.png" />
                            </image>
                         </ImageView>
                         <Label fx:id="clientId" textFill="#bdff99" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
@@ -71,7 +71,7 @@
                   </Label>
                   <ImageView fx:id="elixirImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <image>
-                        <Image url="@../Images/elixir.png" />
+                        <Image url="@../images/elixir.png" />
                      </image>
                   </ImageView>
                </children>

@@ -1,6 +1,6 @@
 package edu.ap.project.clashRoyale.server.model.players;
 
-import edu.ap.project.clashRoyale.client.models.GameModel;
+import edu.ap.project.clashRoyale.client.models.BoardModel;
 import edu.ap.project.clashRoyale.model.Card;
 import edu.ap.project.clashRoyale.server.model.ClientHandler;
 import edu.ap.project.clashRoyale.server.model.gameEngine.ForceState;
@@ -10,28 +10,17 @@ import java.util.ArrayList;
 public class ClientPlayer extends Player{
 
     private final ClientHandler handler;
-    private final GameModel gameModel;
+    private final BoardModel boardModel;
 
-    /**
-     * Constructor
-     * @param name name of player
-     * @param deck deck cards
-     * @param side side of player
-     * @param handler client handler
-     * @param gameModel game model
-     */
-    public ClientPlayer(String name, Card[] deck, int side, ClientHandler handler, GameModel gameModel) {
+    public ClientPlayer(String name, Card[] deck, int side, ClientHandler handler, BoardModel boardModel) {
         super(name, deck, side);
         this.handler = handler;
-        this.gameModel = gameModel;
+        this.boardModel = boardModel;
     }
 
-    /**
-     * update player
-     * @param stateList state list to update player
-     */
-    public void updatePlayer(ArrayList<ArrayList<ForceState>> stateList) {
+    public void updatePlayer(ArrayList<ArrayList<ForceState>> stateList, int rebaseStep) {
         //TODO: connect directly to gameModel and replace stateList
+        boardModel.updateStateList(stateList, rebaseStep);
     }
 
     /**

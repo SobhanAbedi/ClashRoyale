@@ -22,7 +22,7 @@ public class BotPlayer extends Player{
      * @param stateList state list to update player
      */
     @Override
-    public void updatePlayer(ArrayList<ArrayList<ForceState>> stateList) {
+    public void updatePlayer(ArrayList<ArrayList<ForceState>> stateList, int rebaseStep) {
 
     }
 

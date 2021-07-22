@@ -2,6 +2,7 @@ package edu.ap.project.clashRoyale.client.controller;
 
 import com.jfoenix.controls.JFXButton;
 import edu.ap.project.clashRoyale.client.Client;
+import edu.ap.project.clashRoyale.client.models.BoardModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -158,7 +159,8 @@ public class BattleController {
      */
     @FXML
     void trainingClick(ActionEvent event) {
-        client.changeScene("Views/Board.fxml", new BoardController(client));
+        BoardModel boardModel = new BoardModel();
+        client.changeScene("Views/Board.fxml", new BoardController(client, boardModel));
 //        client.changeScene("Views/GameBoard.fxml" , new GameBoardController(client));
         client.buttonClickSound();
     }
