@@ -2,8 +2,10 @@ package edu.AP.Project.ClashRoyale.Server.Model.GameEngine;
 
 import edu.AP.Project.ClashRoyale.Model.Forces.Building;
 import edu.AP.Project.ClashRoyale.Model.GlobalVariables;
+import edu.AP.Project.ClashRoyale.Model.PointDouble;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 public class BuildingEngine extends ForceEngine{
     private Building referenceBuilding;
@@ -15,7 +17,7 @@ public class BuildingEngine extends ForceEngine{
     private float targetMinDist;
 
 
-    public BuildingEngine(GameEngine gameEngine, int side, Building referenceBuilding, Point location) {
+    public BuildingEngine(GameEngine gameEngine, int side, Building referenceBuilding, PointDouble location) {
         super(gameEngine, 0.75f, side);
         this.referenceBuilding = referenceBuilding;
         target = null;
@@ -57,6 +59,11 @@ public class BuildingEngine extends ForceEngine{
     }
 
     @Override
+    public ForceState getState() {
+        return buildingState;
+    }
+
+    @Override
     public void next() {
         buildingState = nextState;
     }
@@ -85,7 +92,7 @@ public class BuildingEngine extends ForceEngine{
             }
             if(timeSinceLastAttack > getAttackTime()) {
                 timeSinceLastAttack = 0;
-                Point deltaLocation = ForceEngine.pointCombination(target.getLocation(), getLocation(), true);
+                PointDouble deltaLocation = ForceEngine.pointCombination(target.getLocation(), getLocation(), true);
                 ForceEngine.scalePoint(deltaLocation, deltaTime/ GlobalVariables.PROJECTILE_TIME);
                 ProjectileEngine projectile = new ProjectileEngine(gameEngine, side, referenceBuilding.getProjectile(), getLocation(), target.getForceID(), getDamage(), deltaLocation);
                 gameEngine.addForce(projectile);
@@ -100,7 +107,7 @@ public class BuildingEngine extends ForceEngine{
     }
 
     @Override
-    public Point getLocation() {
+    public PointDouble getLocation() {
         return buildingState.getLocation();
     }
 
@@ -151,7 +158,7 @@ public class BuildingEngine extends ForceEngine{
     private void setAngle() {
         if(target == null)
             return;
-        Point direction = ForceEngine.pointCombination(target.getLocation(), getLocation(), true);
+        PointDouble direction = ForceEngine.pointCombination(target.getLocation(), getLocation(), true);
         nextState.setAngle((float) Math.atan2(direction.y, direction.x));
     }
 

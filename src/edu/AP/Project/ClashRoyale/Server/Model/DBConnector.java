@@ -5,6 +5,7 @@ import edu.AP.Project.ClashRoyale.Model.Card;
 import edu.AP.Project.ClashRoyale.Model.Forces.*;
 import edu.AP.Project.ClashRoyale.Model.GlobalVariables;
 import edu.AP.Project.ClashRoyale.Model.PlayerInfo;
+import edu.AP.Project.ClashRoyale.Model.PointDouble;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -223,6 +224,30 @@ public class DBConnector {
             System.out.println(e.toString());
             return null;
         }
+    }
+
+    public HashMap<String, CardForces> getAllCardForces() {
+        String query = "SELECT card_name, round, force_name, ST_X(rel_position) AS rel_x, ST_Y(rel_position) AS rel_y FROM card_forces ORDER BY card_name ASC, round ASC, force_name ASC;";
+        HashMap<String, CardForces> result = new HashMap<>(20);
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                String cardName = resultSet.getString("card_name");
+                if(!result.containsKey(cardName))
+                    result.put(cardName, new CardForces(cardName));
+                String forceName = resultSet.getString("force_name");
+                int round = resultSet.getInt("round");
+                double relX = resultSet.getDouble("rel_x");
+                double relY = resultSet.getDouble("rel_y");
+                result.get(cardName).addForce(forceName, new PointDouble(relX, relY), round);
+            }
+            closeStatement(statement);
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return null;
+        }
+        return result;
     }
 
     public HashMap<String, Force[]> getAllForces () {

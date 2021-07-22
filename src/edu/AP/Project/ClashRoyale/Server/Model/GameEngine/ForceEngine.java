@@ -2,8 +2,10 @@ package edu.AP.Project.ClashRoyale.Server.Model.GameEngine;
 
 import edu.AP.Project.ClashRoyale.Model.Forces.Force;
 import edu.AP.Project.ClashRoyale.Model.GlobalVariables;
+import edu.AP.Project.ClashRoyale.Model.PointDouble;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 public abstract class ForceEngine {
     protected GameEngine gameEngine;
@@ -22,17 +24,19 @@ public abstract class ForceEngine {
 
     public abstract void genNextState();
     public abstract ForceState getNextState();
+    public abstract ForceState getState();
     public abstract void next();
     public abstract void doAction();
-    public abstract Point getLocation();
+    public abstract PointDouble getLocation();
     public abstract boolean isSoldierOrBuilding();
+
 
     public float getRadius() {
         return radius;
     }
 
-    public static Point pointCombination(Point point1, Point point2, boolean negate) {
-        Point ans = new Point(point1);
+    public static PointDouble pointCombination(PointDouble point1, PointDouble point2, boolean negate) {
+        PointDouble ans = new PointDouble(point1);
         if(negate)
             ans.translate(-point2.x, -point2.y);
         else
@@ -40,16 +44,16 @@ public abstract class ForceEngine {
         return ans;
     }
 
-    public static void normalizePoint(Point point) {
+    public static void normalizePoint(PointDouble point) {
         double length = point.distance(0, 0);
         point.setLocation(point.x/length, point.y/length);
     }
 
-    public static double PointLength(Point point) {
+    public static double PointLength(PointDouble point) {
         return point.distance(0, 0);
     }
 
-    public static void scalePoint(Point point, double k) {
+    public static void scalePoint(PointDouble point, double k) {
         point.setLocation(point.x * k, point.y * k);
     }
 

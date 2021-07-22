@@ -1,30 +1,33 @@
 package edu.AP.Project.ClashRoyale.Server.Model.GameEngine;
 
+import edu.AP.Project.ClashRoyale.Model.PointDouble;
+
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 public abstract class ForceState {
     protected String forceName;
     protected final int forceID;
-    protected Point location;
+    protected PointDouble location;
 
-    public ForceState(String forceName, int forceID, Point location) {
+    public ForceState(String forceName, int forceID, PointDouble location) {
         this.forceName = forceName;
         this.forceID = forceID;
         this.location = location;
     }
 
-    public void translateLocation(Point direction, boolean negate) {
+    public void translateLocation(PointDouble direction, boolean negate) {
         if(negate)
             location.translate(-direction.x, -direction.y);
         else
             location.translate(direction.x, direction.y);
     }
 
-    public Point getLocation() {
+    public PointDouble getLocation() {
         return location;
     }
 
-    public void setLocation(Point location) {
+    public void setLocation(PointDouble location) {
         this.location = location;
     }
 }

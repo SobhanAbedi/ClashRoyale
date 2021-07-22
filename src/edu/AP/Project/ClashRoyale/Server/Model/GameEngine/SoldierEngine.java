@@ -3,8 +3,10 @@ package edu.AP.Project.ClashRoyale.Server.Model.GameEngine;
 import edu.AP.Project.ClashRoyale.Model.Forces.Building;
 import edu.AP.Project.ClashRoyale.Model.Forces.Soldier;
 import edu.AP.Project.ClashRoyale.Model.GlobalVariables;
+import edu.AP.Project.ClashRoyale.Model.PointDouble;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 public class SoldierEngine extends ForceEngine{
     private Soldier referenceSoldier;
@@ -12,12 +14,12 @@ public class SoldierEngine extends ForceEngine{
     private SoldierState nextState;
     private PowerModifier modifier;
     private ForceEngine target;
-    private Point direction;
+    private PointDouble direction;
     private boolean recheckTarget;
     private float timeSinceLastAttack;
     private float targetMinDist;
 
-    public SoldierEngine(GameEngine gameEngine, int side, Soldier referenceSoldier, Point initialLocation) {
+    public SoldierEngine(GameEngine gameEngine, int side, Soldier referenceSoldier, PointDouble initialLocation) {
         super(gameEngine, 0.5f, side);
         this.referenceSoldier = referenceSoldier;
         target = null;
@@ -26,7 +28,7 @@ public class SoldierEngine extends ForceEngine{
         timeSinceLastAttack = getAttackTime();
         targetMinDist = 0;
         modifier = new PowerModifier();
-        direction = new Point(0, 0);
+        direction = new PointDouble(0, 0);
     }
 
     public float getSpeed() {
@@ -65,12 +67,17 @@ public class SoldierEngine extends ForceEngine{
     }
 
     @Override
+    public ForceState getState() {
+        return soldierState;
+    }
+
+    @Override
     public void next() {
         soldierState = nextState;
     }
 
     @Override
-    public Point getLocation() {
+    public PointDouble getLocation() {
         return soldierState.getLocation();
     }
 
@@ -107,7 +114,7 @@ public class SoldierEngine extends ForceEngine{
                 continue;
             if(!force.isSoldierOrBuilding())
                 continue;
-            Point forceDeltaLocation = ForceEngine.pointCombination(force.getLocation(), getLocation(), true);
+            PointDouble forceDeltaLocation = ForceEngine.pointCombination(force.getLocation(), getLocation(), true);
             double minDist = radius + force.getRadius();
             if(minDist > ForceEngine.PointLength(forceDeltaLocation)) {
                 if(force instanceof SoldierEngine) {
@@ -126,7 +133,7 @@ public class SoldierEngine extends ForceEngine{
                 if(referenceSoldier.getProjectile() == 0) {
                     doDamage(target, referenceSoldier);
                 } else {
-                    Point deltaLocation = ForceEngine.pointCombination(target.getLocation(), getLocation(), true);
+                    PointDouble deltaLocation = ForceEngine.pointCombination(target.getLocation(), getLocation(), true);
                     ForceEngine.scalePoint(deltaLocation, deltaTime/GlobalVariables.PROJECTILE_TIME);
                     ProjectileEngine projectile = new ProjectileEngine(gameEngine, side, referenceSoldier.getProjectile(), getLocation(), target.getForceID(), getDamage(), deltaLocation);
                     gameEngine.addForce(projectile);
@@ -140,7 +147,7 @@ public class SoldierEngine extends ForceEngine{
         nextState.translateLocation(direction, false);
     }
 
-    public void translateDirection(Point translation, boolean negate) {
+    public void translateDirection(PointDouble translation, boolean negate) {
         if(negate)
             direction.translate(-translation.x, -translation.y);
         else
@@ -210,11 +217,11 @@ public class SoldierEngine extends ForceEngine{
 
     private void findDirection() {
         if(Math.abs(getLocation().y) > 1 && target.getLocation().y * getLocation().y < 0) {
-            float averageX = (target.getLocation().x + getLocation().x) / 2f;
+            float averageX = (float) (target.getLocation().x + getLocation().x) / 2f;
             float x_sign = Math.signum(averageX);
             if(x_sign == 0)
                 x_sign = 1;
-            float y_sign = Math.signum(getLocation().y);
+            float y_sign = Math.signum((float) getLocation().y);
             direction.setLocation(x_sign * GlobalVariables.BRIDGE_X, y_sign);
         } else {
             direction.setLocation(target.getLocation());

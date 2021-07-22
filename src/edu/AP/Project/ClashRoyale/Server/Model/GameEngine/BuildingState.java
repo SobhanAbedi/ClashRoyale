@@ -1,13 +1,16 @@
 package edu.AP.Project.ClashRoyale.Server.Model.GameEngine;
 
+import edu.AP.Project.ClashRoyale.Model.PointDouble;
+
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 public class BuildingState extends ForceState implements Cloneable{
     private float angle;
     private float HP;
     private ActionKind actionKind;
 
-    public BuildingState(String forceName, int forceID, Point location, float angle, float HP, ActionKind actionKind) {
+    public BuildingState(String forceName, int forceID, PointDouble location, float angle, float HP, ActionKind actionKind) {
         super(forceName, forceID, location);
         this.angle = angle;
         this.HP = HP;
@@ -16,7 +19,7 @@ public class BuildingState extends ForceState implements Cloneable{
 
     @Override
     public Object clone() throws CloneNotSupportedException{
-        return new SoldierState(forceName, forceID, new Point(location), angle, HP, ActionKind.values()[actionKind.ordinal()]);
+        return new BuildingState(forceName, forceID, new PointDouble(location), angle, HP, ActionKind.values()[actionKind.ordinal()]);
     }
 
     public float getAngle() {

@@ -18,7 +18,19 @@ public class ClientPlayer extends Player{
         this.gameModel = gameModel;
     }
 
-    public void updatePlayer(ArrayList<ForceState>[] stateList) {
+    public void updatePlayer(ArrayList<ArrayList<ForceState>> stateList) {
         //TODO: connect directly to gameModel and replace stateList
+    }
+
+    public int getLevel(){
+        return handler.getLevel();
+    }
+
+    public void endGame(boolean win) {
+        //TODO: finish win and lose
+    }
+
+    public ClientHandler getHandler() {
+        return handler;
     }
 }

@@ -8,10 +8,8 @@ import edu.AP.Project.ClashRoyale.Model.Forces.Spell;
 import edu.AP.Project.ClashRoyale.Model.GlobalVariables;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstruction;
 import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstructionKind;
-import edu.AP.Project.ClashRoyale.Server.Model.ClientHandler;
-import edu.AP.Project.ClashRoyale.Server.Model.DBConnector;
+import edu.AP.Project.ClashRoyale.Server.Model.*;
 import edu.AP.Project.ClashRoyale.Server.Model.GameEngine.GameEngine;
-import edu.AP.Project.ClashRoyale.Server.Model.GamePool;
 import edu.AP.Project.ClashRoyale.Server.Network.ConnectionListener;
 import edu.AP.Project.ClashRoyale.Server.View.ServerCLUI;
 import edu.AP.Project.ClashRoyale.Server.View.ServerUI;
@@ -38,6 +36,7 @@ public class Server implements Runnable{
     private GamePool gamePool2v2;
     private Thread pool2v2Thread;
     private HashMap<GameEngine, Thread> engines;
+    private HashMap<String, CardForces> cardForces;
 
     public Server() {
         stateLock = new Object();
@@ -45,10 +44,11 @@ public class Server implements Runnable{
         dbConnector = new DBConnector();
         cards = null;
         forceList = null;
+        handlerList = new ArrayList<>();
         gamePool1v1 = new GamePool(2);
         gamePool2v2 = new GamePool(4);
         engines = new HashMap<>();
-        handlerList = new ArrayList<>();
+        cardForces = new HashMap<>();
     }
 
     @Override
@@ -102,11 +102,29 @@ public class Server implements Runnable{
         pool2v2Thread = new Thread(gamePool2v2);
         pool2v2Thread.start();
 
+        cardForces = dbConnector.getAllCardForces();
+        System.out.println(cardForces.size());
+        System.out.println("Card Forces:");
+        for(Map.Entry<String, CardForces> entry : cardForces.entrySet()) {
+            System.out.println(entry.getKey());
+            int round = 1;
+            while (true) {
+                ArrayList<CardForce> forces = entry.getValue().getForcesOfRound(round);
+                if(forces == null || forces.size() == 0)
+                    break;
+                for(CardForce force : forces) {
+                    System.out.println("\t" + force.getForceName() + "\tround: " + force.getRound() + "\tat " + force.getRelLocation());
+                }
+                round++;
+            }
+        }
+
 
         if(dbConnector.disconnect() == 0)
             ui.sendVerification("DataBase Disconnected");
         else
             ui.sendError("DataBase Connection Problem");
+
         while (!Thread.interrupted()) {
             synchronized (stateLock) {
                 if (state.equals("Interrupted")) {
@@ -172,5 +190,16 @@ public class Server implements Runnable{
             forces.put(entry.getKey(), entry.getValue()[level - 1]);
         }
         return forces;
+    }
+
+    public ArrayList<CardForce> getCardForces(String cardName, int round) {
+        return cardForces.get(cardName).getForcesOfRound(round);
+    }
+
+    public Thread startGame(GameEngine gameEngine) {
+        Thread gameThread = new Thread(gameEngine);
+        engines.put(gameEngine, gameThread);
+        gameThread.start();
+        return gameThread;
     }
 }

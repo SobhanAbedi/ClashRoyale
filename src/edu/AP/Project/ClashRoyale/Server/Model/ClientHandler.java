@@ -9,6 +9,10 @@ import edu.AP.Project.ClashRoyale.Model.Instructions.Client.ClientInstructionKin
 import edu.AP.Project.ClashRoyale.Model.Instructions.Server.ServerInstruction;
 import edu.AP.Project.ClashRoyale.Model.PlayerInfo;
 import edu.AP.Project.ClashRoyale.Server.Controller.Server;
+import edu.AP.Project.ClashRoyale.Server.Model.GameEngine.GameEngine;
+import edu.AP.Project.ClashRoyale.Server.Model.Players.BotPlayer;
+import edu.AP.Project.ClashRoyale.Server.Model.Players.ClientPlayer;
+import edu.AP.Project.ClashRoyale.Server.Model.Players.Player;
 import edu.AP.Project.ClashRoyale.Server.Network.ClientReceiver;
 import edu.AP.Project.ClashRoyale.Server.Network.ClientTransmitter;
 
@@ -26,6 +30,9 @@ public class ClientHandler{
     private String[] deck;
     private Card[] cards;
     private GameModel gameModel;
+    private ClientPlayer clientPlayer;
+    private GameEngine gameEngine;
+    private Thread gameThread;
 
     public ClientHandler(Socket socket, Server server) {
         this.socket = socket;
@@ -40,6 +47,9 @@ public class ClientHandler{
         deck = null;
         cards = null;
         gameModel = null;
+        clientPlayer = null;
+        gameEngine = null;
+        gameThread = null;
     }
 
     public void close() {
@@ -239,16 +249,26 @@ public class ClientHandler{
         }
     }
 
-    public void startTrainingCamp(boolean smart, ServerInstruction instruction) {
-        //TODO: Finish this function
-        gameModel = (GameModel) instruction.getArg(0);
+    public void startTrainingCamp(ServerInstruction instruction) {
+        boolean smart = (Boolean) instruction.getArg(0);
+        gameModel = (GameModel) instruction.getArg(1);
+        clientPlayer = new ClientPlayer(getUsername(), getDeckCards(), 0, this, gameModel);
+        Player[] players = new Player[2];
+        players[0] = clientPlayer;
+        players[1] = new BotPlayer("Dummy", getDeckCards(), 1);
+        gameEngine = new GameEngine(server, 2, players);
+        gameThread = server.startGame(gameEngine);
     }
 
     public GameModel getGameModel() {
         return gameModel;
     }
 
-    public void joinPool(boolean withAlly, ServerInstruction instruction) {
+    public ClientPlayer getClientPlayer() {
+        return clientPlayer;
+    }
+
+    public void joinPool(ServerInstruction instruction) {
         //TODO: Finish this function
     }
 
@@ -272,5 +292,14 @@ public class ClientHandler{
 
     private void sendUserInfoInvalid() {
         new Thread(new ClientTransmitter(socket, new ClientInstruction(ClientInstructionKind.FAIL, "UserInfo not available. Please Login again.")));
+    }
+
+    public int getLevel() {
+        if(clientInfo == null) {
+            //sendUserInfoInvalid();
+            System.out.println("userinfo invalid");
+            return 1;
+        }
+        return clientInfo.getLevel();
     }
 }

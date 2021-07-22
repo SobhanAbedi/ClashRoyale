@@ -2,18 +2,20 @@ package edu.AP.Project.ClashRoyale.Server.Model.GameEngine;
 
 import edu.AP.Project.ClashRoyale.Model.Forces.Soldier;
 import edu.AP.Project.ClashRoyale.Model.GlobalVariables;
+import edu.AP.Project.ClashRoyale.Model.PointDouble;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 public class ProjectileEngine extends ForceEngine{
     private int targetId;
     private float damage;
-    private Point deltaLocation;
+    private PointDouble deltaLocation;
     private ProjectileState projectileState;
     private ProjectileState nextState;
     private float runningTime;
 
-    public ProjectileEngine(GameEngine gameEngine, int side, int projectileKind, Point initialLocation, int targetId, float damage, Point deltaLocation) {
+    public ProjectileEngine(GameEngine gameEngine, int side, int projectileKind, PointDouble initialLocation, int targetId, float damage, PointDouble deltaLocation) {
         super(gameEngine, 0f, side);
         projectileState = new ProjectileState("Projectile_"+projectileKind, forceID, initialLocation, (float) Math.atan2(deltaLocation.y, deltaLocation.x), ActionKind.CREATE);
         this.targetId = targetId;
@@ -35,6 +37,11 @@ public class ProjectileEngine extends ForceEngine{
     @Override
     public ForceState getNextState() {
         return nextState;
+    }
+
+    @Override
+    public ForceState getState() {
+        return projectileState;
     }
 
     @Override
@@ -63,7 +70,7 @@ public class ProjectileEngine extends ForceEngine{
     }
 
     @Override
-    public Point getLocation() {
+    public PointDouble getLocation() {
         return projectileState.getLocation();
     }
 

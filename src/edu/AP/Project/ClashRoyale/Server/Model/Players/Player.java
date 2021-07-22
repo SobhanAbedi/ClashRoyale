@@ -1,8 +1,11 @@
 package edu.AP.Project.ClashRoyale.Server.Model.Players;
 
 import edu.AP.Project.ClashRoyale.Model.Card;
+import edu.AP.Project.ClashRoyale.Server.Model.GameEngine.ForceState;
 
-public class Player {
+import java.util.ArrayList;
+
+public abstract class Player {
     private final String name;
     private final Card[] deck;
     private final int side;
@@ -10,5 +13,13 @@ public class Player {
         this.name = name;
         this.deck = deck;
         this.side = side;
+    }
+
+    public abstract void updatePlayer(ArrayList<ArrayList<ForceState>> stateList);
+
+    public abstract int getLevel();
+
+    public int getSide() {
+        return side;
     }
 }

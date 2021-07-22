@@ -30,7 +30,9 @@ public class GamePool implements Runnable{
                             players[i] = new ClientPlayer(handler.getUsername(), handler.getDeckCards(), (i/(groupSize/2))%2, handler, handler.getGameModel());
                             if(players[i] == null) {
                                 System.out.println("Null Player entering a game");
-                                //TODO: return other players to the queue
+                                for(int j = 0; j < i; j++ )
+                                    addToPool(((ClientPlayer) players[j]).getHandler());
+                                break;
                             }
                         }
                     }

@@ -3,8 +3,10 @@ package edu.AP.Project.ClashRoyale.Server.Model.GameEngine;
 import edu.AP.Project.ClashRoyale.Model.Forces.Soldier;
 import edu.AP.Project.ClashRoyale.Model.Forces.Spell;
 import edu.AP.Project.ClashRoyale.Model.GlobalVariables;
+import edu.AP.Project.ClashRoyale.Model.PointDouble;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class SpellEngine extends ForceEngine{
@@ -14,7 +16,7 @@ public class SpellEngine extends ForceEngine{
     private float runningTime;
     private boolean effectDone;
 
-    public SpellEngine(GameEngine gameEngine, int side, Spell referenceSpell, Point location) {
+    public SpellEngine(GameEngine gameEngine, int side, Spell referenceSpell, PointDouble location) {
         super(gameEngine, referenceSpell.getRadius(), side);
         this.referenceSpell = referenceSpell;
         spellState = new SpellState(referenceSpell.getName(), forceID, location, ActionKind.CREATE);
@@ -34,6 +36,11 @@ public class SpellEngine extends ForceEngine{
     @Override
     public ForceState getNextState() {
         return nextState;
+    }
+
+    @Override
+    public ForceState getState() {
+        return spellState;
     }
 
     @Override
@@ -88,7 +95,7 @@ public class SpellEngine extends ForceEngine{
     }
 
     @Override
-    public Point getLocation() {
+    public PointDouble getLocation() {
         return spellState.getLocation();
     }
 
