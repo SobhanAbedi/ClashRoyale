@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.image.Image?>
@@ -22,7 +23,10 @@
       </ImageView>
       <BorderPane prefHeight="800.0" prefWidth="800.0">
          <center>
-            <Pane fx:id="gamePane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <Pane fx:id="gamePane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Group fx:id="gameBoard" layoutX="100.0" />
+               </children></Pane>
          </center>
          <top>
             <GridPane prefHeight="75.0" BorderPane.alignment="CENTER">

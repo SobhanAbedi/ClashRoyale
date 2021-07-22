@@ -4,10 +4,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<!--<?import edu.AP.Project.ClashRoyale.Client.Views.BoardView?>-->
+<?import edu.AP.Project.ClashRoyale.Client.Views.BoardView?>
 <AnchorPane prefHeight="700.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-<!--      <BoardView fx:id="board" rowCount="34" columnCount="20" />-->
+      <BoardView fx:id="board" rowCount="34" columnCount="20" />
 
    </children>
 </AnchorPane>

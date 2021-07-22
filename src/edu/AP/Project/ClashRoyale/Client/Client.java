@@ -137,6 +137,7 @@ public class Client extends Application {
         loader.setLocation(Client.class.getResource(address));
         loader.setController(controller);
         try {
+            loader.setClassLoader(getClass().getClassLoader());
             loader.load();
         } catch (IOException e) {
             System.err.println("Error appeared in loading FXML");

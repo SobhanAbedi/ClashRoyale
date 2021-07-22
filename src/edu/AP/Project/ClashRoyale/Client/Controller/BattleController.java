@@ -154,6 +154,7 @@ public class BattleController {
      */
     @FXML
     void oneClick(ActionEvent event) {
+        client.changeScene("Views/Board.fxml", new BoardController(client));
         client.buttonClickSound();
     }
 

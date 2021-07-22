@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
 import java.util.Objects;
 
 public class BoardView extends Group {
-    public final static double CELL_WIDTH = 30.0;
+    public final static double CELL_WIDTH = 20.0;
 
     private int rowCount;
     private int columnCount;
@@ -30,6 +30,7 @@ public class BoardView extends Group {
      */
     public BoardView(){
 //        TODO uploadImages
+        System.out.println("Read Images");
         wallImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Board/wall.png")));
         enemyKingImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Board/enemyKing.png")));
         clientKingImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../Images/Board/clientKing.png")));
@@ -44,7 +45,7 @@ public class BoardView extends Group {
     /**
      * initialize an empty grid of ImageViews
      */
-    private void initializeGrid() {
+    public void initializeGrid() {
         cellViews = new ImageView[rowCount][columnCount];
         for (int row = 0; row < rowCount; row++) {
             for (int column = 0; column < columnCount; column++) {
@@ -57,17 +58,28 @@ public class BoardView extends Group {
                 this.getChildren().add(imageView);
             }
         }
+        System.out.println(this.getChildren());
     }
+
+
+
     /**
      * Updates the view to reflect the state of the model
      * @param model board Model
      */
     public void update(BoardModel model) {
+        System.out.println("Update");
         //for each ImageView, set the image to correspond with the CellValue of that cell
         for (int row = 0; row < rowCount; row++){
             for (int column = 0; column < columnCount; column++){
                 CellValue value = model.getCellValue(row, column);
-                if (value == CellValue.Wall) {
+                if (value == CellValue.Wall ||
+                        value == CellValue.ClientKingWall ||
+                        value == CellValue.ClientQueenWall1 ||
+                        value == CellValue.ClientQueenWall2 ||
+                        value == CellValue.EnemyKingWall ||
+                        value == CellValue.EnemyQueenWall1 ||
+                        value == CellValue.EnemyQueenWall2 ) {
                     cellViews[row][column].setImage(wallImage);
                 }
                 else if (value == CellValue.ClientKingCannon) {
@@ -95,7 +107,7 @@ public class BoardView extends Group {
                 else {
                     cellViews[row][column].setImage(greenImage);
                 }
-
+                System.out.println(cellViews[row][column]);
                 // Models position can be updated through this place:
             }
         }
@@ -123,7 +135,7 @@ public class BoardView extends Group {
      */
     public void setRowCount(int rowCount) {
         this.rowCount = rowCount;
-        this.initializeGrid();
+//        this.initializeGrid();
     }
 
     /**
@@ -132,6 +144,6 @@ public class BoardView extends Group {
      */
     public void setColumnCount(int columnCount) {
         this.columnCount = columnCount;
-        this.initializeGrid();
+//        this.initializeGrid();
     }
 }

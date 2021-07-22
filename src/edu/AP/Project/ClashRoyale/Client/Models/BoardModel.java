@@ -2,29 +2,47 @@ package edu.AP.Project.ClashRoyale.Client.Models;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class BoardModel {
-    private final String fileLocation = "../Board/Board.txt";
+    private final String fileLocation = "src/edu/AP/Project/ClashRoyale/Client/Board/Board.txt";
 
     /**
      * constructor
      */
     public BoardModel(){
         initializeBoard(fileLocation);
+
+//        this.rowCount = 32 + 2;
+//        this.columnCount = 18 + 2;
     }
-    private int rowCount;
-    private int columnCount;
+    // there is two more cells for border Wall
+    private final int rowCount = 32 + 2;
+    private final int columnCount = 18 + 2;
     private CellValue[][] grid;
+
+    /**
+     * get row count
+     * @return row count
+     */
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    /**
+     *
+     * @return column count
+     */
+    public int getColumnCount() {
+        return columnCount;
+    }
 
     /**
      * initialize board
      * @param fileName board
      */
     public void initializeBoard(String fileName){
-        // there is two more cells for border Wall
-        rowCount = 32 + 2;
-        columnCount = 18 + 2;
 
         File file = new File(fileName);
         Scanner scanner = null;
@@ -33,6 +51,7 @@ public class BoardModel {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        System.out.println("row count " + rowCount +"  column count " + columnCount);
         grid = new CellValue[rowCount][columnCount];
         int row = 0;
         int enemyKingRow = 0;
@@ -149,6 +168,7 @@ public class BoardModel {
      */
     public CellValue getCellValue(int row, int column) {
         assert row >= 0 && row < this.grid.length && column >= 0 && column < this.grid[0].length;
+//        System.out.println(grid[row][column]);
         return this.grid[row][column];
     }
     public void update(){
