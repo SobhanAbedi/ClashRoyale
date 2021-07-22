@@ -323,14 +323,12 @@ public class ClientHandler{
         gameThread = server.startGame(gameEngine);
     }
 
+    /**
+     * get board Model
+     * @return
+     */
     public BoardModel getBoardModel() {
         return boardModel;
-    /**
-     * get game model
-     * @return game model
-     */
-    public GameModel getGameModel() {
-        return gameModel;
     }
 
     /**
