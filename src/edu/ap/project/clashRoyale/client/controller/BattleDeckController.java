@@ -39,7 +39,7 @@ public class BattleDeckController {
     private Client client;
     private ArrayList<Card> selected;
     private int cardsInDeckCounter;
-    private final String cardRelativePath = "../Images/Cards/";
+    private final String cardRelativePath = "../images/Cards/";
     private ArrayList<String> cardsInDeck;
     private ArrayList<Card> cards;
     private ArrayList<Card> sortedCards;

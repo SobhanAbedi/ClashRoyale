@@ -3,6 +3,9 @@ package edu.ap.project.clashRoyale.client.controller;
 import com.jfoenix.controls.JFXButton;
 import edu.ap.project.clashRoyale.client.Client;
 import edu.ap.project.clashRoyale.client.models.BoardModel;
+import edu.ap.project.clashRoyale.model.instructions.client.ClientInstruction;
+import edu.ap.project.clashRoyale.model.instructions.server.ServerInstruction;
+import edu.ap.project.clashRoyale.model.instructions.server.ServerInstructionKind;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -159,7 +162,11 @@ public class BattleController {
      */
     @FXML
     void trainingClick(ActionEvent event) {
-        BoardModel boardModel = new BoardModel();
+
+        BoardModel boardModel = new BoardModel(0, client.getClientHandler().getDeckCards(), "DummyBot");
+        ServerInstruction serverInstruction = new ServerInstruction(ServerInstructionKind.START_TRAINING_CAMP, false, boardModel);
+        client.getClientHandler().startTrainingCamp(serverInstruction);
+
         client.changeScene("Views/Board.fxml", new BoardController(client, boardModel));
 //        client.changeScene("Views/GameBoard.fxml" , new GameBoardController(client));
         client.buttonClickSound();

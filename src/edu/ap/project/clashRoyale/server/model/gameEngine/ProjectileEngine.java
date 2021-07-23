@@ -46,7 +46,7 @@ public class ProjectileEngine extends ForceEngine{
     }
 
     @Override
-    public void doAction() {
+    public boolean doAction() {
         if(projectileState.getActionKind() == ActionKind.DIE) {
             ForceEngine target = gameEngine.getForce(targetId);
             if(target != null) {
@@ -55,7 +55,8 @@ public class ProjectileEngine extends ForceEngine{
                 if(target instanceof BuildingEngine)
                     ((BuildingEngine) target).acceptDamage(damage);
             }
-            gameEngine.removeForce(forceID);
+            gameEngine.removeForce(forceID, false);
+            return false;
         }
         if(projectileState.getActionKind() == ActionKind.CREATE)
             nextState.setActionKind(ActionKind.MOVE);
@@ -63,6 +64,7 @@ public class ProjectileEngine extends ForceEngine{
         if(runningTime >= GlobalVariables.PROJECTILE_TIME)
             nextState.setActionKind(ActionKind.DIE);
         nextState.setLocation(ForceEngine.pointCombination(getLocation(), deltaLocation, false));
+        return true;
     }
 
     @Override
@@ -73,5 +75,10 @@ public class ProjectileEngine extends ForceEngine{
     @Override
     public boolean isSoldierOrBuilding() {
         return false;
+    }
+
+    @Override
+    public boolean isDead() {
+        return projectileState.getActionKind() == ActionKind.DEAD || projectileState.getActionKind() == ActionKind.DIE;
     }
 }

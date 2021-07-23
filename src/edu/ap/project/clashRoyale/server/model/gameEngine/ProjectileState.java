@@ -4,12 +4,10 @@ import edu.ap.project.clashRoyale.model.PointDouble;
 
 public class ProjectileState extends ForceState implements Cloneable{
     private float angle;
-    private ActionKind actionKind;
 
     public ProjectileState(String forceName, int forceID, PointDouble location, float angle, ActionKind actionKind) {
-        super(forceName, forceID, location);
+        super(forceName, forceID, location, actionKind);
         this.angle = angle;
-        this.actionKind = actionKind;
     }
 
     @Override

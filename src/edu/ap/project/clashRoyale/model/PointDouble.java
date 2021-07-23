@@ -37,6 +37,6 @@ public class PointDouble extends Point2D.Double {
     }
 
     public PointDouble reverseMapPoint() {
-        return new PointDouble(-x, GlobalVariables.QUARTER_LENGTH - y);
+        return new PointDouble(-x,  - y);
     }
 }

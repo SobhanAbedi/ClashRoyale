@@ -6,5 +6,5 @@ public enum CellValue{
     ClientQueenWall1 , ClientQueenWall2 , ClientQueenCanon1 , ClientQueenCanon2,
     EnemyKingWall , EnemyKingCannon, Enemy,
     ClientKingWall , ClientKingCannon,Client,
-    Bridge , River, Wall
+    Bridge1, Bridge2 , River, Wall
 }

@@ -23,7 +23,7 @@ public abstract class ForceEngine {
     public abstract ForceState getNextState();
     public abstract ForceState getState();
     public abstract void next();
-    public abstract void doAction();
+    public abstract boolean doAction();
     public abstract PointDouble getLocation();
     public abstract boolean isSoldierOrBuilding();
 
@@ -70,4 +70,6 @@ public abstract class ForceEngine {
     public int getSide() {
         return side;
     }
+
+    public abstract boolean isDead();
 }

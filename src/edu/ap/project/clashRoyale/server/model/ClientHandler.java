@@ -261,6 +261,10 @@ public class ClientHandler{
         gameThread = server.startGame(gameEngine);
     }
 
+    public void playCard(ServerInstruction instruction) {
+        gameEngine.putCardRequest(getClientPlayer(), instruction);
+    }
+
     public BoardModel getBoardModel() {
         return boardModel;
     }

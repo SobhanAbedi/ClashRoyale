@@ -46,11 +46,11 @@ public class SpellEngine extends ForceEngine{
     }
 
     @Override
-    public void doAction() {
+    public boolean doAction() {
         if(isDead()) {
-            gameEngine.removeForce(forceID);
+            gameEngine.removeForce(forceID, false);
             nextState.setActionKind(ActionKind.DEAD);
-            return;
+            return false;
         }
         if(spellState.getActionKind() == ActionKind.CREATE);
         runningTime += deltaTime;
@@ -88,7 +88,7 @@ public class SpellEngine extends ForceEngine{
                 break;
 
         }
-
+        return true;
     }
 
     @Override

@@ -1,16 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <?import edu.ap.project.clashRoyale.client.views.BoardView?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
-<BorderPane style="-fx-background-color: black;" xmlns:fx="http://javafx.com/fxml">
-<top>
-   <BorderPane prefHeight="35" style="-fx-background-color: #0B5091; -fx-padding: 10px, 5px, 10px, 5px" >
-      <left><Label fx:id="scoreLabel" style="-fx-font-size: 150%; -fx-text-fill: white" /></left>
-      <center><Label fx:id="gameOverLabel" style="-fx-font-size: 150%; -fx-text-fill: white" /></center>
-      <right><Label fx:id="levelLabel" style="-fx-font-size: 150%; -fx-text-fill: white"/></right>
-   </BorderPane>
-</top>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<center>
-   <BoardView fx:id="board" rowCount="34" columnCount="20" />
-</center>
+
+<BorderPane style="-fx-background-color: lightblue;" xmlns:fx="http://javafx.com/fxml">
+   <top>
+      <BorderPane BorderPane.alignment="CENTER">
+         <left>
+            <Label fx:id="opponentName" alignment="CENTER" maxWidth="1.7976931348623157E308" prefWidth="170.0" text="Opponen: NormalBot" textAlignment="CENTER" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </left>
+         <center>
+            <Label fx:id="result" alignment="CENTER" text="You Won" textAlignment="CENTER" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </center>
+         <right>
+            <Label fx:id="timeRemaining" alignment="CENTER" maxWidth="1.7976931348623157E308" prefWidth="170.0" text="Time Remaining" textAlignment="CENTER" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </right>
+         <BorderPane.margin>
+            <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+         </BorderPane.margin>
+         <bottom>
+            <ProgressBar fx:id="elixirBar" maxWidth="1.7976931348623157E308" progress="0.23" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
+               </BorderPane.margin>
+            </ProgressBar>
+         </bottom>
+      </BorderPane>
+   </top>
+   <center>
+      <BoardView fx:id="boardView" rowCount="34" columnCount="20" onMouseClicked="#placeCard" onMouseMoved="#checkMouseLocation" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+         </BorderPane.margin>
+      </BoardView>
+   </center>
+   <left>
+      <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fx:id="deck1" fitHeight="204.0" fitWidth="170.0" onMouseClicked="#deck1Click" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="deck2" fitHeight="204.0" fitWidth="170.0" onMouseClicked="#deck2Click" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="deck3" fitHeight="204.0" fitWidth="170.0" onMouseClicked="#deck3Click" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="deck4" fitHeight="204.0" fitWidth="170.0" onMouseClicked="#deck4Click" pickOnBounds="true" preserveRatio="true" />
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+         </BorderPane.margin>
+      </VBox>
+   </left>
 </BorderPane>

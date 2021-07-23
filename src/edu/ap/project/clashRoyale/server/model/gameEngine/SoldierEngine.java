@@ -21,9 +21,10 @@ public class SoldierEngine extends ForceEngine{
         target = null;
         recheckTarget = false;
         soldierState = new SoldierState(referenceSoldier.getName(), forceID, initialLocation, 90, referenceSoldier.getHP(), ActionKind.CREATE);
+        modifier = new PowerModifier();
+        modifier.setModifiers(0, 0, 0);
         timeSinceLastAttack = getAttackTime();
         targetMinDist = 0;
-        modifier = new PowerModifier();
         direction = new PointDouble(0, 0);
     }
 
@@ -83,22 +84,20 @@ public class SoldierEngine extends ForceEngine{
     }
 
     @Override
-    public void doAction() {
+    public boolean doAction() {
         direction.setLocation(0, 0);
         if(isDead()) {
-            gameEngine.removeForce(forceID);
+            gameEngine.removeForce(forceID, false);
             nextState.setActionKind(ActionKind.DEAD);
-            return;
+            return false;
         }
         timeSinceLastAttack += deltaTime;
         if(soldierState.getActionKind() == ActionKind.MOVE || soldierState.getActionKind() == ActionKind.ATTACK) {
-            if (target == null) {
+            if (target == null || target.isDead()) {
                 findTarget();
             } else if (recheckTarget && soldierState.getActionKind() == ActionKind.MOVE) {
                 findTarget();
             }
-            if(target instanceof SoldierEngine && ((SoldierEngine) target).isDead() || target instanceof BuildingEngine && ((BuildingEngine) target).isDead())
-                findTarget();
 
             findDirection();
         }
@@ -121,10 +120,10 @@ public class SoldierEngine extends ForceEngine{
         }
 
         if(soldierState.getActionKind() == ActionKind.ATTACK) {
-            if(target.getLocation().distance(getLocation()) - targetMinDist > referenceSoldier.getRange() * 1.3){
+            if(target == null || target.getLocation().distance(getLocation()) - targetMinDist > referenceSoldier.getRange() * 1.3){
                 nextState.setActionKind(ActionKind.MOVE);
             }
-            if(timeSinceLastAttack > getAttackTime()) {
+            if(target != null && timeSinceLastAttack > getAttackTime()) {
                 timeSinceLastAttack = 0;
                 if(referenceSoldier.getProjectile() == 0) {
                     doDamage(target, referenceSoldier);
@@ -132,15 +131,17 @@ public class SoldierEngine extends ForceEngine{
                     PointDouble deltaLocation = ForceEngine.pointCombination(target.getLocation(), getLocation(), true);
                     ForceEngine.scalePoint(deltaLocation, deltaTime/GlobalVariables.PROJECTILE_TIME);
                     ProjectileEngine projectile = new ProjectileEngine(gameEngine, side, referenceSoldier.getProjectile(), getLocation(), target.getForceID(), getDamage(), deltaLocation);
-                    gameEngine.addForce(projectile);
+                    //gameEngine.addForce(projectile);
+                    gameEngine.addLater(projectile);
                 }
             }
-        } else if (target.getLocation().distance(getLocation()) - targetMinDist < referenceSoldier.getRange()) {
+        } else if (target != null && target.getLocation().distance(getLocation()) - targetMinDist < referenceSoldier.getRange()) {
             nextState.setActionKind(ActionKind.ATTACK);
         } else if (soldierState.getActionKind() == ActionKind.CREATE) {
             nextState.setActionKind(ActionKind.MOVE);
         }
         nextState.translateLocation(direction, false);
+        return true;
     }
 
     public void translateDirection(PointDouble translation, boolean negate) {
@@ -163,7 +164,10 @@ public class SoldierEngine extends ForceEngine{
     }
 
     private void setTargetMinDist() {
-        targetMinDist = radius + target.getRadius();
+        if(target == null)
+            targetMinDist = 2 * radius;
+        else
+            targetMinDist = radius + target.getRadius();
     }
 
     public boolean isDead() {
@@ -212,20 +216,24 @@ public class SoldierEngine extends ForceEngine{
     }
 
     private void findDirection() {
-        if(Math.abs(getLocation().y) > 1 && target.getLocation().y * getLocation().y < 0) {
+        if(!referenceSoldier.doesFly() && Math.abs(getLocation().y) > 1 && target!= null && target.getLocation().y * getLocation().y < 0) {
             float averageX = (float) (target.getLocation().x + getLocation().x) / 2f;
             float x_sign = Math.signum(averageX);
             if(x_sign == 0)
                 x_sign = 1;
             float y_sign = Math.signum((float) getLocation().y);
             direction.setLocation(x_sign * GlobalVariables.BRIDGE_X, y_sign);
-        } else {
+        } else if(target != null){
             direction.setLocation(target.getLocation());
         }
-        translateDirection(getLocation(), true);
-        if(direction.distance(0, 0) > getSpeed() * deltaTime) {
-            ForceEngine.normalizePoint(direction);
-            ForceEngine.scalePoint(direction, getSpeed() * deltaTime);
+        if(target != null) {
+            translateDirection(getLocation(), true);
+            if (direction.distance(0, 0) > getSpeed() * deltaTime) {
+                ForceEngine.normalizePoint(direction);
+                ForceEngine.scalePoint(direction, getSpeed() * deltaTime);
+            }
+        } else {
+            direction.setLocation(0, 1);
         }
         nextState.setAngle((float) Math.atan2(direction.y, direction.x));
     }

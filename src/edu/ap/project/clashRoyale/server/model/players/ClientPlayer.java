@@ -19,7 +19,6 @@ public class ClientPlayer extends Player{
     }
 
     public void updatePlayer(ArrayList<ArrayList<ForceState>> stateList, int rebaseStep) {
-        //TODO: connect directly to gameModel and replace stateList
         boardModel.updateStateList(stateList, rebaseStep);
     }
 

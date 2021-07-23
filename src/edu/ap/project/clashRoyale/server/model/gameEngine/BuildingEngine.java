@@ -19,9 +19,10 @@ public class BuildingEngine extends ForceEngine{
         this.referenceBuilding = referenceBuilding;
         target = null;
         buildingState = new BuildingState(referenceBuilding.getName(), forceID, location, 90, referenceBuilding.getHP(), ActionKind.CREATE);
+        modifier = new PowerModifier();
+        modifier.setModifiers(0, 0, 0);
         timeSinceLastAttack = getAttackTime();
         targetMinDist = 0;
-        modifier = new PowerModifier();
     }
 
     public float getAttackTime() {
@@ -66,41 +67,45 @@ public class BuildingEngine extends ForceEngine{
     }
 
     @Override
-    public void doAction() {
+    public boolean doAction() {
         if(isDead()) {
-            gameEngine.removeForce(forceID);
+            gameEngine.removeForce(forceID, false);
             nextState.setActionKind(ActionKind.DEAD);
-            return;
+            return false;
         }
         timeSinceLastAttack += deltaTime;
         if(buildingState.getActionKind() == ActionKind.ATTACK) {
             if (target == null) {
                 findTarget();
             }
-            if(target instanceof SoldierEngine && ((SoldierEngine) target).isDead() || target instanceof BuildingEngine && ((BuildingEngine) target).isDead())
+            if(target.isDead())
                 findTarget();
 
             setAngle();
         }
 
         if(buildingState.getActionKind() == ActionKind.ATTACK) {
-            if(target.getLocation().distance(getLocation()) - targetMinDist > referenceBuilding.getRange() * 1.3){
+            if(target == null || target.getLocation().distance(getLocation()) - targetMinDist > referenceBuilding.getRange() * 1.3){
                 nextState.setActionKind(ActionKind.MOVE);
             }
-            if(timeSinceLastAttack > getAttackTime()) {
+            if(target != null && timeSinceLastAttack > getAttackTime()) {
                 timeSinceLastAttack = 0;
                 PointDouble deltaLocation = ForceEngine.pointCombination(target.getLocation(), getLocation(), true);
                 ForceEngine.scalePoint(deltaLocation, deltaTime/ GlobalVariables.PROJECTILE_TIME);
                 ProjectileEngine projectile = new ProjectileEngine(gameEngine, side, referenceBuilding.getProjectile(), getLocation(), target.getForceID(), getDamage(), deltaLocation);
-                gameEngine.addForce(projectile);
+                //gameEngine.addForce(projectile);
+                gameEngine.addLater(projectile);
             }
-        } else if (target.getLocation().distance(getLocation()) - targetMinDist < referenceBuilding.getRange()) {
+        } else if (target != null && target.getLocation().distance(getLocation()) - targetMinDist < referenceBuilding.getRange()) {
             nextState.setActionKind(ActionKind.ATTACK);
         } else if (buildingState.getActionKind() == ActionKind.CREATE) {
+            if(nextState == null)
+                System.out.println("**NextState is null");
             nextState.setActionKind(ActionKind.MOVE);
         }
-
-        acceptDamage(-referenceBuilding.getHealthGradiant()*deltaTime);
+        if(referenceBuilding.getLifeTime() != 0)
+            acceptDamage(-referenceBuilding.getHealthGradiant()*deltaTime);
+        return true;
     }
 
     @Override

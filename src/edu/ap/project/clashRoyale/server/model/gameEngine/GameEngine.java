@@ -13,9 +13,7 @@ import edu.ap.project.clashRoyale.server.model.CardForce;
 import edu.ap.project.clashRoyale.server.model.players.ClientPlayer;
 import edu.ap.project.clashRoyale.server.model.players.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -36,6 +34,7 @@ public class GameEngine implements Runnable{
     private int currentStep;
     private float currentTime;
     private int rebaseStep;
+    private ArrayList<ForceEngine> toAddLater;
 
     public GameEngine(Server server, int playerCount, Player[] players) {
         this.server = server;
@@ -55,7 +54,31 @@ public class GameEngine implements Runnable{
         quarterLength = GlobalVariables.QUARTER_LENGTH;
         addInitialBuildings();
         rebaseStep = 0;
+        toAddLater = new ArrayList<>();
     }
+
+    public ArrayList<ForceEngine> getToAddLater() {
+        return toAddLater;
+    }
+
+    public void resetToAddLater() {
+        toAddLater.clear();
+    }
+
+    public void addLater(ForceEngine forceEngine) {
+        toAddLater.add(forceEngine);
+    }
+
+    public void addWaitingForces() {
+        ArrayList<ForceState> lastState = gameState.get(gameState.size() - 1);
+        for(ForceEngine forceEngine : toAddLater) {
+            addForce(forceEngine);
+            lastState.add(forceEngine.getState());
+        }
+        resetToAddLater();
+
+    }
+
 
     public int getID() {
         lastForceID++;
@@ -63,12 +86,13 @@ public class GameEngine implements Runnable{
     }
 
     public ForceEngine[] getCurrentForces() {
-        return (ForceEngine[]) currentForces.values().toArray();
+        return currentForces.values().toArray(new ForceEngine[0]);
     }
 
-    public void removeForce(int forceID) {
+    public void removeForce(int forceID, boolean removeFromCurrent) {
         deadForces.put(forceID, currentForces.get(forceID));
-        currentForces.remove(forceID);
+       // if(removeFromCurrent)
+       //     currentForces.remove(forceID);
 
         //Game end Conditions:
         if(playerCount == 2) {
@@ -175,17 +199,38 @@ public class GameEngine implements Runnable{
         while (currentStep < gameSteps) {
             currentTime += deltaTime;
             currentStep++;
-
+            if(currentStep % 100 == 1)
+                System.out.println("Step: " + currentStep);
             for(ForceEngine force : currentForces.values()) {
-                force.doAction();
+                force.genNextState();
             }
+
+            resetToAddLater();
+            ArrayList<Integer> toRemove = new ArrayList<>();
+            Set<Map.Entry<Integer, ForceEngine>> setOfEntries = currentForces.entrySet();
+            Iterator<Map.Entry<Integer, ForceEngine>> itr = setOfEntries.iterator();
+
+            while (itr.hasNext()) {
+                Map.Entry<Integer, ForceEngine> entry = itr.next();
+                if(!entry.getValue().doAction())
+                    toRemove.add(entry.getKey());
+                if(currentStep % 100 == 1)
+                    System.out.println(entry.getValue().getState().getForceName() + ": " + entry.getValue().getState().getActionKind());
+            }
+
+            for(Integer forceID : toRemove) {
+                currentForces.remove(forceID);
+            }
+
 
             ArrayList<ForceState> currentState = new ArrayList<>(16);
             for(ForceEngine force : currentForces.values()) {
                 currentState.add(force.getNextState());
                 force.next();
-                force.genNextState();
             }
+
+            addWaitingForces();
+
             gameState.add(currentState);
         }
     }
@@ -193,12 +238,14 @@ public class GameEngine implements Runnable{
     private void roleBackSimulation(float time) {
         int roleToStep = (int)(time / deltaTime);
         float roleToTime =  roleToStep * deltaTime;
+        System.out.println("RoleToTime: " + roleToTime);
         if(roleToStep > gameState.size())
             return;
         Iterator<CreationRecord> iterator = creationRecords.iterator();
         int minIdRemoved = GlobalVariables.MAX_ID_IN_GAME;
         while (iterator.hasNext()) {
             CreationRecord record = iterator.next();
+            System.out.println("Creation Record: ID: " + record.getId() + ", Time:" + record.getTime());
             if(record.getTime() > roleToTime) {
                 if(record.getId() < minIdRemoved)
                     minIdRemoved = record.getId();
@@ -209,11 +256,11 @@ public class GameEngine implements Runnable{
         }
         lastForceID = minIdRemoved;
         for(int key : currentForces.keySet()) {
-            if(key >= lastForceID)
+            if(key > lastForceID)
                 System.out.println("**GameEngine RoleBack Error**");
         }
         for(int key : deadForces.keySet()) {
-            if(key >= lastForceID)
+            if(key > lastForceID)
                 System.out.println("**GameEngine RoleBack Error**");
         }
         int maxIndex = gameState.size();
@@ -278,7 +325,7 @@ public class GameEngine implements Runnable{
                         break;
                 }
                 if(forceEngine != null) {
-                    currentForces.put(forceEngine.getForceID(), forceEngine);
+                    addForce(forceEngine);
                     gameState.get(gameState.size() - 1).add(forceEngine.getState());
                 }
             }
