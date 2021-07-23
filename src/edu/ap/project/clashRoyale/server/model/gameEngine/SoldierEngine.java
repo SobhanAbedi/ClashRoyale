@@ -15,6 +15,13 @@ public class SoldierEngine extends ForceEngine{
     private float timeSinceLastAttack;
     private float targetMinDist;
 
+    /**
+     * Constructor
+     * @param gameEngine game engine
+     * @param side side
+     * @param referenceSoldier reference soldier
+     * @param initialLocation initial location
+     */
     public SoldierEngine(GameEngine gameEngine, int side, Soldier referenceSoldier, PointDouble initialLocation) {
         super(gameEngine, 0.5f, side);
         this.referenceSoldier = referenceSoldier;
@@ -28,26 +35,50 @@ public class SoldierEngine extends ForceEngine{
         direction = new PointDouble(0, 0);
     }
 
+    /**
+     * get speed
+     * @return speed
+     */
     public float getSpeed() {
         return referenceSoldier.getHitSpeed() * modifier.getSpeedModifier();
     }
 
+    /**
+     * get attack time
+     * @return attack time
+     */
     public float getAttackTime() {
         return referenceSoldier.getHitSpeed() * modifier.getHitSpeedModifier();
     }
 
+    /**
+     * get damage
+     * @return
+     */
     public float getDamage() {
         return referenceSoldier.getDamage() * modifier.getDamageModifier();
     }
 
+    /**
+     * set modifier
+     * @param damageBoost damage boost
+     * @param speedBoost speed boost
+     * @param hitSpeedBoost hit speed
+     */
     public void setModifier(float damageBoost, float speedBoost, float hitSpeedBoost) {
         modifier.setModifiers(damageBoost, speedBoost, hitSpeedBoost);
     }
 
+    /**
+     * set modifier zero
+     */
     public void setModifierZero() {
         modifier.setModifiers(0, 0, 0);
     }
 
+    /**
+     * generate next state
+     */
     @Override
     public void genNextState() {
         try {
@@ -58,31 +89,53 @@ public class SoldierEngine extends ForceEngine{
         setModifierZero();
     }
 
+    /**
+     * get next state
+     * @return next state
+     */
     @Override
     public SoldierState getNextState() {
         return nextState;
     }
 
+    /**
+     * get state
+     * @return state
+     */
     @Override
     public ForceState getState() {
         return soldierState;
     }
 
+    /**
+     * set next state as current state
+     */
     @Override
     public void next() {
         soldierState = nextState;
     }
 
+    /**
+     * get location
+     * @return location
+     */
     @Override
     public PointDouble getLocation() {
         return soldierState.getLocation();
     }
 
+    /**
+     * is soldier or building
+     * @return yes
+     */
     @Override
     public boolean isSoldierOrBuilding() {
         return true;
     }
 
+    /**
+     * do action
+     */
     @Override
     public boolean doAction() {
         direction.setLocation(0, 0);
@@ -144,6 +197,11 @@ public class SoldierEngine extends ForceEngine{
         return true;
     }
 
+    /**
+     * translate direction with translation
+     * @param translation translate
+     * @param negate add or negate
+     */
     public void translateDirection(PointDouble translation, boolean negate) {
         if(negate)
             direction.translate(-translation.x, -translation.y);
@@ -151,6 +209,9 @@ public class SoldierEngine extends ForceEngine{
             direction.translate(translation.x, translation.y);
     }
 
+    /**
+     * find target
+     */
     private void findTarget() {
         ForceEngine[] currentForces = gameEngine.getCurrentForces();
         double minDist = 100;
@@ -163,6 +224,9 @@ public class SoldierEngine extends ForceEngine{
         setTargetMinDist();
     }
 
+    /**
+     * set min distance target
+     */
     private void setTargetMinDist() {
         if(target == null)
             targetMinDist = 2 * radius;
@@ -170,10 +234,18 @@ public class SoldierEngine extends ForceEngine{
             targetMinDist = radius + target.getRadius();
     }
 
+    /**
+     * is alive or dead
+     * @return alive
+     */
     public boolean isDead() {
         return soldierState.getActionKind() == ActionKind.DEAD || soldierState.getActionKind() == ActionKind.DIE;
     }
 
+    /**
+     * get damage
+     * @param damage damage amount
+     */
     public void acceptDamage(float damage) {
         float finalHP = nextState.getHP() - damage;
         if(finalHP <= 0) {
@@ -184,14 +256,26 @@ public class SoldierEngine extends ForceEngine{
         }
     }
 
+    /**
+     * kill
+     */
     public void kill() {
         nextState.setActionKind(ActionKind.DIE);
     }
 
+    /**
+     * does this soldier fly or not
+     * @return Fly state
+     */
     public boolean doesFly(){
         return referenceSoldier.doesFly();
     }
 
+    /**
+     * can hit possible Target or not
+     * @param possibleTarget possible target
+     * @return yes or not
+     */
     public boolean canHit(ForceEngine possibleTarget) {
         if(!possibleTarget.isSoldierOrBuilding())
             return false;
@@ -215,6 +299,9 @@ public class SoldierEngine extends ForceEngine{
         }
     }
 
+    /**
+     * find direction
+     */
     private void findDirection() {
         if(!referenceSoldier.doesFly() && Math.abs(getLocation().y) > 1 && target!= null && target.getLocation().y * getLocation().y < 0) {
             float averageX = (float) (target.getLocation().x + getLocation().x) / 2f;

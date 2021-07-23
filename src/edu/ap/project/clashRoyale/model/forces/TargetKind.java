@@ -9,11 +9,21 @@ public enum TargetKind {
     public final String displayName;
     private final static HashMap<String, TargetKind> list;
 
+    /**
+     * Constructor
+     * @param name name
+     * @param displayName Display name
+     */
     private TargetKind(String name, String displayName) {
         this.name = name;
         this.displayName = displayName;
     }
 
+    /**
+     * get target kind
+     * @param name
+     * @return
+     */
     public static TargetKind getTargetKind(String name) {
         return TargetKind.list.get(name);
     }

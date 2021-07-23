@@ -18,12 +18,23 @@ public enum SpeedTier {
         }
     }
 
+    /**
+     * speed tier constructor
+     * @param tier tier
+     * @param speed speed
+     * @param displayName display movment
+     */
     private SpeedTier(int tier, float speed, String displayName) {
         this.tier = tier;
         this.speed = speed;
         this.displayName = displayName;
     }
 
+    /**
+     * get speed tier
+     * @param tier tier
+     * @return speed tier
+     */
     public static SpeedTier getSpeedTier(int tier) {
         return SpeedTier.list.get(tier);
     }

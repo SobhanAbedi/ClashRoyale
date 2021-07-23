@@ -14,11 +14,22 @@ public enum ServerInstructionKind {
     public final char code;
     public final String name;
     private final static HashMap<Character, ServerInstructionKind> list;
+
+    /**
+     * Constructor
+     * @param code code
+     * @param name name
+     */
     private ServerInstructionKind(char code, String name) {
         this.code = code;
         this.name = name;
     }
 
+    /**
+     * get server instruction kind
+     * @param code code
+     * @return server instruction
+     */
     public static ServerInstructionKind getInstructionKind(char code) {
         return ServerInstructionKind.list.get(code);
     }

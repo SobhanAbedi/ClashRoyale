@@ -20,11 +20,15 @@ import java.util.HashMap;
 public class DBConnector {
     private static final String URL = "jdbc:mysql://localhost:3306/clash_royale";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "TestPass12345";
+    private static final String PASSWORD = "hamidreza";
     private static final int SALT_LEN = 16;
     private static final int PASS_LEN = 128;
     private Connection connection;
 
+    /**
+     * connenct to DataBase
+     * @return success or fail code
+     */
     public int connect() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -42,6 +46,12 @@ public class DBConnector {
         return 0;
     }
 
+    /**
+     * login check
+     * @param username user entered username
+     * @param password user entered password
+     * @return fail code or userid
+     */
     public int login(String username, String password) {
         String query = "SELECT userid, salt, password FROM users WHERE username = '" + username + "'";
 
@@ -75,6 +85,11 @@ public class DBConnector {
         }
     }
 
+    /**
+     * get salt for hashing password
+     * @param len length of salt code
+     * @return salt Byte code
+     */
     private byte[] getSalt(int len) {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[len];
@@ -82,6 +97,13 @@ public class DBConnector {
         return salt;
     }
 
+    /**
+     * hashing password with salt
+     * @param password username password entered
+     * @param salt salt code
+     * @param length length of salt code
+     * @return byte of hashed password
+     */
     private byte[] PBKDF2Hash(String password, byte[] salt, int length) {
         SecretKeyFactory factory;
         byte[] hash;
@@ -103,6 +125,11 @@ public class DBConnector {
         return hash;
     }
 
+    /**
+     * convert byte array to String
+     * @param arr entered byte array
+     * @return String of entered byte
+     */
     private String byteArrToStr(byte[] arr) {
         StringBuilder stringBuilder = new StringBuilder();
         for(int i = 0; i < arr.length; i++)
@@ -110,6 +137,12 @@ public class DBConnector {
         return stringBuilder.toString();
     }
 
+    /**
+     * check Database to sure that username is exist or not
+     * @param username username entered
+     * @return username is exists or not
+     * @throws SQLException when SQL connection failed
+     */
     public boolean usernameExists(String username) throws SQLException {
         String query = "SELECT userid FROM users WHERE username = '" + username + "'";
 
@@ -125,6 +158,12 @@ public class DBConnector {
         }
     }
 
+    /**
+     * sign up new user
+     * @param username new username entered
+     * @param password password entered
+     * @return user id or fail code
+     */
     public int signup(String username, String password) {
         try {
             if (usernameExists(username))
@@ -162,6 +201,11 @@ public class DBConnector {
         return userid;
     }
 
+    /**
+     * get user info from database
+     * @param userid user id
+     * @return Player info
+     */
     public PlayerInfo getUserInfo(int userid) {
         String query1 = "SELECT username, score, coins FROM users WHERE userid=" + userid;
 
@@ -191,6 +235,10 @@ public class DBConnector {
         }
     }
 
+    /**
+     * get all cards
+     * @return Array of Cards
+     */
     public Card[] getAllCardsGeneral() {
         String query1 = "SELECT * FROM cards";
 
@@ -224,6 +272,10 @@ public class DBConnector {
         }
     }
 
+    /**
+     * get all forces related to each cards
+     * @return Hash map of card name and its Forces
+     */
     public HashMap<String, CardForces> getAllCardForces() {
         String query = "SELECT card_name, round, force_name, ST_X(rel_position) AS rel_x, ST_Y(rel_position) AS rel_y FROM card_forces ORDER BY card_name ASC, round ASC, force_name ASC;";
         HashMap<String, CardForces> result = new HashMap<>(20);
@@ -248,6 +300,10 @@ public class DBConnector {
         return result;
     }
 
+    /**
+     * get all forces
+     * @return Hash map of card name and related Array of forces
+     */
     public HashMap<String, Force[]> getAllForces () {
         HashMap<String , Force[]> forceList = new HashMap<>();
         String query;
@@ -303,6 +359,11 @@ public class DBConnector {
         }
     }
 
+    /**
+     * get deck of client from DataBase
+     * @param userid userID that we wants its Deck cards
+     * @return array of String of Card decks of related userid
+     */
     public String[] getDeck(int userid) {
         String query = "SELECT place, card_name FROM deck WHERE userid=" + userid + " ORDER BY place ASC";
         String[] deck = new String[GlobalVariables.DECK_SIZE];
@@ -322,6 +383,12 @@ public class DBConnector {
         }
     }
 
+    /**
+     * get force info
+     * @param forceName force name
+     * @param userLevel user level to calculate force info
+     * @return required force
+     */
     public Force getForceInfo(String forceName, int userLevel) {
         String query1 = "SELECT kind FROM force_kind WHERE name='" + forceName +"'";
         int forceKind = 0;
@@ -366,6 +433,12 @@ public class DBConnector {
         }
     }
 
+    /**
+     * update user score
+     * @param userid user id to update its score
+     * @param newScore new score
+     * @return success or fail code
+     */
     public int updateUserScore(int userid, int newScore) {
         try {
             String query = "UPDATE users SET score=" +newScore+ " WHERE userid=" +userid;
@@ -381,6 +454,11 @@ public class DBConnector {
         }
     }
 
+    /**
+     * insert deck for a new user
+     * @param userid user id
+     * @return success or fail code
+     */
     private int insertDeck(int userid) {
         try {
             StringBuilder stringBuilder = new StringBuilder();
@@ -406,6 +484,13 @@ public class DBConnector {
         }
     }
 
+    /**
+     * Update deck with new card
+     * @param userid user id that wants to update its deck
+     * @param place deck location
+     * @param cardName new card to put in deck location
+     * @return success or fail code
+     */
     public int updateDeck(int userid, int place, String cardName) {
         if(place > GlobalVariables.DECK_SIZE)
             return -1;
@@ -423,6 +508,11 @@ public class DBConnector {
         }
     }
 
+    /**
+     * close statment
+     * @param statement statement
+     * @return success or fail code
+     */
     private int closeStatement(Statement statement) {
         try {
             if(statement != null && !statement.isClosed())
@@ -433,6 +523,10 @@ public class DBConnector {
         return 0;
     }
 
+    /**
+     * disconnect from DataBase
+     * @return
+     */
     public int disconnect() {
         try {
             if(connection != null && !connection.isClosed())

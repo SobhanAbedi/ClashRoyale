@@ -22,14 +22,26 @@ public class ClientPlayer extends Player{
         boardModel.updateStateList(stateList, rebaseStep);
     }
 
+    /**
+     * get level of player
+     * @return player level
+     */
     public int getLevel(){
         return handler.getLevel();
     }
 
+    /**
+     * end game
+     * @param win win or loose
+     */
     public void endGame(boolean win) {
         //TODO: finish win and lose
     }
 
+    /**
+     * get client handler of player
+     * @return Client handler of player
+     */
     public ClientHandler getHandler() {
         return handler;
     }

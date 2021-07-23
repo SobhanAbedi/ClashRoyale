@@ -5,6 +5,12 @@ public enum ForceKind {
 
     public final int forceCode;
     public final String displayName;
+
+    /**
+     * Force kind Constructor
+     * @param forceCode force code
+     * @param displayName display name
+     */
     private ForceKind(int forceCode, String displayName) {
         this.forceCode = forceCode;
         this.displayName = displayName;
